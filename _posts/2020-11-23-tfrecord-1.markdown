@@ -1,0 +1,120 @@
+---
+title: "[텐서플로] TFRecord 파일을 이용한 이미지 분류-(1)"
+layout: post
+date: '2020-11-23 21:10:30'
+author: Edward Park
+categories:
+- DataScience
+tags:
+- TFRecrod
+cover: "/assets/instacode.png"
+---
+
+### TFRecord란?
+- 텐서플로의 데이터 형식중 하나로, model에 input 하는 X,y 를 통합한 형태이다.
+- 이미지 분류에서 원래는 모델의 X에 numpy 형태의 값과 y에 label값을 넣게 되는데 이 두개의 값이 tfrecord파일에는 함께 저장되어있다.
+
+### TFRecord를 사용하는 이유?
+- 한개의 데이터에 라벨정보가 함께 저장되어있기 때문에 이미지데이터랑 이에 매칭되는 라벨을 저장한 csv데이터를 구분해 사용할 필요가 없다.
+- 그리고 이미지를 python으로 불러오는것보다 tfrecord파일을 파이썬으로 불러오는게 더 효율적이라고 들었던것 같다.
+
+
+### 이미지를 TFRecord 형태로 변환
+코드 참고: [tensorflow docs](https://www.tensorflow.org/tutorials/load_data/tfrecord)<br>
+데이터 출처 : [dacon-랜드마크 분류 대회](https://dacon.io/competitions/official/235585/data/)
+[image1.jpg, image2.jpg, ...., imageN.jpg] -> [image1.tfrecord, image2.tfrecord, ..., imageN.tfrecord] <br>
+
+Process : **각 이미지 파일의 경로**를 리스트에 저장후 각각 파일에 접근해 TFRecord파일로 변환
+#### 데이터의 형태를 정의하는 함수
+```Python
+def _bytes_feature(value):
+    """Returns a bytes_list from a string / byte."""
+    if isinstance(value, type(tf.constant(0))):
+        value = value.numpy() # BytesList won't unpack a string from an EagerTensor.
+    return tf.train.Feature(bytes_list=tf.train.BytesList(value=[value]))
+
+def _float_feature(value):
+    """Returns a float_list from a float / double."""
+    return tf.train.Feature(float_list=tf.train.FloatList(value=[value]))
+
+def _int64_feature(value):
+    """Returns an int64_list from a bool / enum / int / uint."""
+		return tf.train.Feature(int64_list=tf.train.Int64List(value=[value]))
+		
+def image_example(imageString, label, name):
+    imageShape = tf.image.decode_jpeg(imageString).shape
+
+    feature = {
+        'image_raw': _bytes_feature(imageString), #이미지는 0~255의 3차원값들
+        'landmark_id': _int64_feature(label), #랜드마크 분류값
+        'id':_bytes_feature(name) #이미지 이름
+    }
+
+    return tf.train.Example(features=tf.train.Features(feature=feature))
+```
+
+#### 파일 경로 저장 관련 함수
+train폴더의 구조는 아래와 같다.
+
+train-[서울, 대전, 대구,..]<br>
+서울-[서울광장, 63시티, 세빛섬....]<br>
+서울광장-[sg1.jpg, sg2.jpg,... sgN.jpg]<br>
+
+
+```Python
+def city_name(n):
+    #return값은 '서울시', '부산시' 등
+    cityFolder = glob("./train/*")
+    return cityFolder[n].split('/')[-1]
+	
+def file_name_by_city(n):
+    #return값은 ['./train/부산시/반여3동 행정복지센터', './train/부산시/성현교회',...]
+    cityFolder = glob("./train/*")
+    folderNames = glob(cityFolder[n] +'/*')
+    print('folder_num : ',len(folderNames))
+    return folderNames
+		
+def get_image_location(folderNames):
+    #return값은 {'./train/부산시/반여3동 행정복지센터/반여3동_행정복지센터_039.JPG': 395,,...}
+    imageLabels = {}
+    for foidx in range(len(folderNames)):
+        fileNames = glob(folderNames[foidx]+'/*')
+        for i in fileNames:
+            imageLabels[i] = pictureCodeDic[i.split('/')[-1].split('.')[0]]
+    print("file_num : ", len(imageLabels))
+    return imageLabels
+```
+#### 경로들를 input하면 TFRecord 파일로 변환해 저장
+```Python
+def convert_func(imageLabels):
+    start = time.time()
+    for filename, label in tqdm(imageLabels.items()):
+        imagename = filename.split('/')[-1].split('.')[0]
+        recordFile = './trainset/train_'+imagename+'.tfrecords' #file name
+
+        with tf.io.TFRecordWriter(recordFile) as writer:
+            imageString = open(filename, 'rb').read()
+            tfExample = image_example(imageString, label, imagename.encode())
+            writer.write(tfExample.SerializeToString())
+
+    print(time.time() -start, '(s)') #spending time
+```
+
+#### Image labeling
+```Python
+#picture name to code
+pictureCode = pd.read_csv("train.csv")
+pictureCodeDic = {}
+for i in tqdm(range(len(pictureCode))):
+    pictureCodeDic[pictureCode.iloc[i]['id']] = pictureCode.iloc[i]['landmark_id']
+```
+
+#### Convert image to TFRecord
+```Python
+city_name(3) #부산시
+folderNames = file_name_by_city(3)
+imageLabels = get_image_location(folderNames)
+convert_func(imageLabels)
+```
+
+2편에서는 TFRecord파일을 이용해 간단한 CNN모델을 통한 이미지 분류에 대해 알아보자.

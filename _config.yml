@@ -9,19 +9,19 @@ exclude:
   - "/vendor/"
 
 # Site settings
-title: Centrarium
-subtitle: "A simple yet classy theme for your Jekyll website or blog"
-email: blcentra@gmail.com
-name: Ben Centra
+title: Edward's blog
+subtitle: "About data science posts"
+email: edwardfdsp@gmail.com
+name: EunSang Park
 description: >
-  A simple yet classy theme for your Jekyll website or blog.
+  contents
 # Base URL of site (i.e. /blog). It should always start with a slash,
 # and never end with a slash. Set it to a blank value if hosting at the
 # root of your server.
 baseurl: "/blog" # the subpath of your site, e.g. /blog/
 url: "https://parkeunsang.github.io" # the base hostname & protocol for your site
-cover: "/assets/header_image.jpg"
-logo: "/assets/logo.png"
+cover: "/assets/blog_theme.jpg"
+logo: "/assets/homepage.png"
 
 # Build settings
 markdown: kramdown
@@ -61,6 +61,9 @@ descriptions:
 
   - cat: dummy
     desc: "Just some placeholder posts, lorem ipsum and the rest."
+    
+  - cat: data science
+    desc: "Just some placeholder posts, lorem ipsum and the rest."
 
 # Social icons and sharing options
 #
@@ -78,40 +81,40 @@ descriptions:
 #     desc: Follow me on Twitter            # Description to display as link title, etc
 #     share: true                           # Include in the "Share" section of posts
 social:
-  - name: Twitter
-    icon: twitter
-    username: TheBenCentra
-    url: https://twitter.com/TheBenCentra
-    desc: Follow me on Twitter
-    share: true
+  # - name: Twitter
+  #   icon: twitter
+  #   username: TheBenCentra
+  #   url: https://twitter.com/TheBenCentra
+  #   desc: Follow me on Twitter
+  #   share: true
 
-  - name: Facebook
-    icon: facebook
-    username: thebencentra
-    url: ""
-    desc: Friend me on Facebook
-    share: true
+  # - name: Facebook
+  #   icon: facebook
+  #   username: thebencentra
+  #   url: ""
+  #   desc: Friend me on Facebook
+  #   share: true
 
   - name: GitHub
     icon: github
-    username: bencentra
-    url: https://github.com/bencentra
+    username: EunSang Park
+    url: https://github.com/parkeunsang
     desc: Fork me on GitHub
     share: false
 
-  - name: LinkedIn
-    icon: linkedin
-    username: Ben Centra
-    url: https://www.linkedin.com/pub/ben-centra/47/769/60a
-    desc: Connect with me on LinkedIn
-    share: true
+  # - name: LinkedIn
+  #   icon: linkedin
+  #   username: Ben Centra
+  #   url: https://www.linkedin.com/pub/ben-centra/47/769/60a
+  #   desc: Connect with me on LinkedIn
+  #   share: true
 
-  - name: Google+
-    icon: google-plus
-    username: ""
-    url: ""
-    desc: Add me to your Circles
-    share: true
+  # - name: Google+
+  #   icon: google-plus
+  #   username: ""
+  #   url: ""
+  #   desc: Add me to your Circles
+  #   share: true
 
   - name: YouTube
     icon: youtube
