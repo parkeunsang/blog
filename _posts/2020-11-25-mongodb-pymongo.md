@@ -1,5 +1,5 @@
 ---
-title: "[MongoDb] pymongo 설치/기본적인 명령어들"
+title: "[MongoDb] pymongo 기본적인 명령어들"
 layout: post
 date: '2020-11-25 03:02:11'
 author: Edward Park
@@ -10,25 +10,7 @@ tags:
 cover: "/assets/instacode.png"
 ---
 
-## Install MongoDb in ubuntu
 
-[Documentation](https://docs.mongodb.com/manual/tutorial/install-mongodb-on-ubuntu/)
-
-```
-sudo systemctl start mongod #stop
-sudo systemctl status mongod
-```
-
-location : /var/lib/mongodb
-
-sudo apt list --installed\|grep mongodb
-
-sudo apt-get purge --auto-remove packagename
-
-If you installed via the package manager, the data directory `/var/lib/mongodb` and the log directory `/var/log/mongodb` are created during the installation.
-
-<br>
-<br>
 ### MongoDb 데이터 저장 구조
 
 > DB-Collection-Document-Key_value<br>
