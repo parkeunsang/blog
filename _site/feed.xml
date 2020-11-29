@@ -6,9 +6,37 @@
 </description>
     <link>http://localhost:4000/blog/</link>
     <atom:link href="http://localhost:4000/blog/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Mon, 23 Nov 2020 22:12:26 +0900</pubDate>
-    <lastBuildDate>Mon, 23 Nov 2020 22:12:26 +0900</lastBuildDate>
+    <pubDate>Sun, 29 Nov 2020 17:17:40 +0900</pubDate>
+    <lastBuildDate>Sun, 29 Nov 2020 17:17:40 +0900</lastBuildDate>
     <generator>Jekyll v3.8.6</generator>
+    
+      <item>
+        <title>[텐서플로] TFRecord 파일을 이용한 이미지 분류-(2)</title>
+        <description>&lt;h3 id=&quot;배경&quot;&gt;배경&lt;/h3&gt; &lt;p&gt;keras를 이용해 만든 모델에서 이전까지는 모델을 학습시킬 때 X,y에 DataFrame이나 Numpy 형태의 데이터만 사용했기 때문에 TFRecord 파일을 모델에 어떻게 학습시켜야하는지 몰라서 헤맸던 기억이 있다. 그래서 이 포스트에서는 간단한...</description>
+        <pubDate>Sun, 29 Nov 2020 03:06:46 +0900</pubDate>
+        <link>http://localhost:4000/blog/datascience/2020/11/29/tfrecord-2.html</link>
+        <guid isPermaLink="true">http://localhost:4000/blog/datascience/2020/11/29/tfrecord-2.html</guid>
+        
+        <category>TFRecrod</category>
+        
+        
+        <category>DataScience</category>
+        
+      </item>
+    
+      <item>
+        <title>[MongoDb] pymongo 기본적인 명령어들</title>
+        <description>&lt;h3 id=&quot;mongodb-데이터-저장-구조&quot;&gt;MongoDb 데이터 저장 구조&lt;/h3&gt; &lt;blockquote&gt; &lt;p&gt;DB-Collection-Document-Key_value&lt;br /&gt; 상위 — 하위&lt;/p&gt; &lt;/blockquote&gt; &lt;h3 id=&quot;python에서-mongodb-사용&quot;&gt;Python에서 MongoDb 사용&lt;/h3&gt; &lt;pre&gt;&lt;code class=&quot;language-Python&quot;&gt; from pymongo import MongoClient client = MongoClient('127.0.0.1') &lt;/code&gt;&lt;/pre&gt; &lt;h3 id=&quot;명령어s&quot;&gt;명령어s&lt;/h3&gt; &lt;h4 id=&quot;db&quot;&gt;DB&lt;/h4&gt;...</description>
+        <pubDate>Wed, 25 Nov 2020 03:02:11 +0900</pubDate>
+        <link>http://localhost:4000/blog/database/2020/11/25/mongodb-pymongo.html</link>
+        <guid isPermaLink="true">http://localhost:4000/blog/database/2020/11/25/mongodb-pymongo.html</guid>
+        
+        <category>Mongodb</category>
+        
+        
+        <category>DataBase</category>
+        
+      </item>
     
       <item>
         <title>[텐서플로] TFRecord 파일을 이용한 이미지 분류-(1)</title>

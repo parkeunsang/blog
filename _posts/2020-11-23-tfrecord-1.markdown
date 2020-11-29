@@ -20,13 +20,19 @@ cover: "/assets/instacode.png"
 
 
 ### 이미지를 TFRecord 형태로 변환
-코드 참고: [tensorflow docs](https://www.tensorflow.org/tutorials/load_data/tfrecord)<br>
+코드 참고: [tensorflow doc](https://www.tensorflow.org/tutorials/load_data/tfrecord)<br>
 데이터 출처 : [dacon-랜드마크 분류 대회](https://dacon.io/competitions/official/235585/data/)
 [image1.jpg, image2.jpg, ...., imageN.jpg] -> [image1.tfrecord, image2.tfrecord, ..., imageN.tfrecord] <br>
 
 Process : **각 이미지 파일의 경로**를 리스트에 저장후 각각 파일에 접근해 TFRecord파일로 변환
 #### 데이터의 형태를 정의하는 함수
 ```Python
+from glob import glob
+import pandas as pd
+from tqdm import tqdm
+import tensorflow as tf
+import time
+
 def _bytes_feature(value):
     """Returns a bytes_list from a string / byte."""
     if isinstance(value, type(tf.constant(0))):
