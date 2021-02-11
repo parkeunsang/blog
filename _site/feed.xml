@@ -6,9 +6,23 @@
 </description>
     <link>http://localhost:4000/blog/</link>
     <atom:link href="http://localhost:4000/blog/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Sun, 31 Jan 2021 22:42:44 +0900</pubDate>
-    <lastBuildDate>Sun, 31 Jan 2021 22:42:44 +0900</lastBuildDate>
+    <pubDate>Thu, 11 Feb 2021 21:26:03 +0900</pubDate>
+    <lastBuildDate>Thu, 11 Feb 2021 21:26:03 +0900</lastBuildDate>
     <generator>Jekyll v3.8.6</generator>
+    
+      <item>
+        <title>[MySQL] database 이름 변경</title>
+        <description>&lt;h2 id=&quot;abstract&quot;&gt;Abstract&lt;/h2&gt; &lt;p&gt;일반적으로 폴더의 이름을 변경하거나 프로그래밍에서 어떤 객체의 이름을 변경하는것은 매우 간단한 일이므로 나는 SQL의 &lt;strong&gt;데이터베이스(이하 DB)&lt;/strong&gt; 이름을 변경하는것도 이와 마찬가지로 쉬운 일이라고 생각을 했었다. 하지만 막상 이를 시도해보니...</description>
+        <pubDate>Thu, 11 Feb 2021 21:01:32 +0900</pubDate>
+        <link>http://localhost:4000/blog/database/2021/02/11/mysql-database.html</link>
+        <guid isPermaLink="true">http://localhost:4000/blog/database/2021/02/11/mysql-database.html</guid>
+        
+        <category>MySQL</category>
+        
+        
+        <category>DataBase</category>
+        
+      </item>
     
       <item>
         <title>[Python] 기관, 외국인 거래량이 많으면 주가가 하락한다? -2편</title>

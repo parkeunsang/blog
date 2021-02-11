@@ -1,5 +1,4 @@
 .DS_Store
-
 # Compiled site
 _site
 .jekyll-cache/
@@ -13,3 +12,4 @@ vendor/
 
 # config 
 _config.yml
+temp.txt
