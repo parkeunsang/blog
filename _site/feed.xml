@@ -6,9 +6,23 @@
 </description>
     <link>http://localhost:4000/blog/</link>
     <atom:link href="http://localhost:4000/blog/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Thu, 11 Feb 2021 21:26:03 +0900</pubDate>
-    <lastBuildDate>Thu, 11 Feb 2021 21:26:03 +0900</lastBuildDate>
+    <pubDate>Mon, 22 Feb 2021 01:32:52 +0900</pubDate>
+    <lastBuildDate>Mon, 22 Feb 2021 01:32:52 +0900</lastBuildDate>
     <generator>Jekyll v3.8.6</generator>
+    
+      <item>
+        <title>[python] AdaGrad, RMSProp, Adam 구현</title>
+        <description>&lt;h2 id=&quot;abstract&quot;&gt;Abstract&lt;/h2&gt; &lt;p&gt;딥러닝에서 각 노드의 weight를 조정할 때, batch마다 gradient를 계산해 &lt;strong&gt;일정 비율(learning rate)로 weight를 업데이트&lt;/strong&gt;한다. 이때 learning rate값이 크면 weight는 발산하게되고, 또 너무 작으면 수렴하는속도가 느려 학습시간이 오래걸릴것이다. 그래서...</description>
+        <pubDate>Mon, 22 Feb 2021 00:51:50 +0900</pubDate>
+        <link>http://localhost:4000/blog/datascience/2021/02/22/python-adagrad-rmsprop-adam.html</link>
+        <guid isPermaLink="true">http://localhost:4000/blog/datascience/2021/02/22/python-adagrad-rmsprop-adam.html</guid>
+        
+        <category>Python</category>
+        
+        
+        <category>DataScience</category>
+        
+      </item>
     
       <item>
         <title>[MySQL] database 이름 변경</title>
@@ -133,18 +147,6 @@
         
         
         <category>DataScience</category>
-        
-      </item>
-    
-      <item>
-        <title>The reason why I decided to blog</title>
-        <description>&lt;h3 id=&quot;study-log&quot;&gt;Study log&lt;/h3&gt; &lt;p&gt;The most important reason is that I want to record ‘study log’. When I studied or did programming, I frequently refered my past code or study result....</description>
-        <pubDate>Thu, 19 Nov 2020 13:52:59 +0900</pubDate>
-        <link>http://localhost:4000/blog/dummy/2020/11/19/the-reason-why-i-decided-to-blog.html</link>
-        <guid isPermaLink="true">http://localhost:4000/blog/dummy/2020/11/19/the-reason-why-i-decided-to-blog.html</guid>
-        
-        
-        <category>Dummy</category>
         
       </item>
     
