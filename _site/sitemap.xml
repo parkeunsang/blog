@@ -3,6 +3,21 @@
   
     
     <url>
+      <loc>http://localhost:4000/blog/stock/2021/02/24/vs.html</loc>
+      
+        <lastmod>2021-02-24T23:21:06+09:00</lastmod>
+      
+      
+        <changefreq>monthly</changefreq>
+      
+      
+        <priority>0.5</priority>
+      
+    </url>
+    
+  
+    
+    <url>
       <loc>http://localhost:4000/blog/datascience/2021/02/22/python-adagrad-rmsprop-adam.html</loc>
       
         <lastmod>2021-02-22T00:51:50+09:00</lastmod>

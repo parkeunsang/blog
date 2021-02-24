@@ -6,9 +6,23 @@
 </description>
     <link>http://localhost:4000/blog/</link>
     <atom:link href="http://localhost:4000/blog/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Mon, 22 Feb 2021 01:32:52 +0900</pubDate>
-    <lastBuildDate>Mon, 22 Feb 2021 01:32:52 +0900</lastBuildDate>
+    <pubDate>Wed, 24 Feb 2021 23:59:47 +0900</pubDate>
+    <lastBuildDate>Wed, 24 Feb 2021 23:59:47 +0900</lastBuildDate>
     <generator>Jekyll v3.8.6</generator>
+    
+      <item>
+        <title>코스피 vs 코스닥, 평균 수익률과 변동성 차이는?</title>
+        <description>&lt;h2 id=&quot;abstract&quot;&gt;Abstract&lt;/h2&gt; &lt;p&gt;주식투자를 하다보면 &lt;strong&gt;코스피 주식을 살때보다 코스닥 종목을 샀을 때 손해를 보는 경우가 많았다&lt;/strong&gt;. 또한 주가의 &lt;strong&gt;변동성도 경험적으로 코스닥이 코스피보다 크다&lt;/strong&gt;고 느껴졌다.&lt;br /&gt; 그래서 코스피와 코스닥 시장 종목들의 &lt;strong&gt;전일대비...</description>
+        <pubDate>Wed, 24 Feb 2021 23:21:06 +0900</pubDate>
+        <link>http://localhost:4000/blog/stock/2021/02/24/vs.html</link>
+        <guid isPermaLink="true">http://localhost:4000/blog/stock/2021/02/24/vs.html</guid>
+        
+        <category>Python</category>
+        
+        
+        <category>Stock</category>
+        
+      </item>
     
       <item>
         <title>[python] AdaGrad, RMSProp, Adam 구현</title>
@@ -133,20 +147,6 @@
         
         
         <category>DataBase</category>
-        
-      </item>
-    
-      <item>
-        <title>[텐서플로] TFRecord 파일을 이용한 이미지 분류-(1)</title>
-        <description>&lt;h3 id=&quot;tfrecord란&quot;&gt;TFRecord란?&lt;/h3&gt; &lt;ul&gt; &lt;li&gt;텐서플로의 데이터 형식중 하나로, model에 input 하는 X,y 를 통합한 형태이다.&lt;/li&gt; &lt;li&gt;이미지 분류에서 원래는 모델의 X에 numpy 형태의 값과 y에 label값을 넣게 되는데 이 두개의 값이 tfrecord파일에는...</description>
-        <pubDate>Mon, 23 Nov 2020 21:10:30 +0900</pubDate>
-        <link>http://localhost:4000/blog/datascience/2020/11/23/tfrecord-1.html</link>
-        <guid isPermaLink="true">http://localhost:4000/blog/datascience/2020/11/23/tfrecord-1.html</guid>
-        
-        <category>TFRecrod</category>
-        
-        
-        <category>DataScience</category>
         
       </item>
     
