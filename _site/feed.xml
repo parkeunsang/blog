@@ -6,9 +6,23 @@
 </description>
     <link>http://localhost:4000/blog/</link>
     <atom:link href="http://localhost:4000/blog/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Wed, 24 Feb 2021 23:59:47 +0900</pubDate>
-    <lastBuildDate>Wed, 24 Feb 2021 23:59:47 +0900</lastBuildDate>
+    <pubDate>Wed, 10 Mar 2021 00:23:24 +0900</pubDate>
+    <lastBuildDate>Wed, 10 Mar 2021 00:23:24 +0900</lastBuildDate>
     <generator>Jekyll v3.8.6</generator>
+    
+      <item>
+        <title>[python]k-means 클러스터링 구현</title>
+        <description>&lt;h2 id=&quot;abstract&quot;&gt;Abstract&lt;/h2&gt; &lt;p&gt;아마 ML algorithm중 가장 이해하기쉽고, 구현도 간단한 알고리즘을 뽑으라면 많은 이들이 k-means clustering을 뽑을것이다. 그래서 한번 구현해보았다.&lt;/p&gt; &lt;h2 id=&quot;동작-과정&quot;&gt;동작 과정&lt;/h2&gt; &lt;ol&gt; &lt;li&gt;hyper-parameter인 k 값을 설정한다.&lt;/li&gt; &lt;li&gt;k개의 center(중심점)을 무작위로...</description>
+        <pubDate>Wed, 10 Mar 2021 00:00:27 +0900</pubDate>
+        <link>http://localhost:4000/blog/datascience/2021/03/10/pythonk-means.html</link>
+        <guid isPermaLink="true">http://localhost:4000/blog/datascience/2021/03/10/pythonk-means.html</guid>
+        
+        <category>Python</category>
+        
+        
+        <category>DataScience</category>
+        
+      </item>
     
       <item>
         <title>코스피 vs 코스닥, 평균 수익률과 변동성 차이는?</title>
@@ -133,20 +147,6 @@
         
         
         <category>DataScience</category>
-        
-      </item>
-    
-      <item>
-        <title>[MongoDb] pymongo 기본적인 명령어들</title>
-        <description>&lt;h3 id=&quot;mongodb-데이터-저장-구조&quot;&gt;MongoDb 데이터 저장 구조&lt;/h3&gt; &lt;blockquote&gt; &lt;p&gt;DB-Collection-Document-Key_value&lt;br /&gt; 상위 — 하위&lt;/p&gt; &lt;/blockquote&gt; &lt;h3 id=&quot;python에서-mongodb-사용&quot;&gt;Python에서 MongoDb 사용&lt;/h3&gt; &lt;pre&gt;&lt;code class=&quot;language-Python&quot;&gt; from pymongo import MongoClient client = MongoClient('127.0.0.1') &lt;/code&gt;&lt;/pre&gt; &lt;h3 id=&quot;명령어s&quot;&gt;명령어s&lt;/h3&gt; &lt;h4 id=&quot;db&quot;&gt;DB&lt;/h4&gt;...</description>
-        <pubDate>Wed, 25 Nov 2020 03:02:11 +0900</pubDate>
-        <link>http://localhost:4000/blog/database/2020/11/25/mongodb-pymongo.html</link>
-        <guid isPermaLink="true">http://localhost:4000/blog/database/2020/11/25/mongodb-pymongo.html</guid>
-        
-        <category>Mongodb</category>
-        
-        
-        <category>DataBase</category>
         
       </item>
     
