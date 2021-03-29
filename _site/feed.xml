@@ -6,9 +6,23 @@
 </description>
     <link>http://localhost:4000/blog/</link>
     <atom:link href="http://localhost:4000/blog/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Thu, 25 Mar 2021 02:22:59 +0900</pubDate>
-    <lastBuildDate>Thu, 25 Mar 2021 02:22:59 +0900</lastBuildDate>
+    <pubDate>Tue, 30 Mar 2021 00:54:10 +0900</pubDate>
+    <lastBuildDate>Tue, 30 Mar 2021 00:54:10 +0900</lastBuildDate>
     <generator>Jekyll v3.8.6</generator>
+    
+      <item>
+        <title>[MySQL] 기초 문법 정리 - 1</title>
+        <description>&lt;h2 id=&quot;abstract&quot;&gt;Abstract&lt;/h2&gt; &lt;p&gt;MySQL의 문법을 큰 기능별(Create, Read, Update, Delete)로 정리해 보았다.&lt;/p&gt; &lt;h2 id=&quot;create&quot;&gt;Create&lt;/h2&gt; &lt;div class=&quot;language-sql highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;-- Set Schema&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;CREATE&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;TABLE&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;classmates&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt; &lt;span...</description>
+        <pubDate>Tue, 30 Mar 2021 00:26:21 +0900</pubDate>
+        <link>http://localhost:4000/blog/database/2021/03/30/mysql.html</link>
+        <guid isPermaLink="true">http://localhost:4000/blog/database/2021/03/30/mysql.html</guid>
+        
+        <category>MySQL</category>
+        
+        
+        <category>DataBase</category>
+        
+      </item>
     
       <item>
         <title>코스피와 상관관계가 높은 종목들은? 삼성전자와 증권사들</title>
@@ -130,20 +144,6 @@
         <pubDate>Tue, 19 Jan 2021 23:24:18 +0900</pubDate>
         <link>http://localhost:4000/blog/stock/2021/01/19/python.html</link>
         <guid isPermaLink="true">http://localhost:4000/blog/stock/2021/01/19/python.html</guid>
-        
-        <category>Stock</category>
-        
-        
-        <category>Stock</category>
-        
-      </item>
-    
-      <item>
-        <title>[Python] 기관, 외국인 거래량과 주가의 관계 분석(EDA)</title>
-        <description>&lt;h3 id=&quot;abstract&quot;&gt;Abstract&lt;/h3&gt; &lt;p&gt;주식시장에는 ‘&lt;strong&gt;개미는 기관, 외인(외국인)을 이길 수 없다&lt;/strong&gt;‘는 말이 있다. 정보의 접근성이나, 투자 자금의 단위, 공매도 등 보다 자유로운 투자가 가능하다는 점 등에서 기관이 개인보다 유리한 위치에 있기 때문이며...</description>
-        <pubDate>Sun, 03 Jan 2021 18:59:33 +0900</pubDate>
-        <link>http://localhost:4000/blog/stock/2021/01/03/eda.html</link>
-        <guid isPermaLink="true">http://localhost:4000/blog/stock/2021/01/03/eda.html</guid>
         
         <category>Stock</category>
         
