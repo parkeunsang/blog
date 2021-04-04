@@ -6,13 +6,27 @@
 </description>
     <link>http://localhost:4000/blog/</link>
     <atom:link href="http://localhost:4000/blog/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Tue, 30 Mar 2021 00:54:10 +0900</pubDate>
-    <lastBuildDate>Tue, 30 Mar 2021 00:54:10 +0900</lastBuildDate>
+    <pubDate>Mon, 05 Apr 2021 03:36:45 +0900</pubDate>
+    <lastBuildDate>Mon, 05 Apr 2021 03:36:45 +0900</lastBuildDate>
     <generator>Jekyll v3.8.6</generator>
     
       <item>
+        <title>[MySQL] 기초 문법 정리 - 2</title>
+        <description>&lt;h2 id=&quot;abstract&quot;&gt;Abstract&lt;/h2&gt; &lt;p&gt;지난포스트에서는 MySQL의 기본적인 문법인 CRUD + 간단한 정렬(order by), 조건문(where)들을 살펴보았다. &lt;br /&gt; 이번포스트에서는 좀더 심화된 조건문(like)과 병합(join)등에 대해 살펴보자.&lt;/p&gt; &lt;h2 id=&quot;tabel-생성&quot;&gt;Tabel 생성&lt;/h2&gt; &lt;div class=&quot;language-sql highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span...</description>
+        <pubDate>Mon, 05 Apr 2021 00:26:21 +0900</pubDate>
+        <link>http://localhost:4000/blog/database/2021/04/05/mysql2.html</link>
+        <guid isPermaLink="true">http://localhost:4000/blog/database/2021/04/05/mysql2.html</guid>
+        
+        <category>MySQL</category>
+        
+        
+        <category>DataBase</category>
+        
+      </item>
+    
+      <item>
         <title>[MySQL] 기초 문법 정리 - 1</title>
-        <description>&lt;h2 id=&quot;abstract&quot;&gt;Abstract&lt;/h2&gt; &lt;p&gt;MySQL의 문법을 큰 기능별(Create, Read, Update, Delete)로 정리해 보았다.&lt;/p&gt; &lt;h2 id=&quot;create&quot;&gt;Create&lt;/h2&gt; &lt;div class=&quot;language-sql highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;-- Set Schema&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;CREATE&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;TABLE&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;classmates&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt; &lt;span...</description>
+        <description>&lt;h2 id=&quot;abstract&quot;&gt;Abstract&lt;/h2&gt; &lt;p&gt;MySQL의 문법을 큰 기능별(Create, Read, Update, Delete)로 정리해 보았다. SQL은 따로 대소문자구분을 하지않으며 여기서는 명령어는 대문자를, 변수명은 소문자를 사용했다.&lt;br /&gt;&lt;/p&gt; &lt;h2 id=&quot;create&quot;&gt;Create&lt;/h2&gt; &lt;div class=&quot;language-sql highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;--...</description>
         <pubDate>Tue, 30 Mar 2021 00:26:21 +0900</pubDate>
         <link>http://localhost:4000/blog/database/2021/03/30/mysql.html</link>
         <guid isPermaLink="true">http://localhost:4000/blog/database/2021/03/30/mysql.html</guid>
@@ -135,20 +149,6 @@
         
         
         <category>Python</category>
-        
-      </item>
-    
-      <item>
-        <title>[Python] 기관, 외국인 거래량이 많으면 주가가 하락한다?</title>
-        <description>&lt;h2 id=&quot;abstract&quot;&gt;Abstract&lt;/h2&gt; &lt;p&gt;&lt;a href=&quot;https://parkeunsang.github.io/blog/stock/2021/01/03/eda.html&quot;&gt;이전 포스트&lt;/a&gt;에서 기관, 외인순매매량과 주가의 관계를 삼성전자, 대한항공 2가지의 예시로 간략하게 살펴보았으며 뚜렷한 결과를 확인하기는 힘들었다. 그래서 이번에는 2020년 12월 31일 기준 코스피에 상장된 총 799개의 종목을...</description>
-        <pubDate>Tue, 19 Jan 2021 23:24:18 +0900</pubDate>
-        <link>http://localhost:4000/blog/stock/2021/01/19/python.html</link>
-        <guid isPermaLink="true">http://localhost:4000/blog/stock/2021/01/19/python.html</guid>
-        
-        <category>Stock</category>
-        
-        
-        <category>Stock</category>
         
       </item>
     

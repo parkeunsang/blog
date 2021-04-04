@@ -3,6 +3,21 @@
   
     
     <url>
+      <loc>http://localhost:4000/blog/database/2021/04/05/mysql2.html</loc>
+      
+        <lastmod>2021-04-05T00:26:21+09:00</lastmod>
+      
+      
+        <changefreq>monthly</changefreq>
+      
+      
+        <priority>0.5</priority>
+      
+    </url>
+    
+  
+    
+    <url>
       <loc>http://localhost:4000/blog/database/2021/03/30/mysql.html</loc>
       
         <lastmod>2021-03-30T00:26:21+09:00</lastmod>
