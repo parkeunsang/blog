@@ -6,8 +6,8 @@
 </description>
     <link>http://localhost:4000/blog/</link>
     <atom:link href="http://localhost:4000/blog/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Mon, 05 Apr 2021 03:36:45 +0900</pubDate>
-    <lastBuildDate>Mon, 05 Apr 2021 03:36:45 +0900</lastBuildDate>
+    <pubDate>Wed, 07 Apr 2021 20:37:55 +0900</pubDate>
+    <lastBuildDate>Wed, 07 Apr 2021 20:37:55 +0900</lastBuildDate>
     <generator>Jekyll v3.8.6</generator>
     
       <item>
@@ -58,13 +58,13 @@
         <title>[Django] 시작하기 - project 및 app 생성(1)</title>
         <description>&lt;h2 id=&quot;what-is-django&quot;&gt;What is Django&lt;/h2&gt; &lt;p&gt;Django는 Python을 기반으로 하는 웹개발 프레임웨크이다.&lt;/p&gt; &lt;h2 id=&quot;why-use-django&quot;&gt;Why use Django&lt;/h2&gt; &lt;ul&gt; &lt;li&gt;개발 속도가 빠르다.&lt;/li&gt; &lt;li&gt;디버깅이 수월하며, 비교적 쉽다.&lt;/li&gt; &lt;/ul&gt; &lt;h2 id=&quot;시작하기&quot;&gt;시작하기&lt;/h2&gt; &lt;h3 id=&quot;환경-세팅&quot;&gt;환경 세팅&lt;/h3&gt; &lt;ol&gt; &lt;li&gt;가상환경...</description>
         <pubDate>Tue, 23 Mar 2021 23:52:22 +0900</pubDate>
-        <link>http://localhost:4000/blog/djagno/2021/03/23/django-project-app-1.html</link>
-        <guid isPermaLink="true">http://localhost:4000/blog/djagno/2021/03/23/django-project-app-1.html</guid>
+        <link>http://localhost:4000/blog/django/2021/03/23/django-project-app-1.html</link>
+        <guid isPermaLink="true">http://localhost:4000/blog/django/2021/03/23/django-project-app-1.html</guid>
         
         <category>Django</category>
         
         
-        <category>Djagno</category>
+        <category>Django</category>
         
       </item>
     

@@ -4,7 +4,7 @@ layout: post
 date: '2021-03-23 23:52:22'
 author: Edward Park
 categories:
-- Djagno
+- Django
 tags:
 - Django
 cover: "/assets/instacode.png"
