@@ -6,9 +6,23 @@
 </description>
     <link>http://localhost:4000/blog/</link>
     <atom:link href="http://localhost:4000/blog/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Wed, 07 Apr 2021 20:37:55 +0900</pubDate>
-    <lastBuildDate>Wed, 07 Apr 2021 20:37:55 +0900</lastBuildDate>
+    <pubDate>Sat, 24 Apr 2021 23:56:37 +0900</pubDate>
+    <lastBuildDate>Sat, 24 Apr 2021 23:56:37 +0900</lastBuildDate>
     <generator>Jekyll v3.8.6</generator>
+    
+      <item>
+        <title>[Python] 나이브 베이즈 분류 이론 설명 및 구현</title>
+        <description>&lt;h2 id=&quot;absctract&quot;&gt;Absctract&lt;/h2&gt; &lt;p&gt;나이브 베이즈 분류는 &lt;strong&gt;베이지안 방법론&lt;/strong&gt;을 이용해 classification 문제를 해결하고자 한다. 특히 자연어처리분야의 텍스트 분류문제에 많이 활용된다. 기본적인 원리는 다음과 같다.&lt;br /&gt;&lt;/p&gt; &lt;table&gt; &lt;thead&gt; &lt;tr&gt; &lt;th&gt;혈액형&lt;/th&gt; &lt;th&gt;안경&lt;/th&gt; &lt;th&gt;합격&lt;/th&gt; &lt;/tr&gt;...</description>
+        <pubDate>Thu, 22 Apr 2021 21:30:12 +0900</pubDate>
+        <link>http://localhost:4000/blog/datascience/2021/04/22/NB.html</link>
+        <guid isPermaLink="true">http://localhost:4000/blog/datascience/2021/04/22/NB.html</guid>
+        
+        <category>Python</category>
+        
+        
+        <category>DataScience</category>
+        
+      </item>
     
       <item>
         <title>[MySQL] 기초 문법 정리 - 2</title>
@@ -135,20 +149,6 @@
         
         
         <category>Stock</category>
-        
-      </item>
-    
-      <item>
-        <title>[Python] PEP-8 스타일 가이드 핵심</title>
-        <description>&lt;h2 id=&quot;스타일-가이드란&quot;&gt;스타일 가이드란?&lt;/h2&gt; &lt;p&gt;각 프로그래밍 언어마다 고유의 문법을 가지고있다. 이러한 문법을 지키지않으면 코드는 제대로 동작하지않는다. &lt;br /&gt; 또한 코드의 가독성을 위해 정해진 규칙인 &lt;strong&gt;스타일 가이드&lt;/strong&gt;도 존재한다. 이러한 규칙을 어긴다고 코드의...</description>
-        <pubDate>Mon, 25 Jan 2021 18:53:56 +0900</pubDate>
-        <link>http://localhost:4000/blog/python/2021/01/25/python-pep-8.html</link>
-        <guid isPermaLink="true">http://localhost:4000/blog/python/2021/01/25/python-pep-8.html</guid>
-        
-        <category>Python</category>
-        
-        
-        <category>Python</category>
         
       </item>
     
