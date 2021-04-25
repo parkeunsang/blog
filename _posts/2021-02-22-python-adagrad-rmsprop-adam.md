@@ -1,5 +1,5 @@
 ---
-title: "[python] AdaGrad, RMSProp, Adam 구현"
+title: "[Python] AdaGrad, RMSProp, Adam 구현"
 layout: post
 date: '2021-02-22 00:51:50'
 author: Edward Park

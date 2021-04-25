@@ -1,5 +1,5 @@
 ---
-title: "[python]k-means 클러스터링 구현"
+title: "[Python]k-means 클러스터링 구현"
 layout: post
 date: '2021-03-10 00:00:27'
 author: Edward Park

@@ -6,8 +6,8 @@
 </description>
     <link>http://localhost:4000/blog/</link>
     <atom:link href="http://localhost:4000/blog/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Sun, 25 Apr 2021 01:05:01 +0900</pubDate>
-    <lastBuildDate>Sun, 25 Apr 2021 01:05:01 +0900</lastBuildDate>
+    <pubDate>Mon, 26 Apr 2021 02:49:51 +0900</pubDate>
+    <lastBuildDate>Mon, 26 Apr 2021 02:49:51 +0900</lastBuildDate>
     <generator>Jekyll v3.8.6</generator>
     
       <item>
@@ -83,7 +83,7 @@
       </item>
     
       <item>
-        <title>[python]k-means 클러스터링 구현</title>
+        <title>[Python]k-means 클러스터링 구현</title>
         <description>&lt;h2 id=&quot;abstract&quot;&gt;Abstract&lt;/h2&gt; &lt;p&gt;아마 ML algorithm중 가장 이해하기쉽고, 구현도 간단한 알고리즘을 뽑으라면 많은 이들이 k-means clustering을 뽑을것이다. 그래서 한번 구현해보았다.&lt;/p&gt; &lt;h2 id=&quot;동작-과정&quot;&gt;동작 과정&lt;/h2&gt; &lt;ol&gt; &lt;li&gt;hyper-parameter인 k 값을 설정한다.&lt;/li&gt; &lt;li&gt;k개의 center(중심점)을 무작위로...</description>
         <pubDate>Wed, 10 Mar 2021 00:00:27 +0900</pubDate>
         <link>http://localhost:4000/blog/datascience/2021/03/10/pythonk-means.html</link>
@@ -111,7 +111,7 @@
       </item>
     
       <item>
-        <title>[python] AdaGrad, RMSProp, Adam 구현</title>
+        <title>[Python] AdaGrad, RMSProp, Adam 구현</title>
         <description>&lt;h2 id=&quot;abstract&quot;&gt;Abstract&lt;/h2&gt; &lt;p&gt;딥러닝에서 각 노드의 weight를 조정할 때, batch마다 gradient를 계산해 &lt;strong&gt;일정 비율(learning rate)로 weight를 업데이트&lt;/strong&gt;한다. 이때 learning rate값이 크면 weight는 발산하게되고, 또 너무 작으면 수렴하는속도가 느려 학습시간이 오래걸릴것이다. 그래서...</description>
         <pubDate>Mon, 22 Feb 2021 00:51:50 +0900</pubDate>
         <link>http://localhost:4000/blog/datascience/2021/02/22/python-adagrad-rmsprop-adam.html</link>
