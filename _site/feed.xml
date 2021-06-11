@@ -6,9 +6,23 @@
 </description>
     <link>http://localhost:4000/blog/</link>
     <atom:link href="http://localhost:4000/blog/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Sun, 06 Jun 2021 01:07:12 +0900</pubDate>
-    <lastBuildDate>Sun, 06 Jun 2021 01:07:12 +0900</lastBuildDate>
+    <pubDate>Fri, 11 Jun 2021 20:29:17 +0900</pubDate>
+    <lastBuildDate>Fri, 11 Jun 2021 20:29:17 +0900</lastBuildDate>
     <generator>Jekyll v3.8.6</generator>
+    
+      <item>
+        <title>[Python] 바이낸스 API를 이용해 분단위 비트코인 가격데이터 수집</title>
+        <description>&lt;h2 id=&quot;abstract&quot;&gt;Abstract&lt;/h2&gt; &lt;p&gt;주식의 경우 &lt;strong&gt;일 단위&lt;/strong&gt; 가격데이터(Open, High, Low, Close, Volume 등)는 한국거래소 등에서 쉽게 구할 수 있다. 하지만 시간, 분 단위 데이터는 증권사 API를 통해서 요청받아야하며, 이마저도 복잡한 프로세스를...</description>
+        <pubDate>Fri, 11 Jun 2021 18:55:22 +0900</pubDate>
+        <link>http://localhost:4000/blog/stock/2021/06/11/python-api.html</link>
+        <guid isPermaLink="true">http://localhost:4000/blog/stock/2021/06/11/python-api.html</guid>
+        
+        <category>Bitcoin</category>
+        
+        
+        <category>Stock</category>
+        
+      </item>
     
       <item>
         <title>[Django] url과 html파일 매칭 시키기 (2)</title>
@@ -135,20 +149,6 @@
         
         
         <category>DataScience</category>
-        
-      </item>
-    
-      <item>
-        <title>[MySQL] database 이름 변경</title>
-        <description>&lt;h2 id=&quot;abstract&quot;&gt;Abstract&lt;/h2&gt; &lt;p&gt;일반적으로 폴더의 이름을 변경하거나 프로그래밍에서 어떤 객체의 이름을 변경하는것은 매우 간단한 일이므로 나는 SQL의 &lt;strong&gt;데이터베이스(이하 DB)&lt;/strong&gt; 이름을 변경하는것도 이와 마찬가지로 쉬운 일이라고 생각을 했었다. 하지만 막상 이를 시도해보니...</description>
-        <pubDate>Thu, 11 Feb 2021 21:01:32 +0900</pubDate>
-        <link>http://localhost:4000/blog/database/2021/02/11/mysql-database.html</link>
-        <guid isPermaLink="true">http://localhost:4000/blog/database/2021/02/11/mysql-database.html</guid>
-        
-        <category>MySQL</category>
-        
-        
-        <category>DataBase</category>
         
       </item>
     
