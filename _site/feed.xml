@@ -6,9 +6,23 @@
 </description>
     <link>http://localhost:4000/blog/</link>
     <atom:link href="http://localhost:4000/blog/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Fri, 11 Jun 2021 20:29:17 +0900</pubDate>
-    <lastBuildDate>Fri, 11 Jun 2021 20:29:17 +0900</lastBuildDate>
+    <pubDate>Mon, 05 Jul 2021 23:52:17 +0900</pubDate>
+    <lastBuildDate>Mon, 05 Jul 2021 23:52:17 +0900</lastBuildDate>
     <generator>Jekyll v3.8.6</generator>
+    
+      <item>
+        <title>[Python] 블록체인 원리 및 구현</title>
+        <description>&lt;h1 id=&quot;block-chain&quot;&gt;Block Chain&lt;/h1&gt; &lt;h2 id=&quot;사전-용어-정리&quot;&gt;사전 용어 정리&lt;/h2&gt; &lt;p&gt;&lt;strong&gt;Block Chain&lt;/strong&gt;&lt;/p&gt; &lt;ul&gt; &lt;li&gt;말 그대로 데이터(Block)을 연결(Chain)한것&lt;/li&gt; &lt;li&gt;구조체를 링크드리스트로 연결하는것과 유사&lt;/li&gt; &lt;/ul&gt; &lt;p&gt;&lt;strong&gt;Hash&lt;/strong&gt;&lt;/p&gt; &lt;ul&gt; &lt;li&gt; &lt;p&gt;임의의 크기를 가진 데이터(Key)를 고정된 크기의 데이터(Value)로 변화시켜...</description>
+        <pubDate>Mon, 05 Jul 2021 23:41:47 +0900</pubDate>
+        <link>http://localhost:4000/blog/python/2021/07/05/python.html</link>
+        <guid isPermaLink="true">http://localhost:4000/blog/python/2021/07/05/python.html</guid>
+        
+        <category>Python</category>
+        
+        
+        <category>Python</category>
+        
+      </item>
     
       <item>
         <title>[Python] 바이낸스 API를 이용해 분단위 비트코인 가격데이터 수집</title>
@@ -54,7 +68,7 @@
     
       <item>
         <title>[MySQL] 기초 문법 정리 - 2</title>
-        <description>&lt;h2 id=&quot;abstract&quot;&gt;Abstract&lt;/h2&gt; &lt;p&gt;지난포스트에서는 MySQL의 기본적인 문법인 CRUD + 간단한 정렬(order by), 조건문(where)들을 살펴보았다. &lt;br /&gt; 이번포스트에서는 좀더 심화된 조건문(like)과 병합(join)등에 대해 살펴보자.&lt;/p&gt; &lt;h2 id=&quot;tabel-생성&quot;&gt;Tabel 생성&lt;/h2&gt; &lt;div class=&quot;language-sql highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span...</description>
+        <description>&lt;h2 id=&quot;abstract&quot;&gt;Abstract&lt;/h2&gt; &lt;p&gt;지난포스트에서는 MySQL의 기본적인 문법인 CRUD + 간단한 정렬(order by), 조건문(where)들을 살펴보았다. &lt;br /&gt; 이번포스트에서는 좀더 심화된 조건문(like)과 병합(join)등에 대해 살펴보자.&lt;/p&gt; &lt;h2 id=&quot;table-생성&quot;&gt;Table 생성&lt;/h2&gt; &lt;div class=&quot;language-sql highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span...</description>
         <pubDate>Mon, 05 Apr 2021 00:26:21 +0900</pubDate>
         <link>http://localhost:4000/blog/database/2021/04/05/mysql2.html</link>
         <guid isPermaLink="true">http://localhost:4000/blog/database/2021/04/05/mysql2.html</guid>
@@ -135,20 +149,6 @@
         
         
         <category>Stock</category>
-        
-      </item>
-    
-      <item>
-        <title>[Python] AdaGrad, RMSProp, Adam 구현</title>
-        <description>&lt;h2 id=&quot;abstract&quot;&gt;Abstract&lt;/h2&gt; &lt;p&gt;딥러닝에서 각 노드의 weight를 조정할 때, batch마다 gradient를 계산해 &lt;strong&gt;일정 비율(learning rate)로 weight를 업데이트&lt;/strong&gt;한다. 이때 learning rate값이 크면 weight는 발산하게되고, 또 너무 작으면 수렴하는속도가 느려 학습시간이 오래걸릴것이다. 그래서...</description>
-        <pubDate>Mon, 22 Feb 2021 00:51:50 +0900</pubDate>
-        <link>http://localhost:4000/blog/datascience/2021/02/22/python-adagrad-rmsprop-adam.html</link>
-        <guid isPermaLink="true">http://localhost:4000/blog/datascience/2021/02/22/python-adagrad-rmsprop-adam.html</guid>
-        
-        <category>Python</category>
-        
-        
-        <category>DataScience</category>
         
       </item>
     
