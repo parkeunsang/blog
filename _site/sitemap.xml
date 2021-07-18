@@ -3,6 +3,21 @@
   
     
     <url>
+      <loc>http://localhost:4000/blog/django/2021/07/18/django-rest-framework-api.html</loc>
+      
+        <lastmod>2021-07-18T16:50:56+09:00</lastmod>
+      
+      
+        <changefreq>monthly</changefreq>
+      
+      
+        <priority>0.5</priority>
+      
+    </url>
+    
+  
+    
+    <url>
       <loc>http://localhost:4000/blog/python/2021/07/06/api-key.html</loc>
       
         <lastmod>2021-07-06T23:41:04+09:00</lastmod>
