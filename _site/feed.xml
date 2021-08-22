@@ -6,9 +6,23 @@
 </description>
     <link>http://localhost:4000/blog/</link>
     <atom:link href="http://localhost:4000/blog/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Sun, 18 Jul 2021 16:53:35 +0900</pubDate>
-    <lastBuildDate>Sun, 18 Jul 2021 16:53:35 +0900</lastBuildDate>
+    <pubDate>Mon, 23 Aug 2021 00:34:21 +0900</pubDate>
+    <lastBuildDate>Mon, 23 Aug 2021 00:34:21 +0900</lastBuildDate>
     <generator>Jekyll v3.8.6</generator>
+    
+      <item>
+        <title>[MySQL] SQL서버의 장점 - 왜 csv(Excel file)로 데이터를 관리하지 않을까?</title>
+        <description>&lt;h2 id=&quot;abstract&quot;&gt;Abstract&lt;/h2&gt; &lt;p&gt;데이터에는 다양한 종류가 있다. 옛날에 ADsP를 준비하며 공부했던 기억을 돌이켜보면 데이터를 &lt;strong&gt;정형&lt;/strong&gt;(csv 등), &lt;strong&gt;반정형&lt;/strong&gt;(xml, json 등), &lt;strong&gt;비정형&lt;/strong&gt;(이미지 텍스트) 크게 3가지로 분류를 했었던 것 같다. 그중 csv, json 형태의...</description>
+        <pubDate>Sun, 22 Aug 2021 23:54:20 +0900</pubDate>
+        <link>http://localhost:4000/blog/database/2021/08/22/mysql-sql-csv.html</link>
+        <guid isPermaLink="true">http://localhost:4000/blog/database/2021/08/22/mysql-sql-csv.html</guid>
+        
+        <category>MySQL</category>
+        
+        
+        <category>DataBase</category>
+        
+      </item>
     
       <item>
         <title>[Django] Rest Framework를 이용해 API 서버 만들기</title>
@@ -133,20 +147,6 @@
         
         
         <category>Stock</category>
-        
-      </item>
-    
-      <item>
-        <title>[Django] 시작하기 - project 및 app 생성(1)</title>
-        <description>&lt;h2 id=&quot;what-is-django&quot;&gt;What is Django&lt;/h2&gt; &lt;p&gt;Django는 Python을 기반으로 하는 웹개발 프레임웨크이다.&lt;/p&gt; &lt;h2 id=&quot;why-use-django&quot;&gt;Why use Django&lt;/h2&gt; &lt;ul&gt; &lt;li&gt;개발 속도가 빠르다.&lt;/li&gt; &lt;li&gt;디버깅이 수월하며, 비교적 쉽다.&lt;/li&gt; &lt;/ul&gt; &lt;h2 id=&quot;시작하기&quot;&gt;시작하기&lt;/h2&gt; &lt;h3 id=&quot;환경-세팅&quot;&gt;환경 세팅&lt;/h3&gt; &lt;ol&gt; &lt;li&gt;가상환경...</description>
-        <pubDate>Tue, 23 Mar 2021 23:52:22 +0900</pubDate>
-        <link>http://localhost:4000/blog/django/2021/03/23/django-project-app-1.html</link>
-        <guid isPermaLink="true">http://localhost:4000/blog/django/2021/03/23/django-project-app-1.html</guid>
-        
-        <category>Django</category>
-        
-        
-        <category>Django</category>
         
       </item>
     
