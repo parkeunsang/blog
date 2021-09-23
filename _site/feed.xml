@@ -6,9 +6,21 @@
 </description>
     <link>http://localhost:4000/blog/</link>
     <atom:link href="http://localhost:4000/blog/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Mon, 23 Aug 2021 00:34:21 +0900</pubDate>
-    <lastBuildDate>Mon, 23 Aug 2021 00:34:21 +0900</lastBuildDate>
+    <pubDate>Thu, 23 Sep 2021 21:18:39 +0900</pubDate>
+    <lastBuildDate>Thu, 23 Sep 2021 21:18:39 +0900</lastBuildDate>
     <generator>Jekyll v3.8.6</generator>
+    
+      <item>
+        <title>[Git] commit 메세지 수정</title>
+        <description>&lt;h2 id=&quot;배경&quot;&gt;배경&lt;/h2&gt; &lt;p&gt;git은 형상관리, 코드공유 등에 요긴하게 이용된다. git의 핵심은 단연 &lt;strong&gt;코드&lt;/strong&gt;이며 이 외의것은 무시되기 쉽다. 나 또한 commit 메세지라던지, branch 관리 등의 필요성을 크게 못느껴 이를 등한시 했었다. 하지만...</description>
+        <pubDate>Thu, 23 Sep 2021 20:58:33 +0900</pubDate>
+        <link>http://localhost:4000/blog/dummy/2021/09/23/git-commit.html</link>
+        <guid isPermaLink="true">http://localhost:4000/blog/dummy/2021/09/23/git-commit.html</guid>
+        
+        
+        <category>Dummy</category>
+        
+      </item>
     
       <item>
         <title>[MySQL] SQL서버의 장점 - 왜 csv(Excel file)로 데이터를 관리하지 않을까?</title>
@@ -131,22 +143,6 @@
         
         
         <category>DataBase</category>
-        
-      </item>
-    
-      <item>
-        <title>코스피와 상관관계가 높은 종목들은? 삼성전자와 증권사들</title>
-        <description>&lt;h2 id=&quot;abstract&quot;&gt;Abstract&lt;/h2&gt; &lt;p&gt;투자를하다보면 많은 경우 &lt;strong&gt;수익률이 코스피 종목일경우 코스피지수, 코스닥 종목일 경우 코스닥 지수와 유사하게 흘러간다&lt;/strong&gt;. 물론 코스피, 코스닥지수는 개별종목들의 주가변동의 합으로 계산되므로 이는 어떻게보면 당연한 것이지만, 얼마나 상관이 있는지는...</description>
-        <pubDate>Thu, 25 Mar 2021 01:55:41 +0900</pubDate>
-        <link>http://localhost:4000/blog/stock/2021/03/25/kospi.html</link>
-        <guid isPermaLink="true">http://localhost:4000/blog/stock/2021/03/25/kospi.html</guid>
-        
-        <category>Stock</category>
-        
-        <category>Kospi</category>
-        
-        
-        <category>Stock</category>
         
       </item>
     
