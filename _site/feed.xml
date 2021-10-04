@@ -6,9 +6,21 @@
 </description>
     <link>http://localhost:4000/blog/</link>
     <atom:link href="http://localhost:4000/blog/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Thu, 23 Sep 2021 21:18:39 +0900</pubDate>
-    <lastBuildDate>Thu, 23 Sep 2021 21:18:39 +0900</lastBuildDate>
+    <pubDate>Mon, 04 Oct 2021 23:34:40 +0900</pubDate>
+    <lastBuildDate>Mon, 04 Oct 2021 23:34:40 +0900</lastBuildDate>
     <generator>Jekyll v3.8.6</generator>
+    
+      <item>
+        <title>왜 쿠팡은 쿠팡플레이 서비스를 시작했을까?</title>
+        <description>&lt;p&gt;한때 뉴스사에서 칼럼을 썼던 기억을 바탕으로 쿠팡플레이에 대해 가볍게 글을 쓰고자 한다.&lt;/p&gt; &lt;h2 id=&quot;내가-쿠팡플레를-접한-배경&quot;&gt;내가 쿠팡플레를 접한 배경&lt;/h2&gt; &lt;p&gt;최근 유튜브에 SNL Korea 클립들이 올라오면서 재미있게 시청을 했었다. 나는 당연히 tvn과 같은...</description>
+        <pubDate>Mon, 04 Oct 2021 23:32:12 +0900</pubDate>
+        <link>http://localhost:4000/blog/dummy/2021/10/04/coupang.html</link>
+        <guid isPermaLink="true">http://localhost:4000/blog/dummy/2021/10/04/coupang.html</guid>
+        
+        
+        <category>Dummy</category>
+        
+      </item>
     
       <item>
         <title>[Git] commit 메세지 수정</title>
@@ -124,20 +136,6 @@
         <pubDate>Mon, 05 Apr 2021 00:26:21 +0900</pubDate>
         <link>http://localhost:4000/blog/database/2021/04/05/mysql2.html</link>
         <guid isPermaLink="true">http://localhost:4000/blog/database/2021/04/05/mysql2.html</guid>
-        
-        <category>MySQL</category>
-        
-        
-        <category>DataBase</category>
-        
-      </item>
-    
-      <item>
-        <title>[MySQL] 기초 문법 정리 - 1</title>
-        <description>&lt;h2 id=&quot;abstract&quot;&gt;Abstract&lt;/h2&gt; &lt;p&gt;MySQL의 문법을 큰 기능별(Create, Read, Update, Delete)로 정리해 보았다. SQL은 따로 대소문자구분을 하지않으며 여기서는 명령어는 대문자를, 변수명은 소문자를 사용했다.&lt;br /&gt;&lt;/p&gt; &lt;h2 id=&quot;create&quot;&gt;Create&lt;/h2&gt; &lt;div class=&quot;language-sql highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;--...</description>
-        <pubDate>Tue, 30 Mar 2021 00:26:21 +0900</pubDate>
-        <link>http://localhost:4000/blog/database/2021/03/30/mysql.html</link>
-        <guid isPermaLink="true">http://localhost:4000/blog/database/2021/03/30/mysql.html</guid>
         
         <category>MySQL</category>
         
