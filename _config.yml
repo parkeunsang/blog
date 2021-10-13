@@ -3,7 +3,7 @@
 plugins:
   - jekyll-archives # Sorry, not GitHub pages friendly!
   - jekyll-sitemap
-  - jekyll-paginate
+  - jekyll-paginate-v2
 
 exclude:
   - "/vendor/"
@@ -25,18 +25,16 @@ logo: "/assets/homepage.png"
 
 # Build settings
 markdown: kramdown
-paginate: 5
-paginate_path: "/page:num/"
 inter_post_navigation: false
 highlightjs_theme: "monokai-sublime"
 
 # Pagination Settings
 # https://github.com/sverrirs/jekyll-paginate-v2/blob/master/README-GENERATOR.md#site-configuration
-# pagination:
-#   enabled: true
-#   per_page: 5
-#   permalink: "/page/:num/"
-#   sort_reverse: true
+pagination:
+  enabled: true
+  per_page: 5
+  permalink: "/page/:num/"
+  sort_reverse: true
 
 # Archive settings (see https://github.com/jekyll/jekyll-archives/)
 jekyll-archives:
@@ -60,9 +58,6 @@ descriptions:
     desc: "Posts describing Jekyll setup techniques."
 
   - cat: dummy
-    desc: "Just some placeholder posts, lorem ipsum and the rest."
-    
-  - cat: data science
     desc: "Just some placeholder posts, lorem ipsum and the rest."
 
 # Social icons and sharing options
