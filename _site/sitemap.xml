@@ -3,6 +3,21 @@
   
     
     <url>
+      <loc>http://localhost:4000/blog/datascience/2021/10/26/precision-vs-recall-tp-vs-fp.html</loc>
+      
+        <lastmod>2021-10-26T22:45:08+09:00</lastmod>
+      
+      
+        <changefreq>monthly</changefreq>
+      
+      
+        <priority>0.5</priority>
+      
+    </url>
+    
+  
+    
+    <url>
       <loc>http://localhost:4000/blog/dummy/2021/10/04/coupang.html</loc>
       
         <lastmod>2021-10-04T23:32:12+09:00</lastmod>

@@ -6,9 +6,21 @@
 </description>
     <link>http://localhost:4000/blog/</link>
     <atom:link href="http://localhost:4000/blog/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Wed, 13 Oct 2021 22:36:19 +0900</pubDate>
-    <lastBuildDate>Wed, 13 Oct 2021 22:36:19 +0900</lastBuildDate>
+    <pubDate>Tue, 26 Oct 2021 00:30:22 +0900</pubDate>
+    <lastBuildDate>Tue, 26 Oct 2021 00:30:22 +0900</lastBuildDate>
     <generator>Jekyll v3.8.6</generator>
+    
+      <item>
+        <title>TP vs FP / Precision vs Recall  정리</title>
+        <description>&lt;h2 id=&quot;개요&quot;&gt;개요&lt;/h2&gt; &lt;p&gt;분류모델에서 성능을 평가하는 지표로 AUC, F1-score 등이 사용된다. 그리고 Precision, Recall 등은 이를 계산할때 활용된다.&lt;br /&gt; 하지만 이름만 들어서는 어떻게 계산되는지 와닿지않아 매번 사용할때마다 헷갈려서 이렇게 정리를 해두고자...</description>
+        <pubDate>Tue, 26 Oct 2021 22:45:08 +0900</pubDate>
+        <link>http://localhost:4000/blog/datascience/2021/10/26/precision-vs-recall-tp-vs-fp.html</link>
+        <guid isPermaLink="true">http://localhost:4000/blog/datascience/2021/10/26/precision-vs-recall-tp-vs-fp.html</guid>
+        
+        
+        <category>DataScience</category>
+        
+      </item>
     
       <item>
         <title>왜 쿠팡은 쿠팡플레이 서비스를 시작했을까?</title>
@@ -127,20 +139,6 @@
         
         
         <category>DataScience</category>
-        
-      </item>
-    
-      <item>
-        <title>[MySQL] 기초 문법 정리 - 2</title>
-        <description>&lt;h2 id=&quot;abstract&quot;&gt;Abstract&lt;/h2&gt; &lt;p&gt;지난포스트에서는 MySQL의 기본적인 문법인 CRUD + 간단한 정렬(order by), 조건문(where)들을 살펴보았다. &lt;br /&gt; 이번포스트에서는 좀더 심화된 조건문(like)과 병합(join)등에 대해 살펴보자.&lt;/p&gt; &lt;h2 id=&quot;table-생성&quot;&gt;Table 생성&lt;/h2&gt; &lt;div class=&quot;language-sql highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span...</description>
-        <pubDate>Mon, 05 Apr 2021 00:26:21 +0900</pubDate>
-        <link>http://localhost:4000/blog/database/2021/04/05/mysql2.html</link>
-        <guid isPermaLink="true">http://localhost:4000/blog/database/2021/04/05/mysql2.html</guid>
-        
-        <category>MySQL</category>
-        
-        
-        <category>DataBase</category>
         
       </item>
     
