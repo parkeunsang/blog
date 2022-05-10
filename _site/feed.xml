@@ -6,9 +6,23 @@
 </description>
     <link>http://localhost:4000/blog/</link>
     <atom:link href="http://localhost:4000/blog/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Sat, 23 Apr 2022 18:20:59 +0900</pubDate>
-    <lastBuildDate>Sat, 23 Apr 2022 18:20:59 +0900</lastBuildDate>
+    <pubDate>Tue, 10 May 2022 21:03:16 +0900</pubDate>
+    <lastBuildDate>Tue, 10 May 2022 21:03:16 +0900</lastBuildDate>
     <generator>Jekyll v3.8.6</generator>
+    
+      <item>
+        <title>[Python] 바이낸스 API를 이용한 선물거래(매매)</title>
+        <description>&lt;h2 id=&quot;요약&quot;&gt;요약&lt;/h2&gt; &lt;p&gt;&lt;a href=&quot;https://parkeunsang.github.io/blog/stock/2021/06/11/python-api.html&quot;&gt;지난 포스트&lt;/a&gt; 에서 &lt;strong&gt;바이낸스 API&lt;/strong&gt;를 활용해 OHLC 데이터 수집을 해보았다. &lt;br /&gt; 이번 포스트에서는 API를 이용해 &lt;strong&gt;현재 보유종목 확인, 선물 거래&lt;/strong&gt;를 하는 코드를 구현해보고자 한다. &lt;br /&gt;...</description>
+        <pubDate>Tue, 10 May 2022 20:06:11 +0900</pubDate>
+        <link>http://localhost:4000/blog/stock/2022/05/10/python-api.html</link>
+        <guid isPermaLink="true">http://localhost:4000/blog/stock/2022/05/10/python-api.html</guid>
+        
+        <category>Bitcoin</category>
+        
+        
+        <category>Stock</category>
+        
+      </item>
     
       <item>
         <title>지역별 평균연봉 - 연봉이 가장 높은 지역은?</title>
@@ -125,20 +139,6 @@
         
         
         <category>Stock</category>
-        
-      </item>
-    
-      <item>
-        <title>[Django] url과 html파일 매칭 시키기 (2)</title>
-        <description>&lt;h2 id=&quot;개요&quot;&gt;개요&lt;/h2&gt; &lt;p&gt;Django를 이용한 웹 앱 개발은 MVC 패턴을 따른다.&lt;br /&gt;&lt;/p&gt; &lt;ul&gt; &lt;li&gt;M(model): models.py, 어플리케이션에 필요한 DB 구조&lt;/li&gt; &lt;li&gt;V(view): template/, 사용자에게 보여지는 부분(html file 등)&lt;/li&gt; &lt;li&gt;C(controller): views.py, DB에 접근해 데이터를...</description>
-        <pubDate>Sun, 06 Jun 2021 00:29:58 +0900</pubDate>
-        <link>http://localhost:4000/blog/django/2021/06/06/django-url-html-2.html</link>
-        <guid isPermaLink="true">http://localhost:4000/blog/django/2021/06/06/django-url-html-2.html</guid>
-        
-        <category>Django</category>
-        
-        
-        <category>Django</category>
         
       </item>
     

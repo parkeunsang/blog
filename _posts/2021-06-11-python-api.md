@@ -16,7 +16,7 @@ cover: "/assets/instacode.png"
 
 ## Binance site
 [Binance API docs](https://binance-docs.github.io/apidocs/spot/en/)<br>
-위 사이트에서 Binance에서 제공하는 API를 확인할 수 있다. 엄청나게 다양한 정보를 제공하지만, 나름 정리가 잘 되어있지만, 개인적으로는 암호화폐에 대한 도메인 지식도 부족하고 영어도 능숙하지 못한 편이라 원하는 정보를 찾는데 꽤나 많은 시간을 썼었다.
+위 사이트에서 Binance에서 제공하는 API를 확인할 수 있다. 엄청나게 다양한 정보를 제공하고, 나름 정리가 잘 되어있지만, 개인적으로는 암호화폐에 대한 도메인 지식도 부족하고 영어도 능숙하지 못한 편이라 원하는 정보를 찾는데 꽤나 많은 시간을 썼었다.
 <img src="/blog/post_images/binance/binance_api_1.png" title="binance_api">
 스크롤을 내리다보면 `Klines/Candlestick Data`라는 항목을 찾을 수 있다. 그리고 GET 요청을 통해 해당 url에 적절한 parameter를 보내 요청하면 아래와 같은 Response를 얻을 수 있다.
 <img src="/blog/post_images/binance/binance_api_2.png" title="binance_api">
