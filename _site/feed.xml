@@ -6,9 +6,23 @@
 </description>
     <link>http://localhost:4000/blog/</link>
     <atom:link href="http://localhost:4000/blog/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Tue, 10 May 2022 21:03:16 +0900</pubDate>
-    <lastBuildDate>Tue, 10 May 2022 21:03:16 +0900</lastBuildDate>
+    <pubDate>Tue, 07 Jun 2022 22:05:38 +0900</pubDate>
+    <lastBuildDate>Tue, 07 Jun 2022 22:05:38 +0900</lastBuildDate>
     <generator>Jekyll v3.8.6</generator>
+    
+      <item>
+        <title>[Python] 비트코인 변동률, 거래량 추이 분석</title>
+        <description>&lt;h2 id=&quot;intro&quot;&gt;Intro&lt;/h2&gt; &lt;p&gt;데이터를 이용한 예측에서는 &lt;strong&gt;미래가 과거와 유사한 추이를 보일 것&lt;/strong&gt;이라는걸 전제로 한다. 하지만 현실은 그렇지 않은 경우가 많다.&lt;br /&gt; 백테스팅에서 뛰어난 결과를 보인 알고리즘도 실제 트레이딩에서는 좋은 결과를 거두지...</description>
+        <pubDate>Tue, 07 Jun 2022 21:46:01 +0900</pubDate>
+        <link>http://localhost:4000/blog/stock/2022/06/07/python.html</link>
+        <guid isPermaLink="true">http://localhost:4000/blog/stock/2022/06/07/python.html</guid>
+        
+        <category>Bitcoin</category>
+        
+        
+        <category>Stock</category>
+        
+      </item>
     
       <item>
         <title>[Python] 바이낸스 API를 이용한 선물거래(매매)</title>
@@ -125,20 +139,6 @@
         
         
         <category>Python</category>
-        
-      </item>
-    
-      <item>
-        <title>[Python] 바이낸스 API를 이용해 분단위 비트코인 가격데이터 수집</title>
-        <description>&lt;h2 id=&quot;abstract&quot;&gt;Abstract&lt;/h2&gt; &lt;p&gt;주식의 경우 &lt;strong&gt;일 단위&lt;/strong&gt; 가격데이터(Open, High, Low, Close, Volume 등)는 한국거래소 등에서 쉽게 구할 수 있다. 하지만 시간, 분 단위 데이터는 증권사 API를 통해서 요청받아야하며, 이마저도 복잡한 프로세스를...</description>
-        <pubDate>Fri, 11 Jun 2021 18:55:22 +0900</pubDate>
-        <link>http://localhost:4000/blog/stock/2021/06/11/python-api.html</link>
-        <guid isPermaLink="true">http://localhost:4000/blog/stock/2021/06/11/python-api.html</guid>
-        
-        <category>Bitcoin</category>
-        
-        
-        <category>Stock</category>
         
       </item>
     
