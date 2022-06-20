@@ -6,9 +6,25 @@
 </description>
     <link>http://localhost:4000/blog/</link>
     <atom:link href="http://localhost:4000/blog/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Tue, 07 Jun 2022 22:05:38 +0900</pubDate>
-    <lastBuildDate>Tue, 07 Jun 2022 22:05:38 +0900</lastBuildDate>
+    <pubDate>Mon, 20 Jun 2022 22:23:38 +0900</pubDate>
+    <lastBuildDate>Mon, 20 Jun 2022 22:23:38 +0900</lastBuildDate>
     <generator>Jekyll v3.8.6</generator>
+    
+      <item>
+        <title>코스피와 기준금리 관계 분석</title>
+        <description>&lt;h2 id=&quot;intro&quot;&gt;Intro&lt;/h2&gt; &lt;p&gt;코스피 지수가 작년 최고치(3300정도)를 찍고 꾸준히 하락하고 있다. 필자도 올해 초부터 주식을 꾸준히 매입하기 시작했는데, 바닥을 모르고 추락하는 지수를 보며 마음을 졸이고 있다.&lt;br /&gt;&lt;/p&gt; &lt;p&gt;주가가 하락하는 이유에는 &lt;strong&gt;러시아...</description>
+        <pubDate>Mon, 20 Jun 2022 20:43:53 +0900</pubDate>
+        <link>http://localhost:4000/blog/stock/2022/06/20/kospi.html</link>
+        <guid isPermaLink="true">http://localhost:4000/blog/stock/2022/06/20/kospi.html</guid>
+        
+        <category>Stock</category>
+        
+        <category>Python</category>
+        
+        
+        <category>Stock</category>
+        
+      </item>
     
       <item>
         <title>[Python] 비트코인 변동률, 거래량 추이 분석</title>
@@ -122,20 +138,6 @@
         <pubDate>Tue, 06 Jul 2021 23:41:04 +0900</pubDate>
         <link>http://localhost:4000/blog/python/2021/07/06/api-key.html</link>
         <guid isPermaLink="true">http://localhost:4000/blog/python/2021/07/06/api-key.html</guid>
-        
-        
-        <category>Python</category>
-        
-      </item>
-    
-      <item>
-        <title>[Python] 블록체인 원리 및 구현</title>
-        <description>&lt;h1 id=&quot;block-chain&quot;&gt;Block Chain&lt;/h1&gt; &lt;h2 id=&quot;사전-용어-정리&quot;&gt;사전 용어 정리&lt;/h2&gt; &lt;p&gt;&lt;strong&gt;Block Chain&lt;/strong&gt;&lt;/p&gt; &lt;ul&gt; &lt;li&gt;말 그대로 데이터(Block)을 연결(Chain)한것&lt;/li&gt; &lt;li&gt;구조체를 링크드리스트로 연결하는것과 유사&lt;/li&gt; &lt;/ul&gt; &lt;p&gt;&lt;strong&gt;Hash&lt;/strong&gt;&lt;/p&gt; &lt;ul&gt; &lt;li&gt; &lt;p&gt;임의의 크기를 가진 데이터(Key)를 고정된 크기의 데이터(Value)로 변화시켜...</description>
-        <pubDate>Mon, 05 Jul 2021 23:41:47 +0900</pubDate>
-        <link>http://localhost:4000/blog/python/2021/07/05/python.html</link>
-        <guid isPermaLink="true">http://localhost:4000/blog/python/2021/07/05/python.html</guid>
-        
-        <category>Python</category>
         
         
         <category>Python</category>
