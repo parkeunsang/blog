@@ -6,9 +6,23 @@
 </description>
     <link>http://localhost:4000/blog/</link>
     <atom:link href="http://localhost:4000/blog/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Mon, 20 Jun 2022 22:23:38 +0900</pubDate>
-    <lastBuildDate>Mon, 20 Jun 2022 22:23:38 +0900</lastBuildDate>
+    <pubDate>Sat, 06 Aug 2022 21:20:24 +0900</pubDate>
+    <lastBuildDate>Sat, 06 Aug 2022 21:20:24 +0900</lastBuildDate>
     <generator>Jekyll v3.8.6</generator>
+    
+      <item>
+        <title>[Python] Bootstrap을 이용한 가설검정(feat.삼성전자 주가)</title>
+        <description>&lt;h2 id=&quot;intro&quot;&gt;Intro&lt;/h2&gt; &lt;p&gt;데이터분석을 하다보면 &lt;strong&gt;가설검정&lt;/strong&gt;을 해야할 일이 많다. 여기서 가설검정이라 함은 사전에 귀무가설과 유의수준을 설정해 데이터 결과값을 토대로 귀무가설을 채택/기각하는 교과서에서 배운 딱딱한 가설검정뿐만 아니라 “내 주식 전략이 유효한 수익을...</description>
+        <pubDate>Sat, 06 Aug 2022 20:23:48 +0900</pubDate>
+        <link>http://localhost:4000/blog/dataanalysis/2022/08/06/python-bootstrap-feat.html</link>
+        <guid isPermaLink="true">http://localhost:4000/blog/dataanalysis/2022/08/06/python-bootstrap-feat.html</guid>
+        
+        <category>Python</category>
+        
+        
+        <category>DataAnalysis</category>
+        
+      </item>
     
       <item>
         <title>코스피와 기준금리 관계 분석</title>
@@ -129,18 +143,6 @@
         
         
         <category>Django</category>
-        
-      </item>
-    
-      <item>
-        <title>환경 변수를 이용한 API Key관리</title>
-        <description>&lt;h2 id=&quot;abstract&quot;&gt;Abstract&lt;/h2&gt; &lt;p&gt;Git을 사용하다 보면 코드에 저장된 API Key나 암호 등 민감한 정보를 무심코 업로드하는 경우가 있다. 그래서 이러한 상황을 방지하기 위해 API Key와 같은 민감한 정보들을 코드가 아닌 컴퓨터...</description>
-        <pubDate>Tue, 06 Jul 2021 23:41:04 +0900</pubDate>
-        <link>http://localhost:4000/blog/python/2021/07/06/api-key.html</link>
-        <guid isPermaLink="true">http://localhost:4000/blog/python/2021/07/06/api-key.html</guid>
-        
-        
-        <category>Python</category>
         
       </item>
     
