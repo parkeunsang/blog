@@ -6,9 +6,23 @@
 </description>
     <link>http://localhost:4000/blog/</link>
     <atom:link href="http://localhost:4000/blog/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Sat, 06 Aug 2022 21:20:24 +0900</pubDate>
-    <lastBuildDate>Sat, 06 Aug 2022 21:20:24 +0900</lastBuildDate>
+    <pubDate>Tue, 16 Aug 2022 22:22:16 +0900</pubDate>
+    <lastBuildDate>Tue, 16 Aug 2022 22:22:16 +0900</lastBuildDate>
     <generator>Jekyll v3.8.6</generator>
+    
+      <item>
+        <title>Nginx sock failed (13: Permission denied) 에러 해결</title>
+        <description>&lt;h2 id=&quot;배경&quot;&gt;배경&lt;/h2&gt; &lt;p&gt;Docker환경(Python:3.7 이미지 사용)에서 Django 프로젝트를 &lt;strong&gt;nginx와&lt;/strong&gt; &lt;strong&gt;uwsgi를&lt;/strong&gt; 이용해 배포하는 과정에서 &lt;strong&gt;502 Bad Gateway&lt;/strong&gt; 에러가 발생했다.&lt;a href=&quot;https://uwsgi-docs.readthedocs.io/en/latest/tutorials/Django_and_nginx.html#some-notes-about-this-tutorial&quot;&gt;실습가이드 참조&lt;/a&gt; &lt;img src=&quot;/blog/post_images/extra/502.png&quot; title=&quot;502error&quot; /&gt; 실습 가이드에서 친절하게 에러 로그를 쌓고있는 위치를...</description>
+        <pubDate>Tue, 16 Aug 2022 21:57:35 +0900</pubDate>
+        <link>http://localhost:4000/blog/dummy/2022/08/16/nginx-sock-failed-13-permission-denied.html</link>
+        <guid isPermaLink="true">http://localhost:4000/blog/dummy/2022/08/16/nginx-sock-failed-13-permission-denied.html</guid>
+        
+        <category>Nginx</category>
+        
+        
+        <category>Dummy</category>
+        
+      </item>
     
       <item>
         <title>[Python] Bootstrap을 이용한 가설검정(feat.삼성전자 주가)</title>
@@ -129,20 +143,6 @@
         
         
         <category>DataBase</category>
-        
-      </item>
-    
-      <item>
-        <title>[Django] Rest Framework를 이용해 API 서버 만들기</title>
-        <description>&lt;h2 id=&quot;abstract&quot;&gt;Abstract&lt;/h2&gt; &lt;p&gt;앞선 포스트에서 봤듯이 Django는 Front-end와 Back-end를 한번에 개발할 수 있는 framework이다. 하지만 많은 경우 Django는 서버 &lt;strong&gt;개발(Back-end)의&lt;/strong&gt; 용도로 많이 사용된다. Front-end는 React, Vue등 보다 효율적으로 개발할 수 있는...</description>
-        <pubDate>Sun, 18 Jul 2021 16:50:56 +0900</pubDate>
-        <link>http://localhost:4000/blog/django/2021/07/18/django-rest-framework-api.html</link>
-        <guid isPermaLink="true">http://localhost:4000/blog/django/2021/07/18/django-rest-framework-api.html</guid>
-        
-        <category>Django</category>
-        
-        
-        <category>Django</category>
         
       </item>
     

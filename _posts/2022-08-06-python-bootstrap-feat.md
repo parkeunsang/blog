@@ -60,7 +60,7 @@ boot_list = np.array(boot_list)
 plt.figure(figsize=(12,5))
 plt.hist(boot_list, bins=100);
 ```
-- 표본집단의 데이터 개수는 1870(len(df))이고, 전날 주가의 변동폭이 4%이상인 날은 **74회**였으므로 뽑는 샘플의 개수(n)dmds 74가 된다.
+- 표본집단의 데이터 개수는 1870(len(df))이고, 전날 주가의 변동폭이 4%이상인 날은 **74회**였으므로 뽑는 샘플의 개수(n)은 74가 된다.
 - 총 10000번 반복한 결과의 분포는 아래와 같이 **정규분포 형태**를 보임을 알 수 있다.
 <img src="/blog/post_images/bootstrap/boot_2.png" title="samsung">
 
