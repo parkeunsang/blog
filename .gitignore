@@ -11,5 +11,5 @@ _site
 vendor/
 
 # config 
-_config.yml
-temp.txt
+_config_git.yml
+_config_local.yml

@@ -6,9 +6,23 @@
 </description>
     <link>http://localhost:4000/blog/</link>
     <atom:link href="http://localhost:4000/blog/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Tue, 16 Aug 2022 22:22:16 +0900</pubDate>
-    <lastBuildDate>Tue, 16 Aug 2022 22:22:16 +0900</lastBuildDate>
+    <pubDate>Thu, 03 Nov 2022 21:57:45 +0900</pubDate>
+    <lastBuildDate>Thu, 03 Nov 2022 21:57:45 +0900</lastBuildDate>
     <generator>Jekyll v3.8.6</generator>
+    
+      <item>
+        <title>서울 원룸 전월세 데이터 분석(feat.직방)</title>
+        <description>&lt;h2 id=&quot;intro&quot;&gt;Intro&lt;/h2&gt; &lt;p&gt;최근 이사할 집을 알아보면서 데이터를 이용해서 분석을 해보면 좀더 좋은 방을 찾을 수 있을것이라는 생각에 서울 구별 원룸/오피스텔 전세 매물 분석을 해보았다. &lt;br /&gt; 데이터는 직방 사이트에서 수집하였으며...</description>
+        <pubDate>Thu, 03 Nov 2022 21:27:53 +0900</pubDate>
+        <link>http://localhost:4000/blog/dataanalysis/2022/11/03/feat.html</link>
+        <guid isPermaLink="true">http://localhost:4000/blog/dataanalysis/2022/11/03/feat.html</guid>
+        
+        <category>Python</category>
+        
+        
+        <category>DataAnalysis</category>
+        
+      </item>
     
       <item>
         <title>Nginx sock failed (13: Permission denied) 에러 해결</title>
@@ -129,20 +143,6 @@
         
         
         <category>Dummy</category>
-        
-      </item>
-    
-      <item>
-        <title>[MySQL] SQL서버의 장점 - 왜 csv(Excel file)로 데이터를 관리하지 않을까?</title>
-        <description>&lt;h2 id=&quot;abstract&quot;&gt;Abstract&lt;/h2&gt; &lt;p&gt;데이터에는 다양한 종류가 있다. 옛날에 ADsP를 준비하며 공부했던 기억을 돌이켜보면 데이터를 &lt;strong&gt;정형&lt;/strong&gt;(csv 등), &lt;strong&gt;반정형&lt;/strong&gt;(xml, json 등), &lt;strong&gt;비정형&lt;/strong&gt;(이미지 텍스트) 크게 3가지로 분류를 했었던 것 같다. 그중 csv, json 형태의...</description>
-        <pubDate>Sun, 22 Aug 2021 23:54:20 +0900</pubDate>
-        <link>http://localhost:4000/blog/database/2021/08/22/mysql-sql-csv.html</link>
-        <guid isPermaLink="true">http://localhost:4000/blog/database/2021/08/22/mysql-sql-csv.html</guid>
-        
-        <category>MySQL</category>
-        
-        
-        <category>DataBase</category>
         
       </item>
     
