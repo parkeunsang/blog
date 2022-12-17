@@ -6,9 +6,23 @@
 </description>
     <link>http://localhost:4000/blog/</link>
     <atom:link href="http://localhost:4000/blog/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Thu, 03 Nov 2022 21:57:45 +0900</pubDate>
-    <lastBuildDate>Thu, 03 Nov 2022 21:57:45 +0900</lastBuildDate>
+    <pubDate>Sun, 18 Dec 2022 00:54:06 +0900</pubDate>
+    <lastBuildDate>Sun, 18 Dec 2022 00:54:06 +0900</lastBuildDate>
     <generator>Jekyll v3.8.6</generator>
+    
+      <item>
+        <title>서울 원룸 전월세 데이터 분석 - 전세, 월세 가격 변화</title>
+        <description>&lt;h2 id=&quot;intro&quot;&gt;Intro&lt;/h2&gt; &lt;p&gt;최근(2022년 12월) 전세 매물을 알아보러 부동산을 돌아다녀보니 월세매물이 강세(수요가 많음)고 상대적으로 전세매물이 공급이 많은 추세였다. 이로인해 월세는 오르고있고, 전세가는 내리고 있다고 말씀들을 많이 하셨다. 그래서 이전에 직방에서 수집한...</description>
+        <pubDate>Sun, 18 Dec 2022 00:29:24 +0900</pubDate>
+        <link>http://localhost:4000/blog/dataanalysis/2022/12/18/zigbang.html</link>
+        <guid isPermaLink="true">http://localhost:4000/blog/dataanalysis/2022/12/18/zigbang.html</guid>
+        
+        <category>Python</category>
+        
+        
+        <category>DataAnalysis</category>
+        
+      </item>
     
       <item>
         <title>서울 원룸 전월세 데이터 분석(feat.직방)</title>
@@ -128,18 +142,6 @@
         <pubDate>Mon, 04 Oct 2021 23:32:12 +0900</pubDate>
         <link>http://localhost:4000/blog/dummy/2021/10/04/coupang.html</link>
         <guid isPermaLink="true">http://localhost:4000/blog/dummy/2021/10/04/coupang.html</guid>
-        
-        
-        <category>Dummy</category>
-        
-      </item>
-    
-      <item>
-        <title>[Git] commit 메세지 수정</title>
-        <description>&lt;h2 id=&quot;배경&quot;&gt;배경&lt;/h2&gt; &lt;p&gt;git은 형상관리, 코드공유 등에 요긴하게 이용된다. git의 핵심은 단연 &lt;strong&gt;코드&lt;/strong&gt;이며 이 외의것은 무시되기 쉽다. 나 또한 commit 메세지라던지, branch 관리 등의 필요성을 크게 못느껴 이를 등한시 했었다. 하지만...</description>
-        <pubDate>Thu, 23 Sep 2021 20:58:33 +0900</pubDate>
-        <link>http://localhost:4000/blog/dummy/2021/09/23/git-commit.html</link>
-        <guid isPermaLink="true">http://localhost:4000/blog/dummy/2021/09/23/git-commit.html</guid>
         
         
         <category>Dummy</category>
