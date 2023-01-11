@@ -6,9 +6,23 @@
 </description>
     <link>http://localhost:4000/blog/</link>
     <atom:link href="http://localhost:4000/blog/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Sun, 18 Dec 2022 00:54:06 +0900</pubDate>
-    <lastBuildDate>Sun, 18 Dec 2022 00:54:06 +0900</lastBuildDate>
+    <pubDate>Wed, 11 Jan 2023 22:40:13 +0900</pubDate>
+    <lastBuildDate>Wed, 11 Jan 2023 22:40:13 +0900</lastBuildDate>
     <generator>Jekyll v3.8.6</generator>
+    
+      <item>
+        <title>서울 원룸 전월세 데이터 분석 - 좋은 방 찾기</title>
+        <description>&lt;h2 id=&quot;intro&quot;&gt;Intro&lt;/h2&gt; &lt;p&gt;&lt;a href=&quot;https://parkeunsang.github.io/blog/dataanalysis/2022/11/03/feat.html&quot;&gt;지난 포스트&lt;/a&gt;에서 서울 지역별 원룸 면적과 전, 월세 분포를 살펴보았다.&lt;br /&gt; 이번 포스트에서는 이러한 정보를 토대로 ML기반 모델을 만들어서 좋은 방을 찾는데 활용할 것이다. 먼저 전세가격을 예측하는...</description>
+        <pubDate>Sun, 08 Jan 2023 18:26:09 +0900</pubDate>
+        <link>http://localhost:4000/blog/datascience/2023/01/08/zigbang.html</link>
+        <guid isPermaLink="true">http://localhost:4000/blog/datascience/2023/01/08/zigbang.html</guid>
+        
+        <category>Python</category>
+        
+        
+        <category>DataScience</category>
+        
+      </item>
     
       <item>
         <title>서울 원룸 전월세 데이터 분석 - 전세, 월세 가격 변화</title>
@@ -133,18 +147,6 @@
         
         
         <category>DataScience</category>
-        
-      </item>
-    
-      <item>
-        <title>왜 쿠팡은 쿠팡플레이 서비스를 시작했을까?</title>
-        <description>&lt;p&gt;한때 뉴스사에서 칼럼을 썼던 기억을 바탕으로 쿠팡플레이에 대해 가볍게 글을 쓰고자 한다.&lt;/p&gt; &lt;h2 id=&quot;내가-쿠팡플레를-접한-배경&quot;&gt;내가 쿠팡플레를 접한 배경&lt;/h2&gt; &lt;p&gt;최근 유튜브에 SNL Korea 클립들이 올라오면서 재미있게 시청을 했었다. 나는 당연히 tvn과 같은...</description>
-        <pubDate>Mon, 04 Oct 2021 23:32:12 +0900</pubDate>
-        <link>http://localhost:4000/blog/dummy/2021/10/04/coupang.html</link>
-        <guid isPermaLink="true">http://localhost:4000/blog/dummy/2021/10/04/coupang.html</guid>
-        
-        
-        <category>Dummy</category>
         
       </item>
     
