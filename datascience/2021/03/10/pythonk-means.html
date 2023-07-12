@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>[Python]k-means 클러스터링 구현</title>
+  <meta name="description" content="Abstract아마 ML algorithm중 가장 이해하기쉽고, 구현도 간단한 알고리즘을 뽑으라면 많은 이들이 k-means clustering을 뽑을것이다. 그래서 한번 구현해보았다.">
+  
+  <meta name="author" content="EunSang Park">
+  <meta name="copyright" content="&copy; EunSang Park 2023">
+  
+
+  <!-- External libraries --> 
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css">
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.9.0/styles/monokai-sublime.min.css">
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/lightbox2/2.7.1/css/lightbox.css">
+
+  <!-- Favicon and other icons (made with http://www.favicon-generator.org/) -->
+  <link rel="shortcut icon" href="/blog/assets/icons/favicon.ico" type="image/x-icon">
+  <link rel="icon" href="/blog/assets/icons/favicon.ico" type="image/x-icon">
+  <link rel="apple-touch-icon" sizes="57x57" href="/blog/assets/icons/apple-icon-57x57.png">
+  <link rel="apple-touch-icon" sizes="60x60" href="/blog/assets/icons/apple-icon-60x60.png">
+  <link rel="apple-touch-icon" sizes="72x72" href="/blog/assets/icons/apple-icon-72x72.png">
+  <link rel="apple-touch-icon" sizes="76x76" href="/blog/assets/icons/apple-icon-76x76.png">
+  <link rel="apple-touch-icon" sizes="114x114" href="/blog/assets/icons/apple-icon-114x114.png">
+  <link rel="apple-touch-icon" sizes="120x120" href="/blog/assets/icons/apple-icon-120x120.png">
+  <link rel="apple-touch-icon" sizes="144x144" href="/blog/assets/icons/apple-icon-144x144.png">
+  <link rel="apple-touch-icon" sizes="152x152" href="/blog/assets/icons/apple-icon-152x152.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/blog/assets/icons/apple-icon-180x180.png">
+  <link rel="icon" type="image/png" sizes="192x192"  href="/blog/assets/icons/android-icon-192x192.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/blog/assets/icons/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="96x96" href="/blog/assets/icons/favicon-96x96.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/blog/assets/icons/favicon-16x16.png">
+  <link rel="manifest" href="/blog/assets/icons/manifest.json">
+  <meta name="msapplication-TileColor" content="#ffffff">
+  <meta name="msapplication-TileImage" content="/blog/assets/icons/ms-icon-144x144.png">
+  <meta name="theme-color" content="#ffffff">
+
+  
+  <!-- Facebook OGP cards -->
+  <meta property="og:description" content="Abstract아마 ML algorithm중 가장 이해하기쉽고, 구현도 간단한 알고리즘을 뽑으라면 많은 이들이 k-means clustering을 뽑을것이다. 그래서 한번 구현해보았다." />
+  <meta property="og:url" content="https://parkeunsang.github.io/datascience/2021/03/10/pythonk-means.html">
+  <meta property="og:site_name" content="Edward's blog" />
+  <meta property="og:title" content="[Python]k-means 클러스터링 구현" />
+  <meta property="og:type" content="website" />
+  <meta property="og:image" content="https://parkeunsang.github.io/blog/assets/instacode.png" />
+  <meta property="og:image:type" content="image/png" />
+  <meta property="og:image:width" content="612" />
+  <meta property="og:image:height" content="605" />
+  
+
+  
+  <!-- Twitter: card tags -->
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="[Python]k-means 클러스터링 구현">
+  <meta name="twitter:description" content="Abstract아마 ML algorithm중 가장 이해하기쉽고, 구현도 간단한 알고리즘을 뽑으라면 많은 이들이 k-means clustering을 뽑을것이다. 그래서 한번 구현해보았다.">
+  <meta name="twitter:image" content="https://parkeunsang.github.io/blog/assets/instacode.png">
+  <meta name="twitter:url" content="https://parkeunsang.github.io/datascience/2021/03/10/pythonk-means.html">
+  
+
+  
+
+  <!-- Site styles -->
+  <link rel="stylesheet" href="/blog/css/main.css">
+  <link rel="canonical" href="https://parkeunsang.github.io/blog/datascience/2021/03/10/pythonk-means.html">
+	<link rel="alternate" type="application/rss+xml" title="Edward's blog" href="https://parkeunsang.github.io/blog/feed.xml" />
+	
+	<!-- Tooltips -->
+	<script type="text/javascript">
+		window.tooltips = []
+	</script>
+  <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
+</head>
+
+
+  <body>
+
+    <header class="navigation" role="banner">
+  <div class="navigation-wrapper">
+    <a href="/blog/" class="logo">
+      
+      <img src="/blog/assets/homepage.png" alt="Edward's blog">
+      
+    </a>
+    <a href="javascript:void(0)" class="navigation-menu-button" id="js-mobile-menu">
+      <i class="fa fa-bars"></i>
+    </a>
+    <nav role="navigation">
+      <ul id="js-navigation-menu" class="navigation-menu show">
+				
+	
+	<li class="nav-link"><a href="/blog/about/">About</a>
+	
+
+	
+	<li class="nav-link"><a href="/blog/category/">Categories</a>
+	
+
+	
+
+	
+
+	
+	<li class="nav-link"><a href="/blog/posts/">Posts</a>
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+      </ul>
+    </nav>
+  </div>
+</header>
+
+
+    <div class="page-content">
+        <div class="post">
+
+<div class="post-header-container has-cover" style="background-image: url(/blog/assets/instacode.png);">
+  <div class="scrim has-cover">
+    <header class="post-header">
+      <h1 class="title">[Python]k-means 클러스터링 구현</h1>
+      <p class="info">by <strong>Edward Park</strong></p>
+    </header>
+  </div>
+</div>
+
+<div class="wrapper">
+
+
+
+<section class="post-meta">
+  <div class="post-date">March 10, 2021</div>
+  <div class="post-categories">
+  in 
+    
+    <a href="/blog/posts">DataScience</a>
+    
+  
+  </div>
+</section>
+
+<article class="post-content">
+  <h2 id="abstract">Abstract</h2>
+<p>아마 ML algorithm중 가장 이해하기쉽고, 구현도 간단한 알고리즘을 뽑으라면 많은 이들이 k-means clustering을 뽑을것이다. 그래서 한번 구현해보았다.</p>
+
+<h2 id="동작-과정">동작 과정</h2>
+<ol>
+  <li>hyper-parameter인 k 값을 설정한다.</li>
+  <li>k개의 center(중심점)을 무작위로 선택한다. (이때 성능을 좋게하기 위해서 랜덤이 아닌 다른 방법을 사용하기도 함)</li>
+  <li>각각의 x에 대해 가장 가까운 center를 찾고, 이 그룹에 포함시킨다.</li>
+  <li>해당 그룹들의 평균값을 다시 center로 지정한다</li>
+  <li>위의 과정을 k개의 중심점들이 변화가 없을 때 까지 반복한다.</li>
+</ol>
+
+<h2 id="code">Code</h2>
+<p><strong>Set data</strong><br />
+무작위로 x를 뽑는다.</p>
+<pre><code class="language-Python">import numpy as np
+import pandas as pd
+
+import matplotlib.pyplot as plt 
+import seaborn as sns
+x = []  # data
+k = 3  # hyper paramters
+np.random.seed(2021)
+x.extend(np.random.normal(loc=[0,0], scale=0.5, size=(100, 2)).tolist())
+x.extend(np.random.normal(loc=[2,2], scale=0.5, size=(100, 2)).tolist())
+x.extend(np.random.normal(loc=[-3,3], scale=0.5, size=(100, 2)).tolist())
+x = np.array(x)
+
+sns.scatterplot(x=x[:,0], y=x[:,1]);
+</code></pre>
+<p><img src="/blog/post_images/cluster1.png" title="sample images" />
+<strong>Train Model</strong></p>
+<pre><code class="language-Python">def distance(a, b):
+    return sum((a - b) ** 2)/len(a)
+
+def group_center(g):
+    g = np.array(g)
+    return g.mean(axis=0)
+
+def cluster(x, k, seed=2022, iter_num=25):
+    logs = []
+    np.random.seed(seed)
+    centers = x[np.random.choice(len(x), size=k, replace=False)]
+    for it in range(iter_num):
+        group = {}
+        for i in range(k):
+            group[i] = []
+        # find nearest center
+        for row in x:
+            temp = []
+            for i in range(k):
+                temp.append(distance(centers[i], row))
+            group[np.argmin(temp)].append(row.tolist())
+
+        # plot data store
+        for i in range(k):
+            group_temp = np.array(group[i])
+            group_temp = np.c_[group_temp, np.full(len(group_temp), i)]
+            if i == 0:
+                grouped = group_temp
+            else:
+                grouped = np.append(grouped, group_temp, axis = 0)
+
+        # update center
+        centers_new = []
+        for i in range(k):
+            centers_new.append(group_center(group[i]).tolist())
+        centers_new = np.array(centers_new)
+        # if updated center == center, break
+
+        if np.sum(centers - centers_new) == 0:
+            break
+        else:
+            centers = centers_new
+            logs.append(grouped)
+    return grouped, logs, it  
+
+grouped, logs, it = cluster(x, 3)
+print(f'iter num:{it}')
+</code></pre>
+<p><strong>Plotting</strong></p>
+<pre><code class="language-Python">plt.figure(figsize=(15,8))
+for i in range(it):
+    plt.subplot(2, it//2+1, i+1)  # row, col, index
+    df = pd.DataFrame(logs[i])
+    df.columns = ['x1', 'x2', 'group']
+    sns.scatterplot(data = df, x = 'x1', y = 'x2', hue = 'group').set_title(f'iter : {i}')
+</code></pre>
+<p><img src="/blog/post_images/cluster2.png" title="sample images" />
+5번의 시행만에 군집을 분리해냈다. 뚜렷히 구분이 되어있는 데이터들에 대해서는 좋은 성능을 보여준다.</p>
+<h2 id="단점">단점</h2>
+<pre><code class="language-Python">x = []  # data
+k = 3  # hyper paramters
+np.random.seed(2021)
+x.extend(np.random.normal(loc=[0,0], scale=0.5, size=(100, 2)).tolist())
+x.extend(np.random.normal(loc=[1,2], scale=0.5, size=(100, 2)).tolist())
+x.extend(np.random.normal(loc=[1,3], scale=0.5, size=(100, 2)).tolist())
+x = np.array(x)
+
+sns.scatterplot(x=x[:,0], y=x[:,1]);
+grouped, logs, it = cluster(x, 4)
+plt.figure(figsize=(15,8))
+for i in range(it):
+    plt.subplot(2, it//2+1, i+1)  # row, col, index
+    df = pd.DataFrame(logs[i])
+    df.columns = ['x1', 'x2', 'group']
+    sns.scatterplot(data = df, x = 'x1', y = 'x2', hue = 'group').set_title(f'iter : {i}')
+</code></pre>
+<p><img src="/blog/post_images/cluster3.png" title="sample images" />
+위와같이 k의 개수를 잘못 설정하면 다소 좋지않은 성능을 보여준다.</p>
+
+<h2 id="결과">결과</h2>
+<ul>
+  <li>확실히 rough하게 짠 알고리즘이다보니 성능(속도 측면)이 좋지않았다.</li>
+  <li>추가로 얼마나 잘 분류되었는지를 평가하는 척도를 통해 적절한 k값을 찾는 과정이 요구될 것이다.</li>
+</ul>
+
+</article>
+<!-- <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script> -->
+
+
+
+<section class="tags">
+  <!-- <strong>Tags:</strong> <a href="/blog/tag/Python">Python</a> -->
+  <strong>Tags:</strong> <a href="https://www.google.co.kr/search?q=Python">Python</a>
+</section>
+
+
+<!-- <section class="rss">
+  <p class="rss-subscribe text"><strong>Subscribe <a href="/blog/feed.xml">via RSS</a></strong></p>
+</section> -->
+
+<section class="share">
+  <span>Share: </span>
+  
+    
+    
+    
+    
+    
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+      <a href="//www.pinterest.com/pin/create/button/?description=%5BPython%5Dk-means+%ED%81%B4%EB%9F%AC%EC%8A%A4%ED%84%B0%EB%A7%81+%EA%B5%AC%ED%98%84&url=https%3A%2F%2Fparkeunsang.github.io%2Fblog%2Fdatascience%2F2021%2F03%2F10%2Fpythonk-means.html&media=https://parkeunsang.github.io/blog/assets/instacode.png"
+        onclick="window.open(this.href, 'pinterest-share', 'width=550,height=255');return false;">
+        <i class="fa fa-pinterest-square fa-lg"></i>
+      </a>
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+      <a href="//www.reddit.com/submit" onclick="window.location = '//www.reddit.com/submit?url=' + encodeURIComponent('https://parkeunsang.github.io/blog/datascience/2021/03/10/pythonk-means.html') + '&title=[Python]k-means 클러스터링 구현'; return false">
+        <i class="fa fa-reddit-square fa-lg"></i>
+      </a>
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+    
+  
+</section>
+
+
+
+
+</div>
+</div>
+
+    </div>
+
+    <footer class="site-footer">
+
+  <div class="wrapper">
+
+    <h3 class="footer-heading">Edward's blog</h3>
+
+    <div class="site-navigation">
+
+      <p><strong>Site Map</strong></p>
+      <ul class="pages">
+				
+	
+	<li class="nav-link"><a href="/blog/about/">About</a>
+	
+
+	
+	<li class="nav-link"><a href="/blog/category/">Categories</a>
+	
+
+	
+
+	
+
+	
+	<li class="nav-link"><a href="/blog/posts/">Posts</a>
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+      </ul>
+    </div>
+
+    <div class="site-contact">
+
+      <p><strong>Contact</strong></p>
+      <ul class="social-media-list">
+        <li>
+          <a href="mailto:edwardfdsp@gmail.com">
+            <i class="fa fa-envelope-o"></i>
+            <span class="username">edwardfdsp@gmail.com</span>
+          </a>
+        </li>
+
+        
+          
+          <li>
+            <a href="https://github.com/parkeunsang" title="Fork me on GitHub">
+              <i class="fa fa-github"></i>
+              <span class="username">EunSang Park</span>
+            </a>
+          </li>
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+
+      </ul>
+    </div>
+
+    <!-- <div class="site-signature">
+      <p class="rss-subscribe text"><strong>Subscribe <a href="/blog/feed.xml">via RSS</a></strong></p>
+      <p class="text">contents
+</p>
+    </div> -->
+
+  </div>
+
+</footer>
+
+<!-- Scripts -->
+<script src="//code.jquery.com/jquery-3.4.1.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/highlight.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.1/js/lightbox.min.js"></script>
+<script src="//unpkg.com/popper.js@1"></script>
+<script src="//unpkg.com/tippy.js@5"></script>
+
+<script type="text/javascript">
+$(document).ready(function() {
+  // Default syntax highlighting
+  hljs.initHighlightingOnLoad();
+
+  // Header
+  var menuToggle = $('#js-mobile-menu').unbind();
+  $('#js-navigation-menu').removeClass("show");
+  menuToggle.on('click', function(e) {
+    e.preventDefault();
+    $('#js-navigation-menu').slideToggle(function(){
+      if($('#js-navigation-menu').is(':hidden')) {
+        $('#js-navigation-menu').removeAttr('style');
+      }
+    });
+  });
+
+	// Enable tooltips via Tippy.js
+	if (Array.isArray(window.tooltips)) {
+		window.tooltips.forEach(function(tooltip) {
+			var selector = tooltip[0];
+			var config = tooltip[1];
+			tippy(selector, config);
+		})
+	}
+});
+
+</script>
+
+
+
+
+
+
+  </body>
+
+</html>

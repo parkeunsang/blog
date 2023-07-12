@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>[Django] 시작하기 - project 및 app 생성(1)</title>
+  <meta name="description" content="What is DjangoDjango는 Python을 기반으로 하는 웹개발 프레임웨크이다.Why use Django  개발 속도가 빠르다.  디버깅이 수월하며, 비교적 쉽다.">
+  
+  <meta name="author" content="EunSang Park">
+  <meta name="copyright" content="&copy; EunSang Park 2023">
+  
+
+  <!-- External libraries --> 
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css">
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.9.0/styles/monokai-sublime.min.css">
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/lightbox2/2.7.1/css/lightbox.css">
+
+  <!-- Favicon and other icons (made with http://www.favicon-generator.org/) -->
+  <link rel="shortcut icon" href="/blog/assets/icons/favicon.ico" type="image/x-icon">
+  <link rel="icon" href="/blog/assets/icons/favicon.ico" type="image/x-icon">
+  <link rel="apple-touch-icon" sizes="57x57" href="/blog/assets/icons/apple-icon-57x57.png">
+  <link rel="apple-touch-icon" sizes="60x60" href="/blog/assets/icons/apple-icon-60x60.png">
+  <link rel="apple-touch-icon" sizes="72x72" href="/blog/assets/icons/apple-icon-72x72.png">
+  <link rel="apple-touch-icon" sizes="76x76" href="/blog/assets/icons/apple-icon-76x76.png">
+  <link rel="apple-touch-icon" sizes="114x114" href="/blog/assets/icons/apple-icon-114x114.png">
+  <link rel="apple-touch-icon" sizes="120x120" href="/blog/assets/icons/apple-icon-120x120.png">
+  <link rel="apple-touch-icon" sizes="144x144" href="/blog/assets/icons/apple-icon-144x144.png">
+  <link rel="apple-touch-icon" sizes="152x152" href="/blog/assets/icons/apple-icon-152x152.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/blog/assets/icons/apple-icon-180x180.png">
+  <link rel="icon" type="image/png" sizes="192x192"  href="/blog/assets/icons/android-icon-192x192.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/blog/assets/icons/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="96x96" href="/blog/assets/icons/favicon-96x96.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/blog/assets/icons/favicon-16x16.png">
+  <link rel="manifest" href="/blog/assets/icons/manifest.json">
+  <meta name="msapplication-TileColor" content="#ffffff">
+  <meta name="msapplication-TileImage" content="/blog/assets/icons/ms-icon-144x144.png">
+  <meta name="theme-color" content="#ffffff">
+
+  
+  <!-- Facebook OGP cards -->
+  <meta property="og:description" content="What is DjangoDjango는 Python을 기반으로 하는 웹개발 프레임웨크이다.Why use Django  개발 속도가 빠르다.  디버깅이 수월하며, 비교적 쉽다." />
+  <meta property="og:url" content="https://parkeunsang.github.io/django/2021/03/23/django-project-app-1.html">
+  <meta property="og:site_name" content="Edward's blog" />
+  <meta property="og:title" content="[Django] 시작하기 - project 및 app 생성(1)" />
+  <meta property="og:type" content="website" />
+  <meta property="og:image" content="https://parkeunsang.github.io/blog/assets/instacode.png" />
+  <meta property="og:image:type" content="image/png" />
+  <meta property="og:image:width" content="612" />
+  <meta property="og:image:height" content="605" />
+  
+
+  
+  <!-- Twitter: card tags -->
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="[Django] 시작하기 - project 및 app 생성(1)">
+  <meta name="twitter:description" content="What is DjangoDjango는 Python을 기반으로 하는 웹개발 프레임웨크이다.Why use Django  개발 속도가 빠르다.  디버깅이 수월하며, 비교적 쉽다.">
+  <meta name="twitter:image" content="https://parkeunsang.github.io/blog/assets/instacode.png">
+  <meta name="twitter:url" content="https://parkeunsang.github.io/django/2021/03/23/django-project-app-1.html">
+  
+
+  
+
+  <!-- Site styles -->
+  <link rel="stylesheet" href="/blog/css/main.css">
+  <link rel="canonical" href="https://parkeunsang.github.io/blog/django/2021/03/23/django-project-app-1.html">
+	<link rel="alternate" type="application/rss+xml" title="Edward's blog" href="https://parkeunsang.github.io/blog/feed.xml" />
+	
+	<!-- Tooltips -->
+	<script type="text/javascript">
+		window.tooltips = []
+	</script>
+  <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
+</head>
+
+
+  <body>
+
+    <header class="navigation" role="banner">
+  <div class="navigation-wrapper">
+    <a href="/blog/" class="logo">
+      
+      <img src="/blog/assets/homepage.png" alt="Edward's blog">
+      
+    </a>
+    <a href="javascript:void(0)" class="navigation-menu-button" id="js-mobile-menu">
+      <i class="fa fa-bars"></i>
+    </a>
+    <nav role="navigation">
+      <ul id="js-navigation-menu" class="navigation-menu show">
+				
+	
+	<li class="nav-link"><a href="/blog/about/">About</a>
+	
+
+	
+	<li class="nav-link"><a href="/blog/category/">Categories</a>
+	
+
+	
+
+	
+
+	
+	<li class="nav-link"><a href="/blog/posts/">Posts</a>
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+      </ul>
+    </nav>
+  </div>
+</header>
+
+
+    <div class="page-content">
+        <div class="post">
+
+<div class="post-header-container has-cover" style="background-image: url(/blog/assets/instacode.png);">
+  <div class="scrim has-cover">
+    <header class="post-header">
+      <h1 class="title">[Django] 시작하기 - project 및 app 생성(1)</h1>
+      <p class="info">by <strong>Edward Park</strong></p>
+    </header>
+  </div>
+</div>
+
+<div class="wrapper">
+
+
+
+<section class="post-meta">
+  <div class="post-date">March 23, 2021</div>
+  <div class="post-categories">
+  in 
+    
+    <a href="/blog/posts">Django</a>
+    
+  
+  </div>
+</section>
+
+<article class="post-content">
+  <h2 id="what-is-django">What is Django</h2>
+<p>Django는 Python을 기반으로 하는 웹개발 프레임웨크이다.</p>
+<h2 id="why-use-django">Why use Django</h2>
+<ul>
+  <li>개발 속도가 빠르다.</li>
+  <li>디버깅이 수월하며, 비교적 쉽다.</li>
+</ul>
+
+<h2 id="시작하기">시작하기</h2>
+<h3 id="환경-세팅">환경 세팅</h3>
+<ol>
+  <li>가상환경 생성<br />
+Django에서는 1개의 프로젝트당 1개의 가상환경을 설정하는것을 지향한다.
+    <pre><code class="language-Shell">$ python -m venv venv
+</code></pre>
+  </li>
+  <li>가상환경 실행
+    <pre><code class="language-Shell">$ source venv/bin/activate  # window에서는 source venv/Scripts/activate 명령어를 통해 실행가능하다.
+</code></pre>
+  </li>
+  <li>Django 설치(pip 사용)
+    <pre><code class="language-Shell">$ pip install django
+$ pip freeze &gt; requirement.txt  #  라이브러리 환경을 저장, 배포시 활용
+</code></pre>
+  </li>
+</ol>
+
+<h3 id="프로젝트-생성">프로젝트 생성</h3>
+<pre><code class="language-Shell">$ django-admin startproject project_name .  # project_name은 프로젝트 이름으로 임의로 설정가능하다
+</code></pre>
+
+<h3 id="앱-생성">앱 생성</h3>
+<p>하나의 프로젝트는 여러개의 앱(각각의 기능을 가진 것)으로 구성된다.</p>
+<pre><code class="language-Shell">$ python manage.py startapp app_name  # app_name은 앱 이름으로 임의로 설정가능하다.
+</code></pre>
+<p>만들어진 폴더의 구조는 아래와 같다.
+<img src="/blog/post_images/django1_1.png" title="django" />
+그리고 앱을 생성할 때 마다 project_name/settings.py 에서 INSTALLED_APPS에 앱 이름을 추가해 줘야 해당앱을 인식할 수 있다.
+<img src="/blog/post_images/django1_2.png" title="django" /></p>
+
+</article>
+<!-- <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script> -->
+
+
+
+<section class="tags">
+  <!-- <strong>Tags:</strong> <a href="/blog/tag/Django">Django</a> -->
+  <strong>Tags:</strong> <a href="https://www.google.co.kr/search?q=Django">Django</a>
+</section>
+
+
+<!-- <section class="rss">
+  <p class="rss-subscribe text"><strong>Subscribe <a href="/blog/feed.xml">via RSS</a></strong></p>
+</section> -->
+
+<section class="share">
+  <span>Share: </span>
+  
+    
+    
+    
+    
+    
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+      <a href="//www.pinterest.com/pin/create/button/?description=%5BDjango%5D+%EC%8B%9C%EC%9E%91%ED%95%98%EA%B8%B0+-+project+%EB%B0%8F+app+%EC%83%9D%EC%84%B1%281%29&url=https%3A%2F%2Fparkeunsang.github.io%2Fblog%2Fdjango%2F2021%2F03%2F23%2Fdjango-project-app-1.html&media=https://parkeunsang.github.io/blog/assets/instacode.png"
+        onclick="window.open(this.href, 'pinterest-share', 'width=550,height=255');return false;">
+        <i class="fa fa-pinterest-square fa-lg"></i>
+      </a>
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+      <a href="//www.reddit.com/submit" onclick="window.location = '//www.reddit.com/submit?url=' + encodeURIComponent('https://parkeunsang.github.io/blog/django/2021/03/23/django-project-app-1.html') + '&title=[Django] 시작하기 - project 및 app 생성(1)'; return false">
+        <i class="fa fa-reddit-square fa-lg"></i>
+      </a>
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+    
+  
+</section>
+
+
+
+
+</div>
+</div>
+
+    </div>
+
+    <footer class="site-footer">
+
+  <div class="wrapper">
+
+    <h3 class="footer-heading">Edward's blog</h3>
+
+    <div class="site-navigation">
+
+      <p><strong>Site Map</strong></p>
+      <ul class="pages">
+				
+	
+	<li class="nav-link"><a href="/blog/about/">About</a>
+	
+
+	
+	<li class="nav-link"><a href="/blog/category/">Categories</a>
+	
+
+	
+
+	
+
+	
+	<li class="nav-link"><a href="/blog/posts/">Posts</a>
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+      </ul>
+    </div>
+
+    <div class="site-contact">
+
+      <p><strong>Contact</strong></p>
+      <ul class="social-media-list">
+        <li>
+          <a href="mailto:edwardfdsp@gmail.com">
+            <i class="fa fa-envelope-o"></i>
+            <span class="username">edwardfdsp@gmail.com</span>
+          </a>
+        </li>
+
+        
+          
+          <li>
+            <a href="https://github.com/parkeunsang" title="Fork me on GitHub">
+              <i class="fa fa-github"></i>
+              <span class="username">EunSang Park</span>
+            </a>
+          </li>
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+
+      </ul>
+    </div>
+
+    <!-- <div class="site-signature">
+      <p class="rss-subscribe text"><strong>Subscribe <a href="/blog/feed.xml">via RSS</a></strong></p>
+      <p class="text">contents
+</p>
+    </div> -->
+
+  </div>
+
+</footer>
+
+<!-- Scripts -->
+<script src="//code.jquery.com/jquery-3.4.1.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/highlight.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.1/js/lightbox.min.js"></script>
+<script src="//unpkg.com/popper.js@1"></script>
+<script src="//unpkg.com/tippy.js@5"></script>
+
+<script type="text/javascript">
+$(document).ready(function() {
+  // Default syntax highlighting
+  hljs.initHighlightingOnLoad();
+
+  // Header
+  var menuToggle = $('#js-mobile-menu').unbind();
+  $('#js-navigation-menu').removeClass("show");
+  menuToggle.on('click', function(e) {
+    e.preventDefault();
+    $('#js-navigation-menu').slideToggle(function(){
+      if($('#js-navigation-menu').is(':hidden')) {
+        $('#js-navigation-menu').removeAttr('style');
+      }
+    });
+  });
+
+	// Enable tooltips via Tippy.js
+	if (Array.isArray(window.tooltips)) {
+		window.tooltips.forEach(function(tooltip) {
+			var selector = tooltip[0];
+			var config = tooltip[1];
+			tippy(selector, config);
+		})
+	}
+});
+
+</script>
+
+
+
+
+
+
+  </body>
+
+</html>

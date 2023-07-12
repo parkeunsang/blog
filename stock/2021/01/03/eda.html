@@ -1,0 +1,665 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>[Python] 기관, 외국인 거래량과 주가의 관계 분석(EDA)</title>
+  <meta name="description" content="Abstract주식시장에는 ‘개미는 기관, 외인(외국인)을 이길 수 없다‘는 말이 있다. 정보의 접근성이나, 투자 자금의 단위, 공매도 등 보다 자유로운 투자가 가능하다는 점 등에서 기관이 개인보다 유리한 위치에 있기 때문이며 나또한 어느정도 동의한다. 그래서 많은 이들이 매매를 ...">
+  
+  <meta name="author" content="EunSang Park">
+  <meta name="copyright" content="&copy; EunSang Park 2023">
+  
+
+  <!-- External libraries --> 
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css">
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.9.0/styles/monokai-sublime.min.css">
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/lightbox2/2.7.1/css/lightbox.css">
+
+  <!-- Favicon and other icons (made with http://www.favicon-generator.org/) -->
+  <link rel="shortcut icon" href="/blog/assets/icons/favicon.ico" type="image/x-icon">
+  <link rel="icon" href="/blog/assets/icons/favicon.ico" type="image/x-icon">
+  <link rel="apple-touch-icon" sizes="57x57" href="/blog/assets/icons/apple-icon-57x57.png">
+  <link rel="apple-touch-icon" sizes="60x60" href="/blog/assets/icons/apple-icon-60x60.png">
+  <link rel="apple-touch-icon" sizes="72x72" href="/blog/assets/icons/apple-icon-72x72.png">
+  <link rel="apple-touch-icon" sizes="76x76" href="/blog/assets/icons/apple-icon-76x76.png">
+  <link rel="apple-touch-icon" sizes="114x114" href="/blog/assets/icons/apple-icon-114x114.png">
+  <link rel="apple-touch-icon" sizes="120x120" href="/blog/assets/icons/apple-icon-120x120.png">
+  <link rel="apple-touch-icon" sizes="144x144" href="/blog/assets/icons/apple-icon-144x144.png">
+  <link rel="apple-touch-icon" sizes="152x152" href="/blog/assets/icons/apple-icon-152x152.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/blog/assets/icons/apple-icon-180x180.png">
+  <link rel="icon" type="image/png" sizes="192x192"  href="/blog/assets/icons/android-icon-192x192.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/blog/assets/icons/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="96x96" href="/blog/assets/icons/favicon-96x96.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/blog/assets/icons/favicon-16x16.png">
+  <link rel="manifest" href="/blog/assets/icons/manifest.json">
+  <meta name="msapplication-TileColor" content="#ffffff">
+  <meta name="msapplication-TileImage" content="/blog/assets/icons/ms-icon-144x144.png">
+  <meta name="theme-color" content="#ffffff">
+
+  
+  <!-- Facebook OGP cards -->
+  <meta property="og:description" content="Abstract주식시장에는 ‘개미는 기관, 외인(외국인)을 이길 수 없다‘는 말이 있다. 정보의 접근성이나, 투자 자금의 단위, 공매도 등 보다 자유로운 투자가 가능하다는 점 등에서 기관이 개인보다 유리한 위치에 있기 때문이며 나또한 어느정도 동의한다. 그래서 많은 이들이 매매를 ..." />
+  <meta property="og:url" content="https://parkeunsang.github.io/stock/2021/01/03/eda.html">
+  <meta property="og:site_name" content="Edward's blog" />
+  <meta property="og:title" content="[Python] 기관, 외국인 거래량과 주가의 관계 분석(EDA)" />
+  <meta property="og:type" content="website" />
+  <meta property="og:image" content="https://parkeunsang.github.io/blog/assets/instacode.png" />
+  <meta property="og:image:type" content="image/png" />
+  <meta property="og:image:width" content="612" />
+  <meta property="og:image:height" content="605" />
+  
+
+  
+  <!-- Twitter: card tags -->
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="[Python] 기관, 외국인 거래량과 주가의 관계 분석(EDA)">
+  <meta name="twitter:description" content="Abstract주식시장에는 ‘개미는 기관, 외인(외국인)을 이길 수 없다‘는 말이 있다. 정보의 접근성이나, 투자 자금의 단위, 공매도 등 보다 자유로운 투자가 가능하다는 점 등에서 기관이 개인보다 유리한 위치에 있기 때문이며 나또한 어느정도 동의한다. 그래서 많은 이들이 매매를 ...">
+  <meta name="twitter:image" content="https://parkeunsang.github.io/blog/assets/instacode.png">
+  <meta name="twitter:url" content="https://parkeunsang.github.io/stock/2021/01/03/eda.html">
+  
+
+  
+
+  <!-- Site styles -->
+  <link rel="stylesheet" href="/blog/css/main.css">
+  <link rel="canonical" href="https://parkeunsang.github.io/blog/stock/2021/01/03/eda.html">
+	<link rel="alternate" type="application/rss+xml" title="Edward's blog" href="https://parkeunsang.github.io/blog/feed.xml" />
+	
+	<!-- Tooltips -->
+	<script type="text/javascript">
+		window.tooltips = []
+	</script>
+  <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
+</head>
+
+
+  <body>
+
+    <header class="navigation" role="banner">
+  <div class="navigation-wrapper">
+    <a href="/blog/" class="logo">
+      
+      <img src="/blog/assets/homepage.png" alt="Edward's blog">
+      
+    </a>
+    <a href="javascript:void(0)" class="navigation-menu-button" id="js-mobile-menu">
+      <i class="fa fa-bars"></i>
+    </a>
+    <nav role="navigation">
+      <ul id="js-navigation-menu" class="navigation-menu show">
+				
+	
+	<li class="nav-link"><a href="/blog/about/">About</a>
+	
+
+	
+	<li class="nav-link"><a href="/blog/category/">Categories</a>
+	
+
+	
+
+	
+
+	
+	<li class="nav-link"><a href="/blog/posts/">Posts</a>
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+      </ul>
+    </nav>
+  </div>
+</header>
+
+
+    <div class="page-content">
+        <div class="post">
+
+<div class="post-header-container has-cover" style="background-image: url(/blog/assets/instacode.png);">
+  <div class="scrim has-cover">
+    <header class="post-header">
+      <h1 class="title">[Python] 기관, 외국인 거래량과 주가의 관계 분석(EDA)</h1>
+      <p class="info">by <strong>Edward Park</strong></p>
+    </header>
+  </div>
+</div>
+
+<div class="wrapper">
+
+
+
+<section class="post-meta">
+  <div class="post-date">January 3, 2021</div>
+  <div class="post-categories">
+  in 
+    
+    <a href="/blog/posts">Stock</a>
+    
+  
+  </div>
+</section>
+
+<article class="post-content">
+  <h3 id="abstract">Abstract</h3>
+<p>주식시장에는 ‘<strong>개미는 기관, 외인(외국인)을 이길 수 없다</strong>‘는 말이 있다. 정보의 접근성이나, 투자 자금의 단위, 공매도 등 보다 자유로운 투자가 가능하다는 점 등에서 기관이 개인보다 유리한 위치에 있기 때문이며 나또한 어느정도 동의한다. 그래서 많은 이들이 매매를 할 때 기관, 외인들의 매매 정보를 참고한다. 하지만 실제로 이들의 매매를 관찰해보면 대량 매수한 시점이후로 주가가 떨어지거나, 반대로 대량 매도이후 주가가 상승하는 등의 현상을 적잖이 볼 수 있다.<br />
+그래서 파이썬을 이용해 <strong>기관, 외인의 순매매량 정보를 이용해 어떤식으로 투자에 활용할 수 있을지</strong>에 대해 분석해보기로 한다.<br />
+데이터 출처 : <a href="http://www.krx.co.kr/main/main.jsp">KRX</a><br />
+데이터 수집 방법 : <a href="https://parkeunsang.github.io/blog/stock/2020/12/16/krx.html">이전 포스트</a> 참조<br /></p>
+
+<h3 id="데이터-전처리">데이터 전처리</h3>
+<h4 id="import-libraries">Import libraries</h4>
+<pre><code class="language-Python">import pandas as pd
+import numpy as np
+import time
+import pickle
+from datetime import datetime
+from tqdm import tqdm
+
+import pymysql
+from sqlalchemy import create_engine
+from pandas.io import sql
+
+import cufflinks as cf
+cf.go_offline()
+cf.set_config_file(offline=False, world_readable=True)
+PASSWORD=your_mysql_password
+</code></pre>
+<h4 id="mysql에서-데이터-불러오기">Mysql에서 데이터 불러오기</h4>
+<pre><code class="language-Python">#import data
+conStock = pymysql.connect(
+    user='root', 
+    passwd=PASSWORD, 
+    host='127.0.0.1', 
+    db='stock', #database(기관, 외인) name
+    charset='utf8'
+)
+
+conPrice = pymysql.connect(
+    user='root', 
+    passwd=PASSWORD, 
+    host='127.0.0.1', 
+    db='stock_price', #database(가격) name
+    charset='utf8'
+)
+
+def allCodes():
+    '''
+    데이터베이스에 저장된 코드(799개) return
+    '''
+    cur = conStock.cursor()
+    cur.execute('show tables')
+    codes = [c[0] for c in cur]
+    return codes
+		
+def extractDf(cur, code):
+    '''
+    코드를 입력받아 해당하는 dataframe 반환
+    '''
+    sql = f"select * from {code}"
+    cur.execute(sql)
+    result = cur.fetchall();
+
+    df = pd.DataFrame(result)
+    columnNames = [x[0] for x in cur.description]
+    df.columns = columnNames
+    return df
+</code></pre>
+
+<h4 id="데이터-전처리-1">데이터 전처리</h4>
+<pre><code class="language-Python">class Preprocessor:
+    '''
+    데이터의 scaling과 관련된 메소드
+    '''
+    def normalize(arr):
+        #     sign = np.sign(arr)
+        #     arr = np.log(np.abs(arr)+1)*sign
+        return (arr-np.mean(arr))/np.std(arr)
+    
+    def minmax(arr):
+        return((arr-np.min(arr))/(np.max(arr)-np.min(arr)))
+
+class TradeStradegy:
+    '''
+    mergePrice : 기관, 외인 데이터베이스로부터 추출된 데이터프레임과
+    주가 데이터베이스로부터 추출된 데이터프레임 결합
+    
+    stradegy1 : 기관, 외인 순매매 데이터를 이용한 매매 전략(다음 포스트에서 다룰 예정)
+    '''
+    def __init__(self, code):
+        self.code = code
+        self.curC = conStock.cursor()
+        self.curP = conPrice.cursor()
+        self.df = self.mergePrice()
+        
+    def mergePrice(self):
+        dfWho = extractDf(self.curC, self.code)
+        dfPrice = extractDf(self.curP, self.code)
+        
+        dfWho['Date'] = pd.to_datetime(dfWho['Date'])
+        dfWho = dfWho.drop(columns = ['Close','Change','Volume'])
+        df = dfWho.merge(dfPrice,how='left',on='Date')
+        return(df)
+    
+    def stradegy1(self, criteria, dayLater, who="foreign_sum"): #or inst_sum
+        return -1
+</code></pre>
+<h4 id="간단한-eda">간단한 EDA</h4>
+<pre><code class="language-Python">codes = allCodes()
+tss = TradeStradegy('c003490') #대한항공의 주식코드(003490)
+df = tss.mergePrice()
+dfPlot = df[['Date','Close','inst_sum','foreign_sum']]
+dfPlot.iplot(x='Date', y=['inst_sum','foreign_sum'], title = "기관, 외국인의 일일 순매매량")
+</code></pre>
+<p><img src="/blog/post_images/tradeWho_1.png" title="sample images" /></p>
+<font color="orange">inst_sum : 기관 순매매량</font>
+<p>, <font color="blue">foreign_sum : 외인 순매매량</font>이다.<br />
+일일 순매매량의 경우 중간중간 솟은(이상치)부분을 제외하고는 plot을 통해 정보를 얻어내기가 쉽지않았다.<br />
+순매매량을 누적합한 값(cumsum)을 이용해 <font color="green">종가(Close)</font>와 같이 plotting해 보았다. 이때 종가와 순매매량은 scale의 차이가 크기때문에<br />
+<strong>minmax scaling</strong>을 이용해 변수의 범위를 조정한 후 plotting을 했다.</p>
+<pre><code class="language-Python">dfPlot1 = dfPlot[::-1]
+dfPlot1.iloc[:,2:] = dfPlot1.iloc[:,2:].cumsum()
+#scaling for plotting
+for i in range(1,dfPlot1.shape[1]):
+        dfPlot1.iloc[:,i] = Preprocessor.minmax(dfPlot1.iloc[:,i])
+				
+dfPlot1.iplot(x='Date', y=['inst_sum','foreign_sum','Close'], title = "기관, 외국인 누적 순매매량(Scaled) + 종가")
+</code></pre>
+<p><img src="/blog/post_images/tradeWho_2.png" title="sample images" />
+<strong>대한항공</strong>의 주가를 선택한 이유는 내가 보유하고있는 종목이기 때문이다.<br />
+가장 눈에띄는 점은 <font color="orange">기관 누적 순매매량</font>과 <font color="green">주가(종가)</font>는 굉장히 유사한 흐름을 보였다는 것이다. 하지만 이러한 정보는 매매에 활용하기 힘들다(<strong>주가에 선행하는 정보가 아니기 때문</strong>). 예를들어 ‘외인이 2주간에 걸쳐 매도세를 보이면 그다음 2주후 주가가 하락한다.’ 와 같은 정보가 유의미한 정보일 것이다(물론 이러한 현상이 유의미한지에 대해서는 여러 case들에 대해 통계적 검정을 거쳐야 할 것이다). <br />
+추가적으로 <strong>삼성전자</strong>의 주가 plot을 겸해서 패턴을 찾아보자.
+<img src="/blog/post_images/tradeWho_3.png" title="sample images" />
+두개의 plot에서 공통적으로 기관, 외인들의 누적 순매매량에 따른 주가의 횡보의 패턴이 보이는가? <br />
+나는 단순히 plot을 이용해서 이러한 유의미한 패턴을 찾기는 힘들었다. 그래서 다음 포스트에서는 좀더 많은 데이터(799개 종목 전체)를 이용해<br />
+<strong>statistical methods</strong>를 이용해 데이터 분석을 해보자.<br />
+*분석 관련 문의사항이나 아이디어 등은 아래 메일로 연락부탁드립니다.</p>
+
+</article>
+<!-- <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script> -->
+
+
+
+<section class="tags">
+  <!-- <strong>Tags:</strong> <a href="/blog/tag/Stock">Stock</a> -->
+  <strong>Tags:</strong> <a href="https://www.google.co.kr/search?q=Stock">Stock</a>
+</section>
+
+
+<!-- <section class="rss">
+  <p class="rss-subscribe text"><strong>Subscribe <a href="/blog/feed.xml">via RSS</a></strong></p>
+</section> -->
+
+<section class="share">
+  <span>Share: </span>
+  
+    
+    
+    
+    
+    
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+      <a href="//www.pinterest.com/pin/create/button/?description=%5BPython%5D+%EA%B8%B0%EA%B4%80%2C+%EC%99%B8%EA%B5%AD%EC%9D%B8+%EA%B1%B0%EB%9E%98%EB%9F%89%EA%B3%BC+%EC%A3%BC%EA%B0%80%EC%9D%98+%EA%B4%80%EA%B3%84+%EB%B6%84%EC%84%9D%28EDA%29&url=https%3A%2F%2Fparkeunsang.github.io%2Fblog%2Fstock%2F2021%2F01%2F03%2Feda.html&media=https://parkeunsang.github.io/blog/assets/instacode.png"
+        onclick="window.open(this.href, 'pinterest-share', 'width=550,height=255');return false;">
+        <i class="fa fa-pinterest-square fa-lg"></i>
+      </a>
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+      <a href="//www.reddit.com/submit" onclick="window.location = '//www.reddit.com/submit?url=' + encodeURIComponent('https://parkeunsang.github.io/blog/stock/2021/01/03/eda.html') + '&title=[Python] 기관, 외국인 거래량과 주가의 관계 분석(EDA)'; return false">
+        <i class="fa fa-reddit-square fa-lg"></i>
+      </a>
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+    
+  
+</section>
+
+
+
+
+</div>
+</div>
+
+    </div>
+
+    <footer class="site-footer">
+
+  <div class="wrapper">
+
+    <h3 class="footer-heading">Edward's blog</h3>
+
+    <div class="site-navigation">
+
+      <p><strong>Site Map</strong></p>
+      <ul class="pages">
+				
+	
+	<li class="nav-link"><a href="/blog/about/">About</a>
+	
+
+	
+	<li class="nav-link"><a href="/blog/category/">Categories</a>
+	
+
+	
+
+	
+
+	
+	<li class="nav-link"><a href="/blog/posts/">Posts</a>
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+      </ul>
+    </div>
+
+    <div class="site-contact">
+
+      <p><strong>Contact</strong></p>
+      <ul class="social-media-list">
+        <li>
+          <a href="mailto:edwardfdsp@gmail.com">
+            <i class="fa fa-envelope-o"></i>
+            <span class="username">edwardfdsp@gmail.com</span>
+          </a>
+        </li>
+
+        
+          
+          <li>
+            <a href="https://github.com/parkeunsang" title="Fork me on GitHub">
+              <i class="fa fa-github"></i>
+              <span class="username">EunSang Park</span>
+            </a>
+          </li>
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+
+      </ul>
+    </div>
+
+    <!-- <div class="site-signature">
+      <p class="rss-subscribe text"><strong>Subscribe <a href="/blog/feed.xml">via RSS</a></strong></p>
+      <p class="text">contents
+</p>
+    </div> -->
+
+  </div>
+
+</footer>
+
+<!-- Scripts -->
+<script src="//code.jquery.com/jquery-3.4.1.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/highlight.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.1/js/lightbox.min.js"></script>
+<script src="//unpkg.com/popper.js@1"></script>
+<script src="//unpkg.com/tippy.js@5"></script>
+
+<script type="text/javascript">
+$(document).ready(function() {
+  // Default syntax highlighting
+  hljs.initHighlightingOnLoad();
+
+  // Header
+  var menuToggle = $('#js-mobile-menu').unbind();
+  $('#js-navigation-menu').removeClass("show");
+  menuToggle.on('click', function(e) {
+    e.preventDefault();
+    $('#js-navigation-menu').slideToggle(function(){
+      if($('#js-navigation-menu').is(':hidden')) {
+        $('#js-navigation-menu').removeAttr('style');
+      }
+    });
+  });
+
+	// Enable tooltips via Tippy.js
+	if (Array.isArray(window.tooltips)) {
+		window.tooltips.forEach(function(tooltip) {
+			var selector = tooltip[0];
+			var config = tooltip[1];
+			tippy(selector, config);
+		})
+	}
+});
+
+</script>
+
+
+
+
+
+
+  </body>
+
+</html>

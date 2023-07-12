@@ -1,0 +1,780 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>[Python] 나이브 베이즈 분류 이론 설명 및 구현</title>
+  <meta name="description" content="Absctract나이브 베이즈 분류는 베이지안 방법론을 이용해 classification 문제를 해결하고자 한다. 특히 자연어처리분야의 텍스트 분류문제에 많이 활용된다. 기본적인 원리는 다음과 같다.">
+  
+  <meta name="author" content="EunSang Park">
+  <meta name="copyright" content="&copy; EunSang Park 2023">
+  
+
+  <!-- External libraries --> 
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css">
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.9.0/styles/monokai-sublime.min.css">
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/lightbox2/2.7.1/css/lightbox.css">
+
+  <!-- Favicon and other icons (made with http://www.favicon-generator.org/) -->
+  <link rel="shortcut icon" href="/blog/assets/icons/favicon.ico" type="image/x-icon">
+  <link rel="icon" href="/blog/assets/icons/favicon.ico" type="image/x-icon">
+  <link rel="apple-touch-icon" sizes="57x57" href="/blog/assets/icons/apple-icon-57x57.png">
+  <link rel="apple-touch-icon" sizes="60x60" href="/blog/assets/icons/apple-icon-60x60.png">
+  <link rel="apple-touch-icon" sizes="72x72" href="/blog/assets/icons/apple-icon-72x72.png">
+  <link rel="apple-touch-icon" sizes="76x76" href="/blog/assets/icons/apple-icon-76x76.png">
+  <link rel="apple-touch-icon" sizes="114x114" href="/blog/assets/icons/apple-icon-114x114.png">
+  <link rel="apple-touch-icon" sizes="120x120" href="/blog/assets/icons/apple-icon-120x120.png">
+  <link rel="apple-touch-icon" sizes="144x144" href="/blog/assets/icons/apple-icon-144x144.png">
+  <link rel="apple-touch-icon" sizes="152x152" href="/blog/assets/icons/apple-icon-152x152.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/blog/assets/icons/apple-icon-180x180.png">
+  <link rel="icon" type="image/png" sizes="192x192"  href="/blog/assets/icons/android-icon-192x192.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/blog/assets/icons/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="96x96" href="/blog/assets/icons/favicon-96x96.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/blog/assets/icons/favicon-16x16.png">
+  <link rel="manifest" href="/blog/assets/icons/manifest.json">
+  <meta name="msapplication-TileColor" content="#ffffff">
+  <meta name="msapplication-TileImage" content="/blog/assets/icons/ms-icon-144x144.png">
+  <meta name="theme-color" content="#ffffff">
+
+  
+  <!-- Facebook OGP cards -->
+  <meta property="og:description" content="Absctract나이브 베이즈 분류는 베이지안 방법론을 이용해 classification 문제를 해결하고자 한다. 특히 자연어처리분야의 텍스트 분류문제에 많이 활용된다. 기본적인 원리는 다음과 같다." />
+  <meta property="og:url" content="https://parkeunsang.github.io/datascience/2021/04/22/NB.html">
+  <meta property="og:site_name" content="Edward's blog" />
+  <meta property="og:title" content="[Python] 나이브 베이즈 분류 이론 설명 및 구현" />
+  <meta property="og:type" content="website" />
+  <meta property="og:image" content="https://parkeunsang.github.io/blog/assets/instacode.png" />
+  <meta property="og:image:type" content="image/png" />
+  <meta property="og:image:width" content="612" />
+  <meta property="og:image:height" content="605" />
+  
+
+  
+  <!-- Twitter: card tags -->
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="[Python] 나이브 베이즈 분류 이론 설명 및 구현">
+  <meta name="twitter:description" content="Absctract나이브 베이즈 분류는 베이지안 방법론을 이용해 classification 문제를 해결하고자 한다. 특히 자연어처리분야의 텍스트 분류문제에 많이 활용된다. 기본적인 원리는 다음과 같다.">
+  <meta name="twitter:image" content="https://parkeunsang.github.io/blog/assets/instacode.png">
+  <meta name="twitter:url" content="https://parkeunsang.github.io/datascience/2021/04/22/NB.html">
+  
+
+  
+
+  <!-- Site styles -->
+  <link rel="stylesheet" href="/blog/css/main.css">
+  <link rel="canonical" href="https://parkeunsang.github.io/blog/datascience/2021/04/22/NB.html">
+	<link rel="alternate" type="application/rss+xml" title="Edward's blog" href="https://parkeunsang.github.io/blog/feed.xml" />
+	
+	<!-- Tooltips -->
+	<script type="text/javascript">
+		window.tooltips = []
+	</script>
+  <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
+</head>
+
+
+  <body>
+
+    <header class="navigation" role="banner">
+  <div class="navigation-wrapper">
+    <a href="/blog/" class="logo">
+      
+      <img src="/blog/assets/homepage.png" alt="Edward's blog">
+      
+    </a>
+    <a href="javascript:void(0)" class="navigation-menu-button" id="js-mobile-menu">
+      <i class="fa fa-bars"></i>
+    </a>
+    <nav role="navigation">
+      <ul id="js-navigation-menu" class="navigation-menu show">
+				
+	
+	<li class="nav-link"><a href="/blog/about/">About</a>
+	
+
+	
+	<li class="nav-link"><a href="/blog/category/">Categories</a>
+	
+
+	
+
+	
+
+	
+	<li class="nav-link"><a href="/blog/posts/">Posts</a>
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+      </ul>
+    </nav>
+  </div>
+</header>
+
+
+    <div class="page-content">
+        <div class="post">
+
+<div class="post-header-container has-cover" style="background-image: url(/blog/assets/instacode.png);">
+  <div class="scrim has-cover">
+    <header class="post-header">
+      <h1 class="title">[Python] 나이브 베이즈 분류 이론 설명 및 구현</h1>
+      <p class="info">by <strong>Edward Park</strong></p>
+    </header>
+  </div>
+</div>
+
+<div class="wrapper">
+
+
+
+<section class="post-meta">
+  <div class="post-date">April 22, 2021</div>
+  <div class="post-categories">
+  in 
+    
+    <a href="/blog/posts">DataScience</a>
+    
+  
+  </div>
+</section>
+
+<article class="post-content">
+  <h2 id="absctract">Absctract</h2>
+<p>나이브 베이즈 분류는 <strong>베이지안 방법론</strong>을 이용해 classification 문제를 해결하고자 한다. 특히 자연어처리분야의 텍스트 분류문제에 많이 활용된다. 기본적인 원리는 다음과 같다.<br /></p>
+
+<table>
+  <thead>
+    <tr>
+      <th>혈액형</th>
+      <th>안경</th>
+      <th>합격</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>A</td>
+      <td>yes</td>
+      <td>pass</td>
+    </tr>
+    <tr>
+      <td>A</td>
+      <td>no</td>
+      <td>fail</td>
+    </tr>
+    <tr>
+      <td>A</td>
+      <td>yes</td>
+      <td>pass</td>
+    </tr>
+    <tr>
+      <td>A</td>
+      <td>yes</td>
+      <td>fail</td>
+    </tr>
+    <tr>
+      <td>B</td>
+      <td>no</td>
+      <td>pass</td>
+    </tr>
+    <tr>
+      <td>B</td>
+      <td>no</td>
+      <td>fail</td>
+    </tr>
+    <tr>
+      <td>B</td>
+      <td>no</td>
+      <td>pass</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>위의 table에서 혈액형이 A이면서 안경을 쓴 사람이 합격할 확률은 다음과 같이 나타낼 수 있다.<br /></p>
+<p style="text-align: center">$$P(pass|혈액형=A, 안경=yes)$$</p>
+<p>실제 관측결과 혈액형이 A이고 안경을 쓴 사람은 3명이고, 그중 2명이 합격을 했다. 따라서 별다른 가정이 없다면 이 값을 \(\frac{2}{3}\) 로 추정하는게 바람직할 것이다.<br />
+하지만 혈액형이 B이고, 안경을 쓴 사람의 경우는 관측되었지 않았기 때문에 예측을 할 수가 없다. 이러한 경우 <strong>각각의 조건을 따로 분리</strong>하여 다음과 같이 예측에 이용할 수 있을 것이다.  <br />
+“혈액형이 B인 사람은 2/3가 합격했고, 안경을 쓴사람도 2/3가 합격했으므로 혈액형이 B이고, 안경을 썼으면 합격할 확률이 50%보다는 높을 것이다”<br />
+이와같은 아이디어가 <strong>나이브 베이즈</strong>의 Base가 된다. 나이브 베이즈는 문장을 학습해 단어의 등장확률을 계산하는 등 자연어 처리분야에서 많이 활용된다. 위처럼 특정 단어들이 연속적으로 나오는 경우를 관측하기 힘들기 때문이다.</p>
+
+<h2 id="수식">수식</h2>
+<p>나이브 베이즈를 이해하기전에 알아야할 몇가지 <strong>조건부 확률 수식</strong>에  대해 알아보자.<br />
+우리가 궁금한 것은 어떠한 조건이 주어졌을때 <strong>해당 결과(pass or fail)가 나올 확률</strong>이다. 즉 베이지안의 관점에서 \(P(pass|x_1, x_2,...,x_n)\)가 \(P(fail|x_1, x_2,...,x_n)\) 보다 크다면 주어진 조건(\(x_1, x_2\))에서 결과를 pass로 예측하는것이 바람직하다. 또한 두 값은 조건부 확률의 정의에 다음과 같이 나타낼 수 있다.<br /></p>
+<p style="text-align: center">$$P(pass,x_1, x_2,...,x_n)/P(x_1, x_2,...,x_n),\ P(fail,x_1,x_2,...,x_n)/P(x_1,x_2,...,x_n)$$</p>
+<p>이 식에서 알 수 있듯이 두 확률을 비교할때는 분모가 관여하지 않는다. 즉 분자의 값들만을 이용해 바람직한 예측값을 계산할 수 있다는 뜻이다. 그리고 위의 식은 다음과같이 나타낼 수 있다.</p>
+<p style="text-align: center">$$P(pass,x_1,...,x_n)=P(x_1,...,x_n|pass)\times P(pass)$$</p>
+<p style="text-align: center">$$=\frac{P(pass,x_1)}{P(pass)}\times \frac{P(pass,x_1,x_2)}{P(pass,x_1)}\times \cdots \times \frac{P(pass,x_1,...,x_n)}{P(pass,x_1,...,x_{n-1})}\times P(pass)$$</p>
+<p>그리고 여기에 <strong>Naive한 가정(각 \(x_i\)는 나머지 \(x_j\)들에 대해 y가 주어진 조건하에 서로 독립이다 - 조건부 독립)</strong> 이 추가되면 위의 수식을 간단하게 변환할 수 있다. 참고로 조건부 독립가정은 다음과 같다.</p>
+<p style="text-align: center">$$\frac{P(pass,x_1,...,x_k)}{P(pass,x_1,...,x_{k-1})}=P(x_k|pass,x_1,...,x_{k-1})=P(x_k|pass)$$</p>
+<p>결과적으로 pass, fail의 조건부 확률은 다음과 같이 나타낼 수 있다.</p>
+<p style="text-align: center">$$P(pass|x_1,...,x_n) \propto P(x_1,...,x_n|pass)\times P(pass)$$
+$$=P(pass)\times \frac{P(pass,x_1)}{P(pass)}\times \cdots \times \frac{P(pass,x_n)}{P(pass)}=P(pass)\prod^n_{i=1}P(x_i|pass),$$
+$$P(fail|x_1,...,x_n) \propto P(fail)\prod^n_{i=1}P(x_i|pass)$$</p>
+<p>그리고 베이지안의 관점에서 \(pass\)할 확률은 아래와 같이 계산할 수 있다.</p>
+<p style="text-align: center">$$\frac{P(pass|x_1,x_2,...,x_n)}{P(pass|x_1,x_2,...,x_n)+P(fail|x_1,x_2,...,x_n)}$$</p>
+<p>다시 위의 예시로 돌아가면 \(P(혈액형=B| pass)= 1/2,\ P(혈액형=B|fail)=1/3,\ P(안경=no|pass)=1/2,\)
+\(P(안경=no|fail)=2/3\)  와같이 나타낼 수 있다.<br />
+결과적으로 <strong>혈액형이 B이고, 안경을 쓴 사람</strong>의 합격확률은 아래와 같이 계산할 수 있을 것이다.</p>
+<p style="text-align: center">$$P(pass,혈액형=B,안경=yes) = P(pass)P(혈액형=B|pass)P(안경=yes|pass) = \frac{4}{7}\times \frac{1}{2} \times \frac{1}{2}=\frac{1}{7}$$</p>
+<p style="text-align: center">$$P(fail,혈액형=B,안경=yes) = P(fail)P(혈액형=B|fail)P(안경=yes|fail) = \frac{3}{7}\times \frac{1}{3} \times \frac{2}{3}=\frac{2}{21}$$</p>
+<p>\(P(pass|혈액형=B,안경=yes)=\frac{1}{7}/(\frac{1}{7}+\frac{2}{21})=\frac{3}{5}\)</p>
+<h2 id="코드">코드</h2>
+<h3 id="make-dataset">Make dataset</h3>
+<pre><code class="language-Python">import pandas as pd
+import numpy as np
+blood_types = ['A', 'B', 'AB', 'O']
+glasses = [0, 1]
+grade = ['A','B','C','D','F']
+blood_types = ['A', 'A', 'B', 'B', 
+               'B','AB', 'AB', 'O']
+glasses = [0, 1, 0, 0, 1, 1, 0, 1]
+passes = [0, 1, 1, 1, 0, 0, 1, 1]
+df = pd.DataFrame({'blood_type': blood_types, 
+                   'glasses': glasses,
+                   'pass': passes
+                  })
+X = df.iloc[:,:-1]
+y = df.iloc[:,-1]
+df
+</code></pre>
+
+<table>
+  <thead>
+    <tr>
+      <th>blood_type</th>
+      <th>glasses</th>
+      <th>pass</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>A</td>
+      <td>0</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>A</td>
+      <td>1</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>B</td>
+      <td>0</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>B</td>
+      <td>0</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>B</td>
+      <td>1</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>AB</td>
+      <td>1</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>AB</td>
+      <td>0</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>O</td>
+      <td>1</td>
+      <td>1</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 id="train">Train</h3>
+<pre><code class="language-Python">def get_ratio(df, cx, cy):
+    df = df.copy()
+    df['count'] = 1  # count
+    pivot = pd.pivot_table(df, index=cx, columns=cy, values='count', aggfunc=np.sum)
+    pivot['sum'] = pivot.sum(axis=1)
+    pivot = pivot.apply(lambda x:x[:-1] / x['sum'],axis=1)
+    pivot = pivot.fillna(0)
+    return pivot.to_dict()
+		
+def train(X, y):
+    df = pd.concat([X,y], axis=1)
+    col_x = df.columns[:-1]  # 열 이름들
+    col_y = df.columns[-1]
+
+    param = {}  # 학습된 파라미터들
+    for cx in col_x:
+        param[cx] = get_ratio(df, cx, col_y)
+
+    y_ratio = {}  # 조건부 확률이 아닌 그냥 p(C_k)
+    for y_val in y.unique():
+        y_ratio[y_val] = np.mean(df[col_y] == y_val)
+    param['y'] = y_ratio
+    return param
+		
+train(X,y)
+</code></pre>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>{'blood_type': {0: {'A': 0.5, 'AB': 0.5, 'B': 0.3333333333333333, 'O': 0.0},
+  1: {'A': 0.5, 'AB': 0.5, 'B': 0.6666666666666666, 'O': 1.0}},
+ 'glasses': {0: {0: 0.25, 1: 0.5}, 1: {0: 0.75, 1: 0.5}},
+ 'y': {0: 0.375, 1: 0.625}}
+</code></pre></div></div>
+<p>blood_type을 예시로 설명하면 \(P(y=0|blood\_type=A)=0.5,\ P(y=1|blood\_type=A)=0.5\) 라는 뜻이다. 또 \(P(y=0)=0.375,\ P(y=1)=0.625\) 이다.<br />
+blood_type이 B이고 pass=1인 경우는 2가지, blood_type이 B이고 pass=0인 경우는 한가지이므로<br />
+\(P(y=0|blood\_type=B)=0.666666\) 이 된다.</p>
+
+<h3 id="test">Test</h3>
+<pre><code class="language-Python">X_test = pd.DataFrame({'blood_type': ['A','B','O'], 'glasses': [0, 1, 0]})
+def test(X_test):
+    col_x = X_test.columns
+    y_pred = []
+    for i in range(len(X_test)):
+        row = X_test.iloc[i]
+        probs = []
+
+        for y_val in y.unique():
+            prob = param['y'][y_val]
+            for i in range(len(col_x)):
+                prob *= param[col_x[0]][y_val][row[0]]
+
+            probs.append(prob)
+        y_pred.append(probs)
+
+    y_pred = pd.DataFrame(y_pred)
+    y_pred['sum'] = y_pred.sum(axis=1)
+    y_pred = y_pred.apply(lambda x:x[:-1]/x['sum'], axis=1)
+    y_pred.columns = y.unique()
+    return y_pred
+test(X_test)
+</code></pre>
+<p><strong>X_test</strong><br /></p>
+
+<table>
+  <thead>
+    <tr>
+      <th>blood_type</th>
+      <th>glasses</th>
+      <th>pred_pass</th>
+      <th>pred_fail</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>A</td>
+      <td>0</td>
+      <td>0.375</td>
+      <td>0.625</td>
+    </tr>
+    <tr>
+      <td>B</td>
+      <td>1</td>
+      <td>0.130435</td>
+      <td>0.869565</td>
+    </tr>
+    <tr>
+      <td>O</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 id="결과-해석">결과 해석</h3>
+<p>frequentist의 관점에서 살펴보면 \(P(y=0|blood\_type=A,glasses=0)=P(y=0|blood\_type=A,glasses=1)=0.5\) 이지만,<br />
+Naive한 가정하에 bayesian 관점에서 확률은 각각 0.375, 0.625로 차이를 보임을 알 수 있다.<br />
+<strong>Frequentist vs Bayesian :</strong> 만약 blood_type과 glasses가 조건부(given pass)독립이 아니라면 빈도주의관점에서 접근하는게 더 정확하다.<br />
+하지만 주어진 데이터가 얼마없거나, X의 차원이 클 경우 <strong>각각의 빈도당 표본이 적어</strong> 베이지안 관점이 좀더 정확한 결과를 낼 수 있을 것이다.</p>
+
+</article>
+<!-- <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script> -->
+
+
+
+<section class="tags">
+  <!-- <strong>Tags:</strong> <a href="/blog/tag/Python">Python</a> -->
+  <strong>Tags:</strong> <a href="https://www.google.co.kr/search?q=Python">Python</a>
+</section>
+
+
+<!-- <section class="rss">
+  <p class="rss-subscribe text"><strong>Subscribe <a href="/blog/feed.xml">via RSS</a></strong></p>
+</section> -->
+
+<section class="share">
+  <span>Share: </span>
+  
+    
+    
+    
+    
+    
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+      <a href="//www.pinterest.com/pin/create/button/?description=%5BPython%5D+%EB%82%98%EC%9D%B4%EB%B8%8C+%EB%B2%A0%EC%9D%B4%EC%A6%88+%EB%B6%84%EB%A5%98+%EC%9D%B4%EB%A1%A0+%EC%84%A4%EB%AA%85+%EB%B0%8F+%EA%B5%AC%ED%98%84&url=https%3A%2F%2Fparkeunsang.github.io%2Fblog%2Fdatascience%2F2021%2F04%2F22%2FNB.html&media=https://parkeunsang.github.io/blog/assets/instacode.png"
+        onclick="window.open(this.href, 'pinterest-share', 'width=550,height=255');return false;">
+        <i class="fa fa-pinterest-square fa-lg"></i>
+      </a>
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+      <a href="//www.reddit.com/submit" onclick="window.location = '//www.reddit.com/submit?url=' + encodeURIComponent('https://parkeunsang.github.io/blog/datascience/2021/04/22/NB.html') + '&title=[Python] 나이브 베이즈 분류 이론 설명 및 구현'; return false">
+        <i class="fa fa-reddit-square fa-lg"></i>
+      </a>
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+    
+  
+</section>
+
+
+
+
+</div>
+</div>
+
+    </div>
+
+    <footer class="site-footer">
+
+  <div class="wrapper">
+
+    <h3 class="footer-heading">Edward's blog</h3>
+
+    <div class="site-navigation">
+
+      <p><strong>Site Map</strong></p>
+      <ul class="pages">
+				
+	
+	<li class="nav-link"><a href="/blog/about/">About</a>
+	
+
+	
+	<li class="nav-link"><a href="/blog/category/">Categories</a>
+	
+
+	
+
+	
+
+	
+	<li class="nav-link"><a href="/blog/posts/">Posts</a>
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+      </ul>
+    </div>
+
+    <div class="site-contact">
+
+      <p><strong>Contact</strong></p>
+      <ul class="social-media-list">
+        <li>
+          <a href="mailto:edwardfdsp@gmail.com">
+            <i class="fa fa-envelope-o"></i>
+            <span class="username">edwardfdsp@gmail.com</span>
+          </a>
+        </li>
+
+        
+          
+          <li>
+            <a href="https://github.com/parkeunsang" title="Fork me on GitHub">
+              <i class="fa fa-github"></i>
+              <span class="username">EunSang Park</span>
+            </a>
+          </li>
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+
+      </ul>
+    </div>
+
+    <!-- <div class="site-signature">
+      <p class="rss-subscribe text"><strong>Subscribe <a href="/blog/feed.xml">via RSS</a></strong></p>
+      <p class="text">contents
+</p>
+    </div> -->
+
+  </div>
+
+</footer>
+
+<!-- Scripts -->
+<script src="//code.jquery.com/jquery-3.4.1.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/highlight.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.1/js/lightbox.min.js"></script>
+<script src="//unpkg.com/popper.js@1"></script>
+<script src="//unpkg.com/tippy.js@5"></script>
+
+<script type="text/javascript">
+$(document).ready(function() {
+  // Default syntax highlighting
+  hljs.initHighlightingOnLoad();
+
+  // Header
+  var menuToggle = $('#js-mobile-menu').unbind();
+  $('#js-navigation-menu').removeClass("show");
+  menuToggle.on('click', function(e) {
+    e.preventDefault();
+    $('#js-navigation-menu').slideToggle(function(){
+      if($('#js-navigation-menu').is(':hidden')) {
+        $('#js-navigation-menu').removeAttr('style');
+      }
+    });
+  });
+
+	// Enable tooltips via Tippy.js
+	if (Array.isArray(window.tooltips)) {
+		window.tooltips.forEach(function(tooltip) {
+			var selector = tooltip[0];
+			var config = tooltip[1];
+			tippy(selector, config);
+		})
+	}
+});
+
+</script>
+
+
+
+
+
+
+  </body>
+
+</html>

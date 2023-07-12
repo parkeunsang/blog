@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>서울 원룸 전월세 데이터 분석 - 좋은 방 찾기</title>
+  <meta name="description" content="Intro지난 포스트에서 서울 지역별  원룸 면적과 전, 월세 분포를 살펴보았다.이번 포스트에서는 이러한 정보를 토대로 ML기반 모델을 만들어서 좋은 방을 찾는데 활용할 것이다. 먼저 전세가격을 예측하는 모델을 만들고, 실제 매물의 전세가격이 모델이 예측한 가격보다 낮으면 해당 매...">
+  
+  <meta name="author" content="EunSang Park">
+  <meta name="copyright" content="&copy; EunSang Park 2023">
+  
+
+  <!-- External libraries --> 
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css">
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.9.0/styles/monokai-sublime.min.css">
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/lightbox2/2.7.1/css/lightbox.css">
+
+  <!-- Favicon and other icons (made with http://www.favicon-generator.org/) -->
+  <link rel="shortcut icon" href="/blog/assets/icons/favicon.ico" type="image/x-icon">
+  <link rel="icon" href="/blog/assets/icons/favicon.ico" type="image/x-icon">
+  <link rel="apple-touch-icon" sizes="57x57" href="/blog/assets/icons/apple-icon-57x57.png">
+  <link rel="apple-touch-icon" sizes="60x60" href="/blog/assets/icons/apple-icon-60x60.png">
+  <link rel="apple-touch-icon" sizes="72x72" href="/blog/assets/icons/apple-icon-72x72.png">
+  <link rel="apple-touch-icon" sizes="76x76" href="/blog/assets/icons/apple-icon-76x76.png">
+  <link rel="apple-touch-icon" sizes="114x114" href="/blog/assets/icons/apple-icon-114x114.png">
+  <link rel="apple-touch-icon" sizes="120x120" href="/blog/assets/icons/apple-icon-120x120.png">
+  <link rel="apple-touch-icon" sizes="144x144" href="/blog/assets/icons/apple-icon-144x144.png">
+  <link rel="apple-touch-icon" sizes="152x152" href="/blog/assets/icons/apple-icon-152x152.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/blog/assets/icons/apple-icon-180x180.png">
+  <link rel="icon" type="image/png" sizes="192x192"  href="/blog/assets/icons/android-icon-192x192.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/blog/assets/icons/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="96x96" href="/blog/assets/icons/favicon-96x96.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/blog/assets/icons/favicon-16x16.png">
+  <link rel="manifest" href="/blog/assets/icons/manifest.json">
+  <meta name="msapplication-TileColor" content="#ffffff">
+  <meta name="msapplication-TileImage" content="/blog/assets/icons/ms-icon-144x144.png">
+  <meta name="theme-color" content="#ffffff">
+
+  
+  <!-- Facebook OGP cards -->
+  <meta property="og:description" content="Intro지난 포스트에서 서울 지역별  원룸 면적과 전, 월세 분포를 살펴보았다.이번 포스트에서는 이러한 정보를 토대로 ML기반 모델을 만들어서 좋은 방을 찾는데 활용할 것이다. 먼저 전세가격을 예측하는 모델을 만들고, 실제 매물의 전세가격이 모델이 예측한 가격보다 낮으면 해당 매..." />
+  <meta property="og:url" content="https://parkeunsang.github.io/datascience/2023/01/08/zigbang.html">
+  <meta property="og:site_name" content="Edward's blog" />
+  <meta property="og:title" content="서울 원룸 전월세 데이터 분석 - 좋은 방 찾기" />
+  <meta property="og:type" content="website" />
+  <meta property="og:image" content="https://parkeunsang.github.io/blog/post_images/real_estate/plot4.png" />
+  <meta property="og:image:type" content="image/png" />
+  <meta property="og:image:width" content="612" />
+  <meta property="og:image:height" content="605" />
+  
+
+  
+  <!-- Twitter: card tags -->
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="서울 원룸 전월세 데이터 분석 - 좋은 방 찾기">
+  <meta name="twitter:description" content="Intro지난 포스트에서 서울 지역별  원룸 면적과 전, 월세 분포를 살펴보았다.이번 포스트에서는 이러한 정보를 토대로 ML기반 모델을 만들어서 좋은 방을 찾는데 활용할 것이다. 먼저 전세가격을 예측하는 모델을 만들고, 실제 매물의 전세가격이 모델이 예측한 가격보다 낮으면 해당 매...">
+  <meta name="twitter:image" content="https://parkeunsang.github.io/blog/post_images/real_estate/plot4.png">
+  <meta name="twitter:url" content="https://parkeunsang.github.io/datascience/2023/01/08/zigbang.html">
+  
+
+  
+
+  <!-- Site styles -->
+  <link rel="stylesheet" href="/blog/css/main.css">
+  <link rel="canonical" href="https://parkeunsang.github.io/blog/datascience/2023/01/08/zigbang.html">
+	<link rel="alternate" type="application/rss+xml" title="Edward's blog" href="https://parkeunsang.github.io/blog/feed.xml" />
+	
+	<!-- Tooltips -->
+	<script type="text/javascript">
+		window.tooltips = []
+	</script>
+  <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
+</head>
+
+
+  <body>
+
+    <header class="navigation" role="banner">
+  <div class="navigation-wrapper">
+    <a href="/blog/" class="logo">
+      
+      <img src="/blog/assets/homepage.png" alt="Edward's blog">
+      
+    </a>
+    <a href="javascript:void(0)" class="navigation-menu-button" id="js-mobile-menu">
+      <i class="fa fa-bars"></i>
+    </a>
+    <nav role="navigation">
+      <ul id="js-navigation-menu" class="navigation-menu show">
+				
+	
+	<li class="nav-link"><a href="/blog/about/">About</a>
+	
+
+	
+	<li class="nav-link"><a href="/blog/category/">Categories</a>
+	
+
+	
+
+	
+
+	
+	<li class="nav-link"><a href="/blog/posts/">Posts</a>
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+      </ul>
+    </nav>
+  </div>
+</header>
+
+
+    <div class="page-content">
+        <div class="post">
+
+<div class="post-header-container has-cover" style="background-image: url(/blog/post_images/real_estate/plot4.png);">
+  <div class="scrim has-cover">
+    <header class="post-header">
+      <h1 class="title">서울 원룸 전월세 데이터 분석 - 좋은 방 찾기</h1>
+      <p class="info">by <strong>Edward Park</strong></p>
+    </header>
+  </div>
+</div>
+
+<div class="wrapper">
+
+
+
+<section class="post-meta">
+  <div class="post-date">January 8, 2023</div>
+  <div class="post-categories">
+  in 
+    
+    <a href="/blog/posts">DataScience</a>
+    
+  
+  </div>
+</section>
+
+<article class="post-content">
+  <h2 id="intro">Intro</h2>
+<p><a href="https://parkeunsang.github.io/blog/dataanalysis/2022/11/03/feat.html">지난 포스트</a>에서 서울 지역별  원룸 면적과 전, 월세 분포를 살펴보았다.<br />
+이번 포스트에서는 이러한 정보를 토대로 ML기반 모델을 만들어서 좋은 방을 찾는데 활용할 것이다. 먼저 전세가격을 예측하는 모델을 만들고, 실제 매물의 전세가격이 모델이 예측한 가격보다 낮으면 해당 매물은 조건에 비해 저렴한 매물이라고 할 수 있다. <br />
+쉽게 설명하면 회기역 근처에 위치하고, 지어진지 10년 된 5평정도의 원룸 전세가는 평균적으로 x만원인데(모델이 예측하는 값) 특정 매물의 가격이 이 가격보다 현저히 낮다면 좋은 조건의 매물이라고 추측할 수 있다.<br />
+물론 이러한 추론을 하기위해서는 몇가지 전제가 존재한다(모델의 성능이 괜찮아야하고, 전세가에 큰 영향을 미치는 변수들이 모두 모델 학습 feature에 포함되어야하고, 데이터에 허위매물이 없어야하는 등).<br />
+이번 포스트에서는 이러한 전제들을 모두 충족시키는 완벽한 모델을 만드는 것을 목적으로 하기보다는, 좋은 방을 구하기위한 수단으로 데이터 모델링을 활용하는 가이드라인 정도를 제시하는것을 목표로 하고자 한다.</p>
+
+<h2 id="전처리">전처리</h2>
+<ul>
+  <li>사용데이터 : 22년12월1일 기준 직방 원룸 매물 데이터. 9월25일기준 데이터는 <a href="https://v5.core.today/dataset/1W517jrj">코어닷투데이</a>에 업로드 되어있음</li>
+</ul>
+
+<pre><code class="language-Python">import pandas as pd
+from sklearn.metrics import mean_squared_error, r2_score
+from sklearn.model_selection import KFold
+from sklearn.model_selection import train_test_split
+import lightgbm as lgbm
+
+data_date = 221201  # or 220925
+data = pd.read_csv(f'data_preprocessed/room_info_{data_date}.csv')
+charter_info = data[data['sales_type'] == '전세'].reset_index(drop=True)
+charter_info = charter_info[charter_info['보증금액']&lt;= 50000].reset_index(drop=True)  # 이상치 제거
+</code></pre>
+
+<h2 id="모델-생성">모델 생성</h2>
+<ul>
+  <li>모델은 LightGBM사용</li>
+  <li>사용변수는 전용면적, 사용승인년도(건축년도와 유사), 위치와 고도값, 반지하 여부</li>
+  <li>위치와 고도값은 전세가와 linear한 관계가 있는게 아니기 때문에(강남, 여의도 등 특정 구역이 비싼것이지 서쪽으로 혹은 남쪽으로갈수록 비싼경향이 있는게 아님) 회귀분석과 같은 선형모델이 아니라 neural network, tree based model등 비선형 모델을 사용해야함.</li>
+</ul>
+
+<pre><code class="language-Python">train_cols = ['전용면적_m2', 'approve_year', 'random_lat', 'random_long', 'is_underground']
+X = charter_info[train_cols]
+y = charter_info['보증금액']
+X_train, X_test, y_train, y_test = train_test_split(X, y, random_state=42, test_size=0.2)
+model = lgbm.LGBMRegressor()
+model.fit(X_train, y_train);
+pred = model.predict(X_test)
+r2_score(y_test, pred)  # test set의 r-square값은 0.765정도로 어느정도 괜찮은 모델이라고 할 수 있음
+</code></pre>
+<ul>
+  <li>위도와 고도값을 뺀 모델의 r-square값은 0.64정도</li>
+  <li>사용승인년도를 뺀 모델의 r-square값도 0.64정도</li>
+  <li>전용면적을 뺀 모델의 r-square값은 0.43정도로 전용면적이 확실히 전세가에 큰 영향을 미침을 알 수 있음.
+    <h2 id="예측">예측</h2>
+  </li>
+  <li>구하고자 하는 동을 기준으로 매물 검색</li>
+</ul>
+
+<pre><code class="language-Python"># 전체 데이터셋을 이용해 모델 다시 생성
+model = lgbm.LGBMRegressor()
+model.fit(X, y);
+charter_info_pred = charter_info.copy()
+charter_info_pred['pred'] = model.predict(X)
+charter_info_pred['score'] = charter_info_pred['pred'] - charter_info_pred['보증금액']  # 높을수록 좋음
+def select_dong(df, wide=[], narrow=[]):
+    result = pd.DataFrame()
+    for i in wide:
+        result = pd.concat([result, df[df['local3'].str.contains(i)]])
+    for i in narrow:
+        result = pd.concat([result, df[df['local3'] == i]])
+    result = result.reset_index(drop=True)
+    return result
+		
+df = select_dong(charter_info_pred, ['문래', '당산', '망원'])
+</code></pre>
+<p><img src="/blog/post_images/real_estate/plot8.png" title="real_estate" /></p>
+<ul>
+  <li>위처럼 좋은 조건의 방인지를 score(예측가-실제전세가)를 통해서 어느정도 파악이 가능하다.</li>
+</ul>
+
+<h2 id="결론">결론</h2>
+<ul>
+  <li>실제로 필자가 방을 구할 때 위 모델을 사용해봤는데 설정한 조건(보증금액 상한, 위치)에서 좋은 score값을 가지는 매물들은 그저그런 오피스텔 원룸 매물들이었고, 그다지 유용하지는 않았다.</li>
+  <li>블로그를 쓰다 보니 residence_type이라는 feature도 모델성능에 긍정적인 영향을 미칠것 이라고 생각된다.</li>
+  <li>이러한 모델은 좋은매물을 찾는것 뿐 아니라 허위매물탐색 등에도 활용될 수 있을것이라고 생각된다.</li>
+</ul>
+
+</article>
+<!-- <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script> -->
+
+
+
+<section class="tags">
+  <!-- <strong>Tags:</strong> <a href="/blog/tag/Python">Python</a> -->
+  <strong>Tags:</strong> <a href="https://www.google.co.kr/search?q=Python">Python</a>
+</section>
+
+
+<!-- <section class="rss">
+  <p class="rss-subscribe text"><strong>Subscribe <a href="/blog/feed.xml">via RSS</a></strong></p>
+</section> -->
+
+<section class="share">
+  <span>Share: </span>
+  
+    
+    
+    
+    
+    
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+      <a href="//www.pinterest.com/pin/create/button/?description=%EC%84%9C%EC%9A%B8+%EC%9B%90%EB%A3%B8+%EC%A0%84%EC%9B%94%EC%84%B8+%EB%8D%B0%EC%9D%B4%ED%84%B0+%EB%B6%84%EC%84%9D+-+%EC%A2%8B%EC%9D%80+%EB%B0%A9+%EC%B0%BE%EA%B8%B0&url=https%3A%2F%2Fparkeunsang.github.io%2Fblog%2Fdatascience%2F2023%2F01%2F08%2Fzigbang.html&media=https://parkeunsang.github.io/blog/post_images/real_estate/plot4.png"
+        onclick="window.open(this.href, 'pinterest-share', 'width=550,height=255');return false;">
+        <i class="fa fa-pinterest-square fa-lg"></i>
+      </a>
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+      <a href="//www.reddit.com/submit" onclick="window.location = '//www.reddit.com/submit?url=' + encodeURIComponent('https://parkeunsang.github.io/blog/datascience/2023/01/08/zigbang.html') + '&title=서울 원룸 전월세 데이터 분석 - 좋은 방 찾기'; return false">
+        <i class="fa fa-reddit-square fa-lg"></i>
+      </a>
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+    
+  
+</section>
+
+
+
+
+</div>
+</div>
+
+    </div>
+
+    <footer class="site-footer">
+
+  <div class="wrapper">
+
+    <h3 class="footer-heading">Edward's blog</h3>
+
+    <div class="site-navigation">
+
+      <p><strong>Site Map</strong></p>
+      <ul class="pages">
+				
+	
+	<li class="nav-link"><a href="/blog/about/">About</a>
+	
+
+	
+	<li class="nav-link"><a href="/blog/category/">Categories</a>
+	
+
+	
+
+	
+
+	
+	<li class="nav-link"><a href="/blog/posts/">Posts</a>
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+      </ul>
+    </div>
+
+    <div class="site-contact">
+
+      <p><strong>Contact</strong></p>
+      <ul class="social-media-list">
+        <li>
+          <a href="mailto:edwardfdsp@gmail.com">
+            <i class="fa fa-envelope-o"></i>
+            <span class="username">edwardfdsp@gmail.com</span>
+          </a>
+        </li>
+
+        
+          
+          <li>
+            <a href="https://github.com/parkeunsang" title="Fork me on GitHub">
+              <i class="fa fa-github"></i>
+              <span class="username">EunSang Park</span>
+            </a>
+          </li>
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+
+      </ul>
+    </div>
+
+    <!-- <div class="site-signature">
+      <p class="rss-subscribe text"><strong>Subscribe <a href="/blog/feed.xml">via RSS</a></strong></p>
+      <p class="text">contents
+</p>
+    </div> -->
+
+  </div>
+
+</footer>
+
+<!-- Scripts -->
+<script src="//code.jquery.com/jquery-3.4.1.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/highlight.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.1/js/lightbox.min.js"></script>
+<script src="//unpkg.com/popper.js@1"></script>
+<script src="//unpkg.com/tippy.js@5"></script>
+
+<script type="text/javascript">
+$(document).ready(function() {
+  // Default syntax highlighting
+  hljs.initHighlightingOnLoad();
+
+  // Header
+  var menuToggle = $('#js-mobile-menu').unbind();
+  $('#js-navigation-menu').removeClass("show");
+  menuToggle.on('click', function(e) {
+    e.preventDefault();
+    $('#js-navigation-menu').slideToggle(function(){
+      if($('#js-navigation-menu').is(':hidden')) {
+        $('#js-navigation-menu').removeAttr('style');
+      }
+    });
+  });
+
+	// Enable tooltips via Tippy.js
+	if (Array.isArray(window.tooltips)) {
+		window.tooltips.forEach(function(tooltip) {
+			var selector = tooltip[0];
+			var config = tooltip[1];
+			tippy(selector, config);
+		})
+	}
+});
+
+</script>
+
+
+
+
+
+
+  </body>
+
+</html>

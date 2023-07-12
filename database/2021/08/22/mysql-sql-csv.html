@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>[MySQL] SQL서버의 장점 - 왜 csv(Excel file)로 데이터를 관리하지 않을까?</title>
+  <meta name="description" content="Abstract데이터에는 다양한 종류가 있다. 옛날에 ADsP를 준비하며 공부했던 기억을 돌이켜보면 데이터를 정형(csv 등), 반정형(xml, json 등), 비정형(이미지 텍스트) 크게 3가지로 분류를 했었던 것 같다. 그중 csv, json 형태의 데이터는 각각 SQL, No...">
+  
+  <meta name="author" content="EunSang Park">
+  <meta name="copyright" content="&copy; EunSang Park 2023">
+  
+
+  <!-- External libraries --> 
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css">
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.9.0/styles/monokai-sublime.min.css">
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/lightbox2/2.7.1/css/lightbox.css">
+
+  <!-- Favicon and other icons (made with http://www.favicon-generator.org/) -->
+  <link rel="shortcut icon" href="/blog/assets/icons/favicon.ico" type="image/x-icon">
+  <link rel="icon" href="/blog/assets/icons/favicon.ico" type="image/x-icon">
+  <link rel="apple-touch-icon" sizes="57x57" href="/blog/assets/icons/apple-icon-57x57.png">
+  <link rel="apple-touch-icon" sizes="60x60" href="/blog/assets/icons/apple-icon-60x60.png">
+  <link rel="apple-touch-icon" sizes="72x72" href="/blog/assets/icons/apple-icon-72x72.png">
+  <link rel="apple-touch-icon" sizes="76x76" href="/blog/assets/icons/apple-icon-76x76.png">
+  <link rel="apple-touch-icon" sizes="114x114" href="/blog/assets/icons/apple-icon-114x114.png">
+  <link rel="apple-touch-icon" sizes="120x120" href="/blog/assets/icons/apple-icon-120x120.png">
+  <link rel="apple-touch-icon" sizes="144x144" href="/blog/assets/icons/apple-icon-144x144.png">
+  <link rel="apple-touch-icon" sizes="152x152" href="/blog/assets/icons/apple-icon-152x152.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/blog/assets/icons/apple-icon-180x180.png">
+  <link rel="icon" type="image/png" sizes="192x192"  href="/blog/assets/icons/android-icon-192x192.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/blog/assets/icons/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="96x96" href="/blog/assets/icons/favicon-96x96.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/blog/assets/icons/favicon-16x16.png">
+  <link rel="manifest" href="/blog/assets/icons/manifest.json">
+  <meta name="msapplication-TileColor" content="#ffffff">
+  <meta name="msapplication-TileImage" content="/blog/assets/icons/ms-icon-144x144.png">
+  <meta name="theme-color" content="#ffffff">
+
+  
+  <!-- Facebook OGP cards -->
+  <meta property="og:description" content="Abstract데이터에는 다양한 종류가 있다. 옛날에 ADsP를 준비하며 공부했던 기억을 돌이켜보면 데이터를 정형(csv 등), 반정형(xml, json 등), 비정형(이미지 텍스트) 크게 3가지로 분류를 했었던 것 같다. 그중 csv, json 형태의 데이터는 각각 SQL, No..." />
+  <meta property="og:url" content="https://parkeunsang.github.io/database/2021/08/22/mysql-sql-csv.html">
+  <meta property="og:site_name" content="Edward's blog" />
+  <meta property="og:title" content="[MySQL] SQL서버의 장점 - 왜 csv(Excel file)로 데이터를 관리하지 않을까?" />
+  <meta property="og:type" content="website" />
+  <meta property="og:image" content="https://parkeunsang.github.io/blog/assets/instacode.png" />
+  <meta property="og:image:type" content="image/png" />
+  <meta property="og:image:width" content="612" />
+  <meta property="og:image:height" content="605" />
+  
+
+  
+  <!-- Twitter: card tags -->
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="[MySQL] SQL서버의 장점 - 왜 csv(Excel file)로 데이터를 관리하지 않을까?">
+  <meta name="twitter:description" content="Abstract데이터에는 다양한 종류가 있다. 옛날에 ADsP를 준비하며 공부했던 기억을 돌이켜보면 데이터를 정형(csv 등), 반정형(xml, json 등), 비정형(이미지 텍스트) 크게 3가지로 분류를 했었던 것 같다. 그중 csv, json 형태의 데이터는 각각 SQL, No...">
+  <meta name="twitter:image" content="https://parkeunsang.github.io/blog/assets/instacode.png">
+  <meta name="twitter:url" content="https://parkeunsang.github.io/database/2021/08/22/mysql-sql-csv.html">
+  
+
+  
+
+  <!-- Site styles -->
+  <link rel="stylesheet" href="/blog/css/main.css">
+  <link rel="canonical" href="https://parkeunsang.github.io/blog/database/2021/08/22/mysql-sql-csv.html">
+	<link rel="alternate" type="application/rss+xml" title="Edward's blog" href="https://parkeunsang.github.io/blog/feed.xml" />
+	
+	<!-- Tooltips -->
+	<script type="text/javascript">
+		window.tooltips = []
+	</script>
+  <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
+</head>
+
+
+  <body>
+
+    <header class="navigation" role="banner">
+  <div class="navigation-wrapper">
+    <a href="/blog/" class="logo">
+      
+      <img src="/blog/assets/homepage.png" alt="Edward's blog">
+      
+    </a>
+    <a href="javascript:void(0)" class="navigation-menu-button" id="js-mobile-menu">
+      <i class="fa fa-bars"></i>
+    </a>
+    <nav role="navigation">
+      <ul id="js-navigation-menu" class="navigation-menu show">
+				
+	
+	<li class="nav-link"><a href="/blog/about/">About</a>
+	
+
+	
+	<li class="nav-link"><a href="/blog/category/">Categories</a>
+	
+
+	
+
+	
+
+	
+	<li class="nav-link"><a href="/blog/posts/">Posts</a>
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+      </ul>
+    </nav>
+  </div>
+</header>
+
+
+    <div class="page-content">
+        <div class="post">
+
+<div class="post-header-container has-cover" style="background-image: url(/blog/assets/instacode.png);">
+  <div class="scrim has-cover">
+    <header class="post-header">
+      <h1 class="title">[MySQL] SQL서버의 장점 - 왜 csv(Excel file)로 데이터를 관리하지 않을까?</h1>
+      <p class="info">by <strong>Edward Park</strong></p>
+    </header>
+  </div>
+</div>
+
+<div class="wrapper">
+
+
+
+<section class="post-meta">
+  <div class="post-date">August 22, 2021</div>
+  <div class="post-categories">
+  in 
+    
+    <a href="/blog/posts">DataBase</a>
+    
+  
+  </div>
+</section>
+
+<article class="post-content">
+  <h2 id="abstract">Abstract</h2>
+<p>데이터에는 다양한 종류가 있다. 옛날에 ADsP를 준비하며 공부했던 기억을 돌이켜보면 데이터를 <strong>정형</strong>(csv 등), <strong>반정형</strong>(xml, json 등), <strong>비정형</strong>(이미지 텍스트) 크게 3가지로 분류를 했었던 것 같다. 그중 csv, json 형태의 데이터는 각각 SQL, NoSQL을 이용해 <strong>파일이 아닌 서버</strong>로 데이터를 관리할 수 있다. <br />
+나도 종종 SQL, NoSQL서버를 사용해 데이터 관리를 한 적이 있지만, 필요에 의해 사용했다기 보다는 이런것을 경험해보고, 공부하기위해 사용했었다. SQL사용이 어색했기도 했고, 데이터를 서버를 통해 관리하는 것의 장점을 크게 못느꼈기 때문이다. <br />
+그러던 중  최근 웹 관련 프로젝트를 하며 MySQL 서버를 사용해야할 일이 생겼고, AWS EC2를 이용해 MySQL서버를 구축해 외부에서 DB에 접근하는 것을 경험하며 로컬에서 파일로 데이터를 관리하는것 대비 SQL서버의 장점을 많이 느꼈다. 그래서 이번 포스트에서는 <strong>SQL 서버 vs Excel file</strong>을 주제로 택했다.</p>
+
+<h2 id="1-처음-느낀-db-서버의-필요성---대용량-처리">1. 처음 느낀 DB 서버의 필요성 - 대용량 처리</h2>
+<p>작년 데이터분석 관련 인턴을 하며 게임 관련 데이터를 수집하는 과정에서 그냥 하나의 JSON파일에 수기가의 데이터를 몰아넣어 저장한 적이 있었다. 그리고 이 데이터를 분석하려고 jupyter notebook에서 데이터를 불러오려고 시도했지만, 너무 큰 용량이라 jupyter 서버가 다운 되는 상황이 발생했다(아마 메모리의 문제일 것으로 생각된다). 그래서 어쩔 수 없이 데이터를 관리하는 다른 방법을 찾아야했고(JSON파일을 분할해서 저장하는 등), <strong>MongoDB</strong>라는 NoSQL이라는것을 알게되었다. 리스트에 담긴 수많은 <strong>JSON데이터를 분리해서 저장</strong>할 수 있었고, jupyter 에서도 필요한 부분만 불러와 사용할 수 있었기 때문에 메모리 측면에서도 효율적이었다. 그래서 기가바이트 단위의 비교적 대용량 데이터를 관리할때의 DB 서버의 장점을 경험했었다.</p>
+
+<h2 id="2-데이터-접근">2. 데이터 접근</h2>
+<p>로컬에 데이터를 csv, json 등의 파일형태로 저장하게되면 해당 데이터는 당연하게도 <strong>해당 컴퓨터에서만 사용</strong>할 수 있다. 심지어 나처럼 하나의 컴퓨터에 윈도우와 리눅스 운영체제를 나누어 사용하는 경우 하드디스크가 파티션이 되어있어서 다른 운영체제의 데이터에 접근할 수 없다. 그리고 웹 서버를 함께 개발할 때에도 <strong>공유된 DB</strong>를 이용하는것이 바람직할 것이다. 그래서 데이터를 DB 서버에 저장할 경우 <strong>데이터에 접근이 용이</strong>하다는 큰 장점을 가질 수 있다.</p>
+
+<h2 id="3-저장공간">3. 저장공간</h2>
+<p>이부분은 사실 DB 서버의 장점이라기보다는 <strong>클라우드 환경의 장점</strong>에 더 가깝다고 생각이되지만, 클라우드에 데이터를 저장할 때 파일 형태보다는 DB 서버를 구축해 저장하는것이 훨씬 효율적이므로 3번째 장점에 넣게 되었다.<br />
+데이터 분석을 위해 데이터를 수집하거나, kaggle 등의 대회에서 데이터를 다운받다보면 <strong>기가바이트 단위의 데이터</strong>를 관리해야할 일이 생긴다. 따로 하드디스크를 추가해 저장공간에 무리가 없으면 로컬 컴퓨터에서 파일형태로 데이터를 관리해도 되지만, 나처럼 128GB의 SSD를 사용하는 경우 몇백메가바이트의 파일이라도 저장공간에 큰 부담이 생긴다. 이럴때 <strong>AWS 등의 클라우드 서비스를 이용해 DB 서버를 구축</strong>해 데이터를 관리한다면 이러한 문제를 해결할 수 있을 것이다.</p>
+
+</article>
+<!-- <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script> -->
+
+
+
+<section class="tags">
+  <!-- <strong>Tags:</strong> <a href="/blog/tag/MySQL">MySQL</a> -->
+  <strong>Tags:</strong> <a href="https://www.google.co.kr/search?q=MySQL">MySQL</a>
+</section>
+
+
+<!-- <section class="rss">
+  <p class="rss-subscribe text"><strong>Subscribe <a href="/blog/feed.xml">via RSS</a></strong></p>
+</section> -->
+
+<section class="share">
+  <span>Share: </span>
+  
+    
+    
+    
+    
+    
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+      <a href="//www.pinterest.com/pin/create/button/?description=%5BMySQL%5D+SQL%EC%84%9C%EB%B2%84%EC%9D%98+%EC%9E%A5%EC%A0%90+-+%EC%99%9C+csv%28Excel+file%29%EB%A1%9C+%EB%8D%B0%EC%9D%B4%ED%84%B0%EB%A5%BC+%EA%B4%80%EB%A6%AC%ED%95%98%EC%A7%80+%EC%95%8A%EC%9D%84%EA%B9%8C%3F&url=https%3A%2F%2Fparkeunsang.github.io%2Fblog%2Fdatabase%2F2021%2F08%2F22%2Fmysql-sql-csv.html&media=https://parkeunsang.github.io/blog/assets/instacode.png"
+        onclick="window.open(this.href, 'pinterest-share', 'width=550,height=255');return false;">
+        <i class="fa fa-pinterest-square fa-lg"></i>
+      </a>
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+      <a href="//www.reddit.com/submit" onclick="window.location = '//www.reddit.com/submit?url=' + encodeURIComponent('https://parkeunsang.github.io/blog/database/2021/08/22/mysql-sql-csv.html') + '&title=[MySQL] SQL서버의 장점 - 왜 csv(Excel file)로 데이터를 관리하지 않을까?'; return false">
+        <i class="fa fa-reddit-square fa-lg"></i>
+      </a>
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+    
+  
+</section>
+
+
+
+
+</div>
+</div>
+
+    </div>
+
+    <footer class="site-footer">
+
+  <div class="wrapper">
+
+    <h3 class="footer-heading">Edward's blog</h3>
+
+    <div class="site-navigation">
+
+      <p><strong>Site Map</strong></p>
+      <ul class="pages">
+				
+	
+	<li class="nav-link"><a href="/blog/about/">About</a>
+	
+
+	
+	<li class="nav-link"><a href="/blog/category/">Categories</a>
+	
+
+	
+
+	
+
+	
+	<li class="nav-link"><a href="/blog/posts/">Posts</a>
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+      </ul>
+    </div>
+
+    <div class="site-contact">
+
+      <p><strong>Contact</strong></p>
+      <ul class="social-media-list">
+        <li>
+          <a href="mailto:edwardfdsp@gmail.com">
+            <i class="fa fa-envelope-o"></i>
+            <span class="username">edwardfdsp@gmail.com</span>
+          </a>
+        </li>
+
+        
+          
+          <li>
+            <a href="https://github.com/parkeunsang" title="Fork me on GitHub">
+              <i class="fa fa-github"></i>
+              <span class="username">EunSang Park</span>
+            </a>
+          </li>
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+
+      </ul>
+    </div>
+
+    <!-- <div class="site-signature">
+      <p class="rss-subscribe text"><strong>Subscribe <a href="/blog/feed.xml">via RSS</a></strong></p>
+      <p class="text">contents
+</p>
+    </div> -->
+
+  </div>
+
+</footer>
+
+<!-- Scripts -->
+<script src="//code.jquery.com/jquery-3.4.1.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/highlight.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.1/js/lightbox.min.js"></script>
+<script src="//unpkg.com/popper.js@1"></script>
+<script src="//unpkg.com/tippy.js@5"></script>
+
+<script type="text/javascript">
+$(document).ready(function() {
+  // Default syntax highlighting
+  hljs.initHighlightingOnLoad();
+
+  // Header
+  var menuToggle = $('#js-mobile-menu').unbind();
+  $('#js-navigation-menu').removeClass("show");
+  menuToggle.on('click', function(e) {
+    e.preventDefault();
+    $('#js-navigation-menu').slideToggle(function(){
+      if($('#js-navigation-menu').is(':hidden')) {
+        $('#js-navigation-menu').removeAttr('style');
+      }
+    });
+  });
+
+	// Enable tooltips via Tippy.js
+	if (Array.isArray(window.tooltips)) {
+		window.tooltips.forEach(function(tooltip) {
+			var selector = tooltip[0];
+			var config = tooltip[1];
+			tippy(selector, config);
+		})
+	}
+});
+
+</script>
+
+
+
+
+
+
+  </body>
+
+</html>

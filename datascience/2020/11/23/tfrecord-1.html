@@ -1,0 +1,643 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>[텐서플로] TFRecord 파일을 이용한 이미지 분류-(1)</title>
+  <meta name="description" content="TFRecord란?  텐서플로의 데이터 형식중 하나로, model에 input 하는 X,y 를 통합한 형태이다.  이미지 분류에서 원래는 모델의 X에 numpy 형태의 값과 y에 label값을 넣게 되는데 이 두개의 값이 tfrecord파일에는 함께 저장되어있다.">
+  
+  <meta name="author" content="EunSang Park">
+  <meta name="copyright" content="&copy; EunSang Park 2023">
+  
+
+  <!-- External libraries --> 
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css">
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.9.0/styles/monokai-sublime.min.css">
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/lightbox2/2.7.1/css/lightbox.css">
+
+  <!-- Favicon and other icons (made with http://www.favicon-generator.org/) -->
+  <link rel="shortcut icon" href="/blog/assets/icons/favicon.ico" type="image/x-icon">
+  <link rel="icon" href="/blog/assets/icons/favicon.ico" type="image/x-icon">
+  <link rel="apple-touch-icon" sizes="57x57" href="/blog/assets/icons/apple-icon-57x57.png">
+  <link rel="apple-touch-icon" sizes="60x60" href="/blog/assets/icons/apple-icon-60x60.png">
+  <link rel="apple-touch-icon" sizes="72x72" href="/blog/assets/icons/apple-icon-72x72.png">
+  <link rel="apple-touch-icon" sizes="76x76" href="/blog/assets/icons/apple-icon-76x76.png">
+  <link rel="apple-touch-icon" sizes="114x114" href="/blog/assets/icons/apple-icon-114x114.png">
+  <link rel="apple-touch-icon" sizes="120x120" href="/blog/assets/icons/apple-icon-120x120.png">
+  <link rel="apple-touch-icon" sizes="144x144" href="/blog/assets/icons/apple-icon-144x144.png">
+  <link rel="apple-touch-icon" sizes="152x152" href="/blog/assets/icons/apple-icon-152x152.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/blog/assets/icons/apple-icon-180x180.png">
+  <link rel="icon" type="image/png" sizes="192x192"  href="/blog/assets/icons/android-icon-192x192.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/blog/assets/icons/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="96x96" href="/blog/assets/icons/favicon-96x96.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/blog/assets/icons/favicon-16x16.png">
+  <link rel="manifest" href="/blog/assets/icons/manifest.json">
+  <meta name="msapplication-TileColor" content="#ffffff">
+  <meta name="msapplication-TileImage" content="/blog/assets/icons/ms-icon-144x144.png">
+  <meta name="theme-color" content="#ffffff">
+
+  
+  <!-- Facebook OGP cards -->
+  <meta property="og:description" content="TFRecord란?  텐서플로의 데이터 형식중 하나로, model에 input 하는 X,y 를 통합한 형태이다.  이미지 분류에서 원래는 모델의 X에 numpy 형태의 값과 y에 label값을 넣게 되는데 이 두개의 값이 tfrecord파일에는 함께 저장되어있다." />
+  <meta property="og:url" content="https://parkeunsang.github.io/datascience/2020/11/23/tfrecord-1.html">
+  <meta property="og:site_name" content="Edward's blog" />
+  <meta property="og:title" content="[텐서플로] TFRecord 파일을 이용한 이미지 분류-(1)" />
+  <meta property="og:type" content="website" />
+  <meta property="og:image" content="https://parkeunsang.github.io/blog/assets/instacode.png" />
+  <meta property="og:image:type" content="image/png" />
+  <meta property="og:image:width" content="612" />
+  <meta property="og:image:height" content="605" />
+  
+
+  
+  <!-- Twitter: card tags -->
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="[텐서플로] TFRecord 파일을 이용한 이미지 분류-(1)">
+  <meta name="twitter:description" content="TFRecord란?  텐서플로의 데이터 형식중 하나로, model에 input 하는 X,y 를 통합한 형태이다.  이미지 분류에서 원래는 모델의 X에 numpy 형태의 값과 y에 label값을 넣게 되는데 이 두개의 값이 tfrecord파일에는 함께 저장되어있다.">
+  <meta name="twitter:image" content="https://parkeunsang.github.io/blog/assets/instacode.png">
+  <meta name="twitter:url" content="https://parkeunsang.github.io/datascience/2020/11/23/tfrecord-1.html">
+  
+
+  
+
+  <!-- Site styles -->
+  <link rel="stylesheet" href="/blog/css/main.css">
+  <link rel="canonical" href="https://parkeunsang.github.io/blog/datascience/2020/11/23/tfrecord-1.html">
+	<link rel="alternate" type="application/rss+xml" title="Edward's blog" href="https://parkeunsang.github.io/blog/feed.xml" />
+	
+	<!-- Tooltips -->
+	<script type="text/javascript">
+		window.tooltips = []
+	</script>
+  <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
+</head>
+
+
+  <body>
+
+    <header class="navigation" role="banner">
+  <div class="navigation-wrapper">
+    <a href="/blog/" class="logo">
+      
+      <img src="/blog/assets/homepage.png" alt="Edward's blog">
+      
+    </a>
+    <a href="javascript:void(0)" class="navigation-menu-button" id="js-mobile-menu">
+      <i class="fa fa-bars"></i>
+    </a>
+    <nav role="navigation">
+      <ul id="js-navigation-menu" class="navigation-menu show">
+				
+	
+	<li class="nav-link"><a href="/blog/about/">About</a>
+	
+
+	
+	<li class="nav-link"><a href="/blog/category/">Categories</a>
+	
+
+	
+
+	
+
+	
+	<li class="nav-link"><a href="/blog/posts/">Posts</a>
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+      </ul>
+    </nav>
+  </div>
+</header>
+
+
+    <div class="page-content">
+        <div class="post">
+
+<div class="post-header-container has-cover" style="background-image: url(/blog/assets/instacode.png);">
+  <div class="scrim has-cover">
+    <header class="post-header">
+      <h1 class="title">[텐서플로] TFRecord 파일을 이용한 이미지 분류-(1)</h1>
+      <p class="info">by <strong>Edward Park</strong></p>
+    </header>
+  </div>
+</div>
+
+<div class="wrapper">
+
+
+
+<section class="post-meta">
+  <div class="post-date">November 23, 2020</div>
+  <div class="post-categories">
+  in 
+    
+    <a href="/blog/posts">DataScience</a>
+    
+  
+  </div>
+</section>
+
+<article class="post-content">
+  <h3 id="tfrecord란">TFRecord란?</h3>
+<ul>
+  <li>텐서플로의 데이터 형식중 하나로, model에 input 하는 X,y 를 통합한 형태이다.</li>
+  <li>이미지 분류에서 원래는 모델의 X에 numpy 형태의 값과 y에 label값을 넣게 되는데 이 두개의 값이 tfrecord파일에는 함께 저장되어있다.</li>
+</ul>
+
+<h3 id="tfrecord를-사용하는-이유">TFRecord를 사용하는 이유?</h3>
+<ul>
+  <li>한개의 데이터에 라벨정보가 함께 저장되어있기 때문에 이미지데이터랑 이에 매칭되는 라벨을 저장한 csv데이터를 구분해 사용할 필요가 없다.</li>
+  <li>그리고 이미지를 python으로 불러오는것보다 tfrecord파일을 파이썬으로 불러오는게 더 효율적이라고 들었던것 같다.</li>
+</ul>
+
+<h3 id="이미지를-tfrecord-형태로-변환">이미지를 TFRecord 형태로 변환</h3>
+<p>코드 참고: <a href="https://www.tensorflow.org/tutorials/load_data/tfrecord">tensorflow doc</a><br />
+데이터 출처 : <a href="https://dacon.io/competitions/official/235585/data/">dacon-랜드마크 분류 대회</a>
+[image1.jpg, image2.jpg, …., imageN.jpg] -&gt; [image1.tfrecord, image2.tfrecord, …, imageN.tfrecord] <br /></p>
+
+<p>Process : <strong>각 이미지 파일의 경로</strong>를 리스트에 저장후 각각 파일에 접근해 TFRecord파일로 변환</p>
+<h4 id="데이터의-형태를-정의하는-함수">데이터의 형태를 정의하는 함수</h4>
+<pre><code class="language-Python">from glob import glob
+import pandas as pd
+from tqdm import tqdm
+import tensorflow as tf
+import time
+
+def _bytes_feature(value):
+    """Returns a bytes_list from a string / byte."""
+    if isinstance(value, type(tf.constant(0))):
+        value = value.numpy() # BytesList won't unpack a string from an EagerTensor.
+    return tf.train.Feature(bytes_list=tf.train.BytesList(value=[value]))
+
+def _float_feature(value):
+    """Returns a float_list from a float / double."""
+    return tf.train.Feature(float_list=tf.train.FloatList(value=[value]))
+
+def _int64_feature(value):
+    """Returns an int64_list from a bool / enum / int / uint."""
+		return tf.train.Feature(int64_list=tf.train.Int64List(value=[value]))
+		
+def image_example(imageString, label, name):
+    imageShape = tf.image.decode_jpeg(imageString).shape
+
+    feature = {
+        'image_raw': _bytes_feature(imageString), #이미지는 0~255의 3차원값들
+        'landmark_id': _int64_feature(label), #랜드마크 분류값
+        'id':_bytes_feature(name) #이미지 이름
+    }
+
+    return tf.train.Example(features=tf.train.Features(feature=feature))
+</code></pre>
+
+<h4 id="파일-경로-저장-관련-함수">파일 경로 저장 관련 함수</h4>
+<p>train폴더의 구조는 아래와 같다.</p>
+
+<p>train-[서울, 대전, 대구,..]<br />
+서울-[서울광장, 63시티, 세빛섬….]<br />
+서울광장-[sg1.jpg, sg2.jpg,… sgN.jpg]<br /></p>
+
+<pre><code class="language-Python">def city_name(n):
+    #return값은 '서울시', '부산시' 등
+    cityFolder = glob("./train/*")
+    return cityFolder[n].split('/')[-1]
+	
+def file_name_by_city(n):
+    #return값은 ['./train/부산시/반여3동 행정복지센터', './train/부산시/성현교회',...]
+    cityFolder = glob("./train/*")
+    folderNames = glob(cityFolder[n] +'/*')
+    print('folder_num : ',len(folderNames))
+    return folderNames
+		
+def get_image_location(folderNames):
+    #return값은 {'./train/부산시/반여3동 행정복지센터/반여3동_행정복지센터_039.JPG': 395,,...}
+    imageLabels = {}
+    for foidx in range(len(folderNames)):
+        fileNames = glob(folderNames[foidx]+'/*')
+        for i in fileNames:
+            imageLabels[i] = pictureCodeDic[i.split('/')[-1].split('.')[0]]
+    print("file_num : ", len(imageLabels))
+    return imageLabels
+</code></pre>
+<h4 id="경로들를-input하면-tfrecord-파일로-변환해-저장">경로들를 input하면 TFRecord 파일로 변환해 저장</h4>
+<pre><code class="language-Python">def convert_func(imageLabels):
+    start = time.time()
+    for filename, label in tqdm(imageLabels.items()):
+        imagename = filename.split('/')[-1].split('.')[0]
+        recordFile = './trainset/train_'+imagename+'.tfrecords' #file name
+
+        with tf.io.TFRecordWriter(recordFile) as writer:
+            imageString = open(filename, 'rb').read()
+            tfExample = image_example(imageString, label, imagename.encode())
+            writer.write(tfExample.SerializeToString())
+
+    print(time.time() -start, '(s)') #spending time
+</code></pre>
+
+<h4 id="image-labeling">Image labeling</h4>
+<pre><code class="language-Python">#picture name to code
+pictureCode = pd.read_csv("train.csv")
+pictureCodeDic = {}
+for i in tqdm(range(len(pictureCode))):
+    pictureCodeDic[pictureCode.iloc[i]['id']] = pictureCode.iloc[i]['landmark_id']
+</code></pre>
+
+<h4 id="convert-image-to-tfrecord">Convert image to TFRecord</h4>
+<pre><code class="language-Python">city_name(3) #부산시
+folderNames = file_name_by_city(3)
+imageLabels = get_image_location(folderNames)
+convert_func(imageLabels)
+</code></pre>
+
+<p>2편에서는 TFRecord파일을 이용해 간단한 CNN모델을 통한 이미지 분류에 대해 알아보자.</p>
+
+</article>
+<!-- <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script> -->
+
+
+
+<section class="tags">
+  <!-- <strong>Tags:</strong> <a href="/blog/tag/TFRecrod">TFRecrod</a> -->
+  <strong>Tags:</strong> <a href="https://www.google.co.kr/search?q=TFRecrod">TFRecrod</a>
+</section>
+
+
+<!-- <section class="rss">
+  <p class="rss-subscribe text"><strong>Subscribe <a href="/blog/feed.xml">via RSS</a></strong></p>
+</section> -->
+
+<section class="share">
+  <span>Share: </span>
+  
+    
+    
+    
+    
+    
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+      <a href="//www.pinterest.com/pin/create/button/?description=%5B%ED%85%90%EC%84%9C%ED%94%8C%EB%A1%9C%5D+TFRecord+%ED%8C%8C%EC%9D%BC%EC%9D%84+%EC%9D%B4%EC%9A%A9%ED%95%9C+%EC%9D%B4%EB%AF%B8%EC%A7%80+%EB%B6%84%EB%A5%98-%281%29&url=https%3A%2F%2Fparkeunsang.github.io%2Fblog%2Fdatascience%2F2020%2F11%2F23%2Ftfrecord-1.html&media=https://parkeunsang.github.io/blog/assets/instacode.png"
+        onclick="window.open(this.href, 'pinterest-share', 'width=550,height=255');return false;">
+        <i class="fa fa-pinterest-square fa-lg"></i>
+      </a>
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+      <a href="//www.reddit.com/submit" onclick="window.location = '//www.reddit.com/submit?url=' + encodeURIComponent('https://parkeunsang.github.io/blog/datascience/2020/11/23/tfrecord-1.html') + '&title=[텐서플로] TFRecord 파일을 이용한 이미지 분류-(1)'; return false">
+        <i class="fa fa-reddit-square fa-lg"></i>
+      </a>
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+    
+  
+</section>
+
+
+
+
+</div>
+</div>
+
+    </div>
+
+    <footer class="site-footer">
+
+  <div class="wrapper">
+
+    <h3 class="footer-heading">Edward's blog</h3>
+
+    <div class="site-navigation">
+
+      <p><strong>Site Map</strong></p>
+      <ul class="pages">
+				
+	
+	<li class="nav-link"><a href="/blog/about/">About</a>
+	
+
+	
+	<li class="nav-link"><a href="/blog/category/">Categories</a>
+	
+
+	
+
+	
+
+	
+	<li class="nav-link"><a href="/blog/posts/">Posts</a>
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+      </ul>
+    </div>
+
+    <div class="site-contact">
+
+      <p><strong>Contact</strong></p>
+      <ul class="social-media-list">
+        <li>
+          <a href="mailto:edwardfdsp@gmail.com">
+            <i class="fa fa-envelope-o"></i>
+            <span class="username">edwardfdsp@gmail.com</span>
+          </a>
+        </li>
+
+        
+          
+          <li>
+            <a href="https://github.com/parkeunsang" title="Fork me on GitHub">
+              <i class="fa fa-github"></i>
+              <span class="username">EunSang Park</span>
+            </a>
+          </li>
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+
+      </ul>
+    </div>
+
+    <!-- <div class="site-signature">
+      <p class="rss-subscribe text"><strong>Subscribe <a href="/blog/feed.xml">via RSS</a></strong></p>
+      <p class="text">contents
+</p>
+    </div> -->
+
+  </div>
+
+</footer>
+
+<!-- Scripts -->
+<script src="//code.jquery.com/jquery-3.4.1.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/highlight.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.1/js/lightbox.min.js"></script>
+<script src="//unpkg.com/popper.js@1"></script>
+<script src="//unpkg.com/tippy.js@5"></script>
+
+<script type="text/javascript">
+$(document).ready(function() {
+  // Default syntax highlighting
+  hljs.initHighlightingOnLoad();
+
+  // Header
+  var menuToggle = $('#js-mobile-menu').unbind();
+  $('#js-navigation-menu').removeClass("show");
+  menuToggle.on('click', function(e) {
+    e.preventDefault();
+    $('#js-navigation-menu').slideToggle(function(){
+      if($('#js-navigation-menu').is(':hidden')) {
+        $('#js-navigation-menu').removeAttr('style');
+      }
+    });
+  });
+
+	// Enable tooltips via Tippy.js
+	if (Array.isArray(window.tooltips)) {
+		window.tooltips.forEach(function(tooltip) {
+			var selector = tooltip[0];
+			var config = tooltip[1];
+			tippy(selector, config);
+		})
+	}
+});
+
+</script>
+
+
+
+
+
+
+  </body>
+
+</html>

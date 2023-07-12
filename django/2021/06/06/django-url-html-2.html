@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>[Django] url과 html파일 매칭 시키기 (2)</title>
+  <meta name="description" content="개요Django를 이용한 웹 앱 개발은 MVC 패턴을 따른다.  M(model): models.py, 어플리케이션에 필요한 DB 구조  V(view): template/, 사용자에게 보여지는 부분(html file 등)  C(controller): views.py, DB에 접근해 ...">
+  
+  <meta name="author" content="EunSang Park">
+  <meta name="copyright" content="&copy; EunSang Park 2023">
+  
+
+  <!-- External libraries --> 
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css">
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.9.0/styles/monokai-sublime.min.css">
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/lightbox2/2.7.1/css/lightbox.css">
+
+  <!-- Favicon and other icons (made with http://www.favicon-generator.org/) -->
+  <link rel="shortcut icon" href="/blog/assets/icons/favicon.ico" type="image/x-icon">
+  <link rel="icon" href="/blog/assets/icons/favicon.ico" type="image/x-icon">
+  <link rel="apple-touch-icon" sizes="57x57" href="/blog/assets/icons/apple-icon-57x57.png">
+  <link rel="apple-touch-icon" sizes="60x60" href="/blog/assets/icons/apple-icon-60x60.png">
+  <link rel="apple-touch-icon" sizes="72x72" href="/blog/assets/icons/apple-icon-72x72.png">
+  <link rel="apple-touch-icon" sizes="76x76" href="/blog/assets/icons/apple-icon-76x76.png">
+  <link rel="apple-touch-icon" sizes="114x114" href="/blog/assets/icons/apple-icon-114x114.png">
+  <link rel="apple-touch-icon" sizes="120x120" href="/blog/assets/icons/apple-icon-120x120.png">
+  <link rel="apple-touch-icon" sizes="144x144" href="/blog/assets/icons/apple-icon-144x144.png">
+  <link rel="apple-touch-icon" sizes="152x152" href="/blog/assets/icons/apple-icon-152x152.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/blog/assets/icons/apple-icon-180x180.png">
+  <link rel="icon" type="image/png" sizes="192x192"  href="/blog/assets/icons/android-icon-192x192.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/blog/assets/icons/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="96x96" href="/blog/assets/icons/favicon-96x96.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/blog/assets/icons/favicon-16x16.png">
+  <link rel="manifest" href="/blog/assets/icons/manifest.json">
+  <meta name="msapplication-TileColor" content="#ffffff">
+  <meta name="msapplication-TileImage" content="/blog/assets/icons/ms-icon-144x144.png">
+  <meta name="theme-color" content="#ffffff">
+
+  
+  <!-- Facebook OGP cards -->
+  <meta property="og:description" content="개요Django를 이용한 웹 앱 개발은 MVC 패턴을 따른다.  M(model): models.py, 어플리케이션에 필요한 DB 구조  V(view): template/, 사용자에게 보여지는 부분(html file 등)  C(controller): views.py, DB에 접근해 ..." />
+  <meta property="og:url" content="https://parkeunsang.github.io/django/2021/06/06/django-url-html-2.html">
+  <meta property="og:site_name" content="Edward's blog" />
+  <meta property="og:title" content="[Django] url과 html파일 매칭 시키기 (2)" />
+  <meta property="og:type" content="website" />
+  <meta property="og:image" content="https://parkeunsang.github.io/blog/assets/instacode.png" />
+  <meta property="og:image:type" content="image/png" />
+  <meta property="og:image:width" content="612" />
+  <meta property="og:image:height" content="605" />
+  
+
+  
+  <!-- Twitter: card tags -->
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="[Django] url과 html파일 매칭 시키기 (2)">
+  <meta name="twitter:description" content="개요Django를 이용한 웹 앱 개발은 MVC 패턴을 따른다.  M(model): models.py, 어플리케이션에 필요한 DB 구조  V(view): template/, 사용자에게 보여지는 부분(html file 등)  C(controller): views.py, DB에 접근해 ...">
+  <meta name="twitter:image" content="https://parkeunsang.github.io/blog/assets/instacode.png">
+  <meta name="twitter:url" content="https://parkeunsang.github.io/django/2021/06/06/django-url-html-2.html">
+  
+
+  
+
+  <!-- Site styles -->
+  <link rel="stylesheet" href="/blog/css/main.css">
+  <link rel="canonical" href="https://parkeunsang.github.io/blog/django/2021/06/06/django-url-html-2.html">
+	<link rel="alternate" type="application/rss+xml" title="Edward's blog" href="https://parkeunsang.github.io/blog/feed.xml" />
+	
+	<!-- Tooltips -->
+	<script type="text/javascript">
+		window.tooltips = []
+	</script>
+  <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
+</head>
+
+
+  <body>
+
+    <header class="navigation" role="banner">
+  <div class="navigation-wrapper">
+    <a href="/blog/" class="logo">
+      
+      <img src="/blog/assets/homepage.png" alt="Edward's blog">
+      
+    </a>
+    <a href="javascript:void(0)" class="navigation-menu-button" id="js-mobile-menu">
+      <i class="fa fa-bars"></i>
+    </a>
+    <nav role="navigation">
+      <ul id="js-navigation-menu" class="navigation-menu show">
+				
+	
+	<li class="nav-link"><a href="/blog/about/">About</a>
+	
+
+	
+	<li class="nav-link"><a href="/blog/category/">Categories</a>
+	
+
+	
+
+	
+
+	
+	<li class="nav-link"><a href="/blog/posts/">Posts</a>
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+      </ul>
+    </nav>
+  </div>
+</header>
+
+
+    <div class="page-content">
+        <div class="post">
+
+<div class="post-header-container has-cover" style="background-image: url(/blog/assets/instacode.png);">
+  <div class="scrim has-cover">
+    <header class="post-header">
+      <h1 class="title">[Django] url과 html파일 매칭 시키기 (2)</h1>
+      <p class="info">by <strong>Edward Park</strong></p>
+    </header>
+  </div>
+</div>
+
+<div class="wrapper">
+
+
+
+<section class="post-meta">
+  <div class="post-date">June 6, 2021</div>
+  <div class="post-categories">
+  in 
+    
+    <a href="/blog/posts">Django</a>
+    
+  
+  </div>
+</section>
+
+<article class="post-content">
+  <h2 id="개요">개요</h2>
+<p>Django를 이용한 웹 앱 개발은 MVC 패턴을 따른다.<br /></p>
+<ul>
+  <li>M(model): models.py, 어플리케이션에 필요한 DB 구조</li>
+  <li>V(view): template/, 사용자에게 보여지는 부분(html file 등)</li>
+  <li>C(controller): views.py, DB에 접근해 데이터를 조작+계산 과정을 거친 후 html file과 연결</li>
+</ul>
+
+<p>이번 포스트에서는 Django를 이용해 url을 설계하고, 해당 url로 접근시 사전에 정의된 간단한 html파일을 반환하는 작업을 해볼 예정이다.<br />
+과정은 크게  <strong>url 설계 - C(controller)정의 - V(view)정의</strong> 순서로 나눌 수 있다.<br /></p>
+<h2 id="사전-세팅">사전 세팅</h2>
+<p>사전 환경 세팅은 <a href="https://parkeunsang.github.io/blog/django/2021/03/23/django-project-app-1.html">이전 포스트</a> 참고<br />
+이번 포스트에서 생성한 파일들을 포함하는 최종 폴더 구조는 아래와 같다.
+<img src="/blog/post_images/django2_1.png" title="폴더구조" />
+또한 서버를 실행시키기 위해서는 프로젝트폴더(project_name), 앱 폴더(app_name), manage.py가 위치한 폴더에서 아래와 같은 명령어를 입력하면 된다. 
+<code class="language-plaintext highlighter-rouge">$ python manage.py runserver</code>
+<strong>참고 : 이때 $는 terminal에서 명령어를 실행시킴을 의미하며 코드에 따로 $를 입력할 필요는 없다.</strong> terminal환경은 git bash, vscode, pycharm 등에서 접속 가능하다.</p>
+<h2 id="url-설계">url 설계</h2>
+<p><code class="language-plaintext highlighter-rouge">project_name/urls.py</code></p>
+<pre><code class="language-Python">from django.contrib import admin
+from django.urls import path, include
+
+urlpatterns = [
+    path('admin/', admin.site.urls),
+    path('app1/', include('app_name.urls')),
+]
+</code></pre>
+<p>기본적으로 프로젝트를 시작하면 <code class="language-plaintext highlighter-rouge">admin</code> url은 자동으로 생성된다. 즉 <code class="language-plaintext highlighter-rouge">http://127.0.0.1:8000/admin</code> 에 접속하면 관리자 페이지가 나오게 된다.<br />
+1개의 프로젝트에는 여러개의 <strong>app</strong>이 있고, 각각의 app마다 base url을 지정해 사용할 수 있다. 예를들어 <code class="language-plaintext highlighter-rouge">board</code>라는 앱과 <code class="language-plaintext highlighter-rouge">user</code> 라는 앱이 있고, board에는 글쓰기(create), 글 조회하기(detail)기능이 있으며 user에는 로그인(login), 회원가입(signup) 기능이 필요화다고 가정하자. 이럴경우 url은 다음과 같이 설계할 수 있을 것이다.<br /></p>
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">http://127.0.0.1:8000/board/create</code>, <code class="language-plaintext highlighter-rouge">http://127.0.0.1:8000/board/detail</code></li>
+  <li><code class="language-plaintext highlighter-rouge">http://127.0.0.1:8000/user/login</code>, <code class="language-plaintext highlighter-rouge">http://127.0.0.1:8000/user/signup</code>
+이때 board, user와 같이 앱 정보에 해당하는 url은 <code class="language-plaintext highlighter-rouge">project_name/urls.py</code>에서 정의하고, create, detail과 같이 앱의 기능에 해당하는 url은 <code class="language-plaintext highlighter-rouge">app_name/urls.py</code>에서 정의한다(이를 지키지않는다고 해서 앱이 작동하지 않는것은 아니다).<br />
+그래서 위의 코드에서 <code class="language-plaintext highlighter-rouge">path('app1/', include('app_name.urls')),</code> 를 살펴보면, app1은  board, user와 같은 앱 이름에 해당하는 url이고, include안의 내용은 <code class="language-plaintext highlighter-rouge">app_name.urls</code>에 있는 내용(예를들어 create, detail과 같은것)들을 탑재하겠다는 뜻이다.<br />
+app_name폴더안의 urls.py는 프로젝트생성시 <strong>존재하지 않기</strong>때문에 파일을 만든 후 내용을 채워넣어야한다. 여기서는 아주 기본적인 기능만 넣어보자.
+<code class="language-plaintext highlighter-rouge">app_name.urls.py</code>
+```Python
+from django.urls import path
+from . import views</li>
+</ul>
+
+<p>urlpatterns = [
+    path(‘index/’, views.index),
+]</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>이렇게 두개의 urls.py 파일을 만들면 `http://127.0.0.1:8000/app1/index/` 에 접근할 수 있을 것이다.&lt;br&gt;
+두번째 urls.py에서 views를 import한다고 나와있는데, 아직 views안의 내용을 채워넣지 않았기 때문에 서버를 실행시킨 후 위 url에 접근하면 에러가 발생한다.
+## controller(views.py)  정의
+`app_name/views.py`
+```Python
+from django.shortcuts import render
+
+# Create your views here.
+def index(request):
+    return render(request, 'index.html')
+</code></pre></div></div>
+<p><code class="language-plaintext highlighter-rouge">app_name.urls.py</code> 에서 views.index를 호출하므로 index라는 함수를 만들어 준다. 이때 <strong>request</strong>는 필수로 받아야하는 인자이다.<br />
+render부분에도 첫번째 인자로 request가 필수로 들어가야하며 두번째 인자인 <code class="language-plaintext highlighter-rouge">index.html</code>은 아직까지 생성하지않은 templates 폴더에 위치한 html 파일이다.</p>
+
+<h2 id="viewtemplate-정의">view(template/) 정의</h2>
+<p><code class="language-plaintext highlighter-rouge">app_name/templates/index.html</code></p>
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;!DOCTYPE html&gt;</span>
+<span class="nt">&lt;html</span> <span class="na">lang=</span><span class="s">"en"</span><span class="nt">&gt;</span>
+<span class="nt">&lt;head&gt;</span>
+    <span class="nt">&lt;meta</span> <span class="na">charset=</span><span class="s">"UTF-8"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;title&gt;</span>Title<span class="nt">&lt;/title&gt;</span>
+<span class="nt">&lt;/head&gt;</span>
+<span class="nt">&lt;body&gt;</span>
+    index page
+<span class="nt">&lt;/body&gt;</span>
+<span class="nt">&lt;/html&gt;</span>
+</code></pre></div></div>
+<p>app_name폴더에서 templates라는 폴더를만들고, 안에 index.html파일을 생성해 간단한 내용을 채웠다. <br />
+이제 서버를 실행시켜 url에 접근해 해당 html파일이 표시되는지 확인해보자.<br />
+<code class="language-plaintext highlighter-rouge">python manage.py runserver</code> 명령어를 실행시키면 아래와 같이 서버가 실행되고있다는 표시를 확인할 수 있다.
+<img src="/blog/post_images/django2_2.png" title="runserver" />
+그리고 해당 url로 접근하면 정의된 html이 나타남을 확인할 수 있을 것이다.
+<img src="/blog/post_images/django2_3.png" title="chrome" />
+<a href="https://github.com/parkeunsang/django_blog">전체 코드 참고(git)</a></p>
+
+</article>
+<!-- <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script> -->
+
+
+
+<section class="tags">
+  <!-- <strong>Tags:</strong> <a href="/blog/tag/Django">Django</a> -->
+  <strong>Tags:</strong> <a href="https://www.google.co.kr/search?q=Django">Django</a>
+</section>
+
+
+<!-- <section class="rss">
+  <p class="rss-subscribe text"><strong>Subscribe <a href="/blog/feed.xml">via RSS</a></strong></p>
+</section> -->
+
+<section class="share">
+  <span>Share: </span>
+  
+    
+    
+    
+    
+    
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+      <a href="//www.pinterest.com/pin/create/button/?description=%5BDjango%5D+url%EA%B3%BC+html%ED%8C%8C%EC%9D%BC+%EB%A7%A4%EC%B9%AD+%EC%8B%9C%ED%82%A4%EA%B8%B0+%282%29&url=https%3A%2F%2Fparkeunsang.github.io%2Fblog%2Fdjango%2F2021%2F06%2F06%2Fdjango-url-html-2.html&media=https://parkeunsang.github.io/blog/assets/instacode.png"
+        onclick="window.open(this.href, 'pinterest-share', 'width=550,height=255');return false;">
+        <i class="fa fa-pinterest-square fa-lg"></i>
+      </a>
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+      <a href="//www.reddit.com/submit" onclick="window.location = '//www.reddit.com/submit?url=' + encodeURIComponent('https://parkeunsang.github.io/blog/django/2021/06/06/django-url-html-2.html') + '&title=[Django] url과 html파일 매칭 시키기 (2)'; return false">
+        <i class="fa fa-reddit-square fa-lg"></i>
+      </a>
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+    
+  
+</section>
+
+
+
+
+</div>
+</div>
+
+    </div>
+
+    <footer class="site-footer">
+
+  <div class="wrapper">
+
+    <h3 class="footer-heading">Edward's blog</h3>
+
+    <div class="site-navigation">
+
+      <p><strong>Site Map</strong></p>
+      <ul class="pages">
+				
+	
+	<li class="nav-link"><a href="/blog/about/">About</a>
+	
+
+	
+	<li class="nav-link"><a href="/blog/category/">Categories</a>
+	
+
+	
+
+	
+
+	
+	<li class="nav-link"><a href="/blog/posts/">Posts</a>
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+      </ul>
+    </div>
+
+    <div class="site-contact">
+
+      <p><strong>Contact</strong></p>
+      <ul class="social-media-list">
+        <li>
+          <a href="mailto:edwardfdsp@gmail.com">
+            <i class="fa fa-envelope-o"></i>
+            <span class="username">edwardfdsp@gmail.com</span>
+          </a>
+        </li>
+
+        
+          
+          <li>
+            <a href="https://github.com/parkeunsang" title="Fork me on GitHub">
+              <i class="fa fa-github"></i>
+              <span class="username">EunSang Park</span>
+            </a>
+          </li>
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+
+      </ul>
+    </div>
+
+    <!-- <div class="site-signature">
+      <p class="rss-subscribe text"><strong>Subscribe <a href="/blog/feed.xml">via RSS</a></strong></p>
+      <p class="text">contents
+</p>
+    </div> -->
+
+  </div>
+
+</footer>
+
+<!-- Scripts -->
+<script src="//code.jquery.com/jquery-3.4.1.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/highlight.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.1/js/lightbox.min.js"></script>
+<script src="//unpkg.com/popper.js@1"></script>
+<script src="//unpkg.com/tippy.js@5"></script>
+
+<script type="text/javascript">
+$(document).ready(function() {
+  // Default syntax highlighting
+  hljs.initHighlightingOnLoad();
+
+  // Header
+  var menuToggle = $('#js-mobile-menu').unbind();
+  $('#js-navigation-menu').removeClass("show");
+  menuToggle.on('click', function(e) {
+    e.preventDefault();
+    $('#js-navigation-menu').slideToggle(function(){
+      if($('#js-navigation-menu').is(':hidden')) {
+        $('#js-navigation-menu').removeAttr('style');
+      }
+    });
+  });
+
+	// Enable tooltips via Tippy.js
+	if (Array.isArray(window.tooltips)) {
+		window.tooltips.forEach(function(tooltip) {
+			var selector = tooltip[0];
+			var config = tooltip[1];
+			tippy(selector, config);
+		})
+	}
+});
+
+</script>
+
+
+
+
+
+
+  </body>
+
+</html>

@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>[Python] 바이낸스 API를 이용해 분단위 비트코인 가격데이터 수집</title>
+  <meta name="description" content="Abstract주식의 경우 일 단위 가격데이터(Open, High, Low, Close, Volume 등)는 한국거래소 등에서 쉽게 구할 수 있다. 하지만 시간, 분 단위 데이터는 증권사 API를 통해서 요청받아야하며, 이마저도 복잡한 프로세스를 거쳐야한다. 하지만 비트코인데이터의...">
+  
+  <meta name="author" content="EunSang Park">
+  <meta name="copyright" content="&copy; EunSang Park 2023">
+  
+
+  <!-- External libraries --> 
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css">
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.9.0/styles/monokai-sublime.min.css">
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/lightbox2/2.7.1/css/lightbox.css">
+
+  <!-- Favicon and other icons (made with http://www.favicon-generator.org/) -->
+  <link rel="shortcut icon" href="/blog/assets/icons/favicon.ico" type="image/x-icon">
+  <link rel="icon" href="/blog/assets/icons/favicon.ico" type="image/x-icon">
+  <link rel="apple-touch-icon" sizes="57x57" href="/blog/assets/icons/apple-icon-57x57.png">
+  <link rel="apple-touch-icon" sizes="60x60" href="/blog/assets/icons/apple-icon-60x60.png">
+  <link rel="apple-touch-icon" sizes="72x72" href="/blog/assets/icons/apple-icon-72x72.png">
+  <link rel="apple-touch-icon" sizes="76x76" href="/blog/assets/icons/apple-icon-76x76.png">
+  <link rel="apple-touch-icon" sizes="114x114" href="/blog/assets/icons/apple-icon-114x114.png">
+  <link rel="apple-touch-icon" sizes="120x120" href="/blog/assets/icons/apple-icon-120x120.png">
+  <link rel="apple-touch-icon" sizes="144x144" href="/blog/assets/icons/apple-icon-144x144.png">
+  <link rel="apple-touch-icon" sizes="152x152" href="/blog/assets/icons/apple-icon-152x152.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/blog/assets/icons/apple-icon-180x180.png">
+  <link rel="icon" type="image/png" sizes="192x192"  href="/blog/assets/icons/android-icon-192x192.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/blog/assets/icons/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="96x96" href="/blog/assets/icons/favicon-96x96.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/blog/assets/icons/favicon-16x16.png">
+  <link rel="manifest" href="/blog/assets/icons/manifest.json">
+  <meta name="msapplication-TileColor" content="#ffffff">
+  <meta name="msapplication-TileImage" content="/blog/assets/icons/ms-icon-144x144.png">
+  <meta name="theme-color" content="#ffffff">
+
+  
+  <!-- Facebook OGP cards -->
+  <meta property="og:description" content="Abstract주식의 경우 일 단위 가격데이터(Open, High, Low, Close, Volume 등)는 한국거래소 등에서 쉽게 구할 수 있다. 하지만 시간, 분 단위 데이터는 증권사 API를 통해서 요청받아야하며, 이마저도 복잡한 프로세스를 거쳐야한다. 하지만 비트코인데이터의..." />
+  <meta property="og:url" content="https://parkeunsang.github.io/stock/2021/06/11/python-api.html">
+  <meta property="og:site_name" content="Edward's blog" />
+  <meta property="og:title" content="[Python] 바이낸스 API를 이용해 분단위 비트코인 가격데이터 수집" />
+  <meta property="og:type" content="website" />
+  <meta property="og:image" content="https://parkeunsang.github.io/blog/assets/instacode.png" />
+  <meta property="og:image:type" content="image/png" />
+  <meta property="og:image:width" content="612" />
+  <meta property="og:image:height" content="605" />
+  
+
+  
+  <!-- Twitter: card tags -->
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="[Python] 바이낸스 API를 이용해 분단위 비트코인 가격데이터 수집">
+  <meta name="twitter:description" content="Abstract주식의 경우 일 단위 가격데이터(Open, High, Low, Close, Volume 등)는 한국거래소 등에서 쉽게 구할 수 있다. 하지만 시간, 분 단위 데이터는 증권사 API를 통해서 요청받아야하며, 이마저도 복잡한 프로세스를 거쳐야한다. 하지만 비트코인데이터의...">
+  <meta name="twitter:image" content="https://parkeunsang.github.io/blog/assets/instacode.png">
+  <meta name="twitter:url" content="https://parkeunsang.github.io/stock/2021/06/11/python-api.html">
+  
+
+  
+
+  <!-- Site styles -->
+  <link rel="stylesheet" href="/blog/css/main.css">
+  <link rel="canonical" href="https://parkeunsang.github.io/blog/stock/2021/06/11/python-api.html">
+	<link rel="alternate" type="application/rss+xml" title="Edward's blog" href="https://parkeunsang.github.io/blog/feed.xml" />
+	
+	<!-- Tooltips -->
+	<script type="text/javascript">
+		window.tooltips = []
+	</script>
+  <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
+</head>
+
+
+  <body>
+
+    <header class="navigation" role="banner">
+  <div class="navigation-wrapper">
+    <a href="/blog/" class="logo">
+      
+      <img src="/blog/assets/homepage.png" alt="Edward's blog">
+      
+    </a>
+    <a href="javascript:void(0)" class="navigation-menu-button" id="js-mobile-menu">
+      <i class="fa fa-bars"></i>
+    </a>
+    <nav role="navigation">
+      <ul id="js-navigation-menu" class="navigation-menu show">
+				
+	
+	<li class="nav-link"><a href="/blog/about/">About</a>
+	
+
+	
+	<li class="nav-link"><a href="/blog/category/">Categories</a>
+	
+
+	
+
+	
+
+	
+	<li class="nav-link"><a href="/blog/posts/">Posts</a>
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+      </ul>
+    </nav>
+  </div>
+</header>
+
+
+    <div class="page-content">
+        <div class="post">
+
+<div class="post-header-container has-cover" style="background-image: url(/blog/assets/instacode.png);">
+  <div class="scrim has-cover">
+    <header class="post-header">
+      <h1 class="title">[Python] 바이낸스 API를 이용해 분단위 비트코인 가격데이터 수집</h1>
+      <p class="info">by <strong>Edward Park</strong></p>
+    </header>
+  </div>
+</div>
+
+<div class="wrapper">
+
+
+
+<section class="post-meta">
+  <div class="post-date">June 11, 2021</div>
+  <div class="post-categories">
+  in 
+    
+    <a href="/blog/posts">Stock</a>
+    
+  
+  </div>
+</section>
+
+<article class="post-content">
+  <h2 id="abstract">Abstract</h2>
+<p>주식의 경우 <strong>일 단위</strong> 가격데이터(Open, High, Low, Close, Volume 등)는 한국거래소 등에서 쉽게 구할 수 있다. 하지만 시간, 분 단위 데이터는 증권사 API를 통해서 요청받아야하며, 이마저도 복잡한 프로세스를 거쳐야한다. <br />
+하지만 비트코인데이터의 경우 일단위 뿐만 아니라 시간, 분 단위 데이터도 업비트, Binance등의 사이트에서 따로 인증키 없이 API를 통해 쉽게 데이터를 받을 수 있다. 그래서 이번 포스트에서는 <strong>Binance</strong>에서 제공하는 API를 통해 여러 암호화폐 데이터를 수집하고, 엑셀 파일로 저장하는 법을 알아보자.</p>
+
+<h2 id="binance-site">Binance site</h2>
+<p><a href="https://binance-docs.github.io/apidocs/spot/en/">Binance API docs</a><br />
+위 사이트에서 Binance에서 제공하는 API를 확인할 수 있다. 엄청나게 다양한 정보를 제공하고, 나름 정리가 잘 되어있지만, 개인적으로는 암호화폐에 대한 도메인 지식도 부족하고 영어도 능숙하지 못한 편이라 원하는 정보를 찾는데 꽤나 많은 시간을 썼었다.
+<img src="/blog/post_images/binance/binance_api_1.png" title="binance_api" />
+스크롤을 내리다보면 <code class="language-plaintext highlighter-rouge">Klines/Candlestick Data</code>라는 항목을 찾을 수 있다. 그리고 GET 요청을 통해 해당 url에 적절한 parameter를 보내 요청하면 아래와 같은 Response를 얻을 수 있다.
+<img src="/blog/post_images/binance/binance_api_2.png" title="binance_api" />
+여기서 <code class="language-plaintext highlighter-rouge">asset volume</code>, <code class="language-plaintext highlighter-rouge">taker</code> 등 생소한 용어들이 등장하는데, asset volume은 거래량의 단위를 다르게한것이고, taker은 시장가로 거래한 사람들(?) 정도로 생각하면 될 것 같다(정확하지는 않음).<br /></p>
+
+<h2 id="code">Code</h2>
+<h3 id="import-libraries">Import libraries</h3>
+<pre><code class="language-Python">import requests
+from datetime import datetime
+import time
+import pandas as pd
+from tqdm import tqdm
+</code></pre>
+<h3 id="심볼암호화폐-코드-가져오기">심볼(암호화폐 코드) 가져오기</h3>
+<pre><code class="language-Python">result = requests.get('https://api.binance.com/api/v3/ticker/price')
+js = result.json()
+symbols = [x['symbol'] for x in js]
+symbols_usdt = [x for x in symbols if 'USDT' in x]  # 끝이 USDT로 끝나는 심볼들, ['BTCUSDT', 'ETHUSDT', ...]
+</code></pre>
+<p>암호화폐 가격을 요청하기위해서는 필수로 해당 암호화폐의 Symbol을 알아야한다. 예를들어 <strong>비트코인을 달러로 거래한 데이터</strong>에 해당되는 심볼은 <code class="language-plaintext highlighter-rouge">BTCUSDT</code> 이다. <br />
+보통 바이낸스 거래소에서는 달러단위로 거래를 많이하므로 USDT로 끝나는 심볼들(2021.06.10 기준 310개)을 사용해 데이터를 수집한다.</p>
+<h3 id="날짜구간와-심볼을-입력하면-dataframe으로-반환">날짜(구간)와 심볼을 입력하면 DataFrame으로 반환</h3>
+<pre><code class="language-Python">COLUMNS = ['Open_time', 'Open', 'High', 'Low', 'Close', 'Volume', 'Close_time', 'quote_av', 'trades', 
+                   'tb_base_av', 'tb_quote_av', 'ignore']
+URL = 'https://api.binance.com/api/v3/klines'
+def get_data(start_date, end_date, symbol):
+    data = []
+    
+    start = int(time.mktime(datetime.strptime(start_date + ' 00:00', '%Y-%m-%d %H:%M').timetuple())) * 1000
+    end = int(time.mktime(datetime.strptime(end_date +' 23:59', '%Y-%m-%d %H:%M').timetuple())) * 1000
+    params = {
+        'symbol': symbol,
+        'interval': '1m',
+        'limit': 1000,
+        'startTime': start,
+        'endTime': end
+    }
+    
+    while start &lt; end:
+        print(datetime.fromtimestamp(start // 1000))
+        params['startTime'] = start
+        result = requests.get(URL, params = params)
+        js = result.json()
+        if not js:
+            break
+        data.extend(js)  # result에 저장
+        start = js[-1][0] + 60000  # 다음 step으로
+    # 전처리
+    if not data:  # 해당 기간에 데이터가 없는 경우
+        print('해당 기간에 일치하는 데이터가 없습니다.')
+        return -1
+    df = pd.DataFrame(data)
+    df.columns = COLUMNS
+    df['Open_time'] = df.apply(lambda x:datetime.fromtimestamp(x['Open_time'] // 1000), axis=1)
+    df = df.drop(columns = ['Close_time', 'ignore'])
+    df['Symbol'] = symbol
+    df.loc[:, 'Open':'tb_quote_av'] = df.loc[:, 'Open':'tb_quote_av'].astype(float)  # string to float
+    df['trades'] = df['trades'].astype(int)
+    return df
+
+start_date = '2021-06-01'
+end_date = '2021-12-31'
+symbol = symbols_usdt[0]
+get_data(start_date, end_date, symbol)
+</code></pre>
+<p><img src="/blog/post_images/binance/data_result.png" title="binance_api" />
+위의 결과처럼 start_date, end_date, symbol을 넣으면 해당되는 데이터를 뽑아준다. 이때 틱 단위를 바꾸고 싶으면 <strong>params에서 inverval을 3m, 1h</strong>등으로 수정해 사용할 수 있다.</p>
+
+<h2 id="여러-암호화폐-데이터-수집-및-저장">여러 암호화폐 데이터 수집 및 저장</h2>
+<pre><code class="language-Python">import time
+years = list(range(2017, 2022))  # 바이낸스에서는 2017년 8월 이후의 데이터부터 제공
+for symbol in symbols_usdt[:10]:
+    for year in years:
+        start_date = f'{year}-01-01'
+        end_date = f'{year}-12-31'
+        df = get_data(start_date, end_date, symbol)
+        df.to_csv(f'E:/projects/binance/data/{symbol[:3].lower()}_{year}.csv', index=False)  # csv파일로 저장하는 부분
+				time.sleep(1)  # 과다한 요청으로 API사용이 제한되는것을 막기 위해
+</code></pre>
+<p>위의 코드를 실행하면 비트코인, 이더리움 등 10가지 암호화폐의 2017년부터 현재까지 데이터를 csv파일로 저장할 수 있다.<br />
+다음 포스트에는 간단하게 암호화폐 데이터에 대한 EDA를 해볼 예정이며 기타 코드에대한 문의사항이나 매매전략에대한 아이디어가 있으신 분들은 <code class="language-plaintext highlighter-rouge">edwardfdsp@gmail.com</code>로 메일 부탁드립니다.</p>
+
+</article>
+<!-- <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script> -->
+
+
+
+<section class="tags">
+  <!-- <strong>Tags:</strong> <a href="/blog/tag/Bitcoin">Bitcoin</a> -->
+  <strong>Tags:</strong> <a href="https://www.google.co.kr/search?q=Bitcoin">Bitcoin</a>
+</section>
+
+
+<!-- <section class="rss">
+  <p class="rss-subscribe text"><strong>Subscribe <a href="/blog/feed.xml">via RSS</a></strong></p>
+</section> -->
+
+<section class="share">
+  <span>Share: </span>
+  
+    
+    
+    
+    
+    
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+      <a href="//www.pinterest.com/pin/create/button/?description=%5BPython%5D+%EB%B0%94%EC%9D%B4%EB%82%B8%EC%8A%A4+API%EB%A5%BC+%EC%9D%B4%EC%9A%A9%ED%95%B4+%EB%B6%84%EB%8B%A8%EC%9C%84+%EB%B9%84%ED%8A%B8%EC%BD%94%EC%9D%B8+%EA%B0%80%EA%B2%A9%EB%8D%B0%EC%9D%B4%ED%84%B0+%EC%88%98%EC%A7%91&url=https%3A%2F%2Fparkeunsang.github.io%2Fblog%2Fstock%2F2021%2F06%2F11%2Fpython-api.html&media=https://parkeunsang.github.io/blog/assets/instacode.png"
+        onclick="window.open(this.href, 'pinterest-share', 'width=550,height=255');return false;">
+        <i class="fa fa-pinterest-square fa-lg"></i>
+      </a>
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+      <a href="//www.reddit.com/submit" onclick="window.location = '//www.reddit.com/submit?url=' + encodeURIComponent('https://parkeunsang.github.io/blog/stock/2021/06/11/python-api.html') + '&title=[Python] 바이낸스 API를 이용해 분단위 비트코인 가격데이터 수집'; return false">
+        <i class="fa fa-reddit-square fa-lg"></i>
+      </a>
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+    
+  
+</section>
+
+
+
+
+</div>
+</div>
+
+    </div>
+
+    <footer class="site-footer">
+
+  <div class="wrapper">
+
+    <h3 class="footer-heading">Edward's blog</h3>
+
+    <div class="site-navigation">
+
+      <p><strong>Site Map</strong></p>
+      <ul class="pages">
+				
+	
+	<li class="nav-link"><a href="/blog/about/">About</a>
+	
+
+	
+	<li class="nav-link"><a href="/blog/category/">Categories</a>
+	
+
+	
+
+	
+
+	
+	<li class="nav-link"><a href="/blog/posts/">Posts</a>
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+      </ul>
+    </div>
+
+    <div class="site-contact">
+
+      <p><strong>Contact</strong></p>
+      <ul class="social-media-list">
+        <li>
+          <a href="mailto:edwardfdsp@gmail.com">
+            <i class="fa fa-envelope-o"></i>
+            <span class="username">edwardfdsp@gmail.com</span>
+          </a>
+        </li>
+
+        
+          
+          <li>
+            <a href="https://github.com/parkeunsang" title="Fork me on GitHub">
+              <i class="fa fa-github"></i>
+              <span class="username">EunSang Park</span>
+            </a>
+          </li>
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+
+      </ul>
+    </div>
+
+    <!-- <div class="site-signature">
+      <p class="rss-subscribe text"><strong>Subscribe <a href="/blog/feed.xml">via RSS</a></strong></p>
+      <p class="text">contents
+</p>
+    </div> -->
+
+  </div>
+
+</footer>
+
+<!-- Scripts -->
+<script src="//code.jquery.com/jquery-3.4.1.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/highlight.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.1/js/lightbox.min.js"></script>
+<script src="//unpkg.com/popper.js@1"></script>
+<script src="//unpkg.com/tippy.js@5"></script>
+
+<script type="text/javascript">
+$(document).ready(function() {
+  // Default syntax highlighting
+  hljs.initHighlightingOnLoad();
+
+  // Header
+  var menuToggle = $('#js-mobile-menu').unbind();
+  $('#js-navigation-menu').removeClass("show");
+  menuToggle.on('click', function(e) {
+    e.preventDefault();
+    $('#js-navigation-menu').slideToggle(function(){
+      if($('#js-navigation-menu').is(':hidden')) {
+        $('#js-navigation-menu').removeAttr('style');
+      }
+    });
+  });
+
+	// Enable tooltips via Tippy.js
+	if (Array.isArray(window.tooltips)) {
+		window.tooltips.forEach(function(tooltip) {
+			var selector = tooltip[0];
+			var config = tooltip[1];
+			tippy(selector, config);
+		})
+	}
+});
+
+</script>
+
+
+
+
+
+
+  </body>
+
+</html>

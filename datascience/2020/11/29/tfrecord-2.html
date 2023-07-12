@@ -1,0 +1,683 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>[텐서플로] TFRecord 파일을 이용한 이미지 분류-(2)</title>
+  <meta name="description" content="배경keras를 이용해 만든 모델에서 이전까지는 모델을 학습시킬 때 X,y에 DataFrame이나 Numpy 형태의 데이터만 사용했기 때문에  TFRecord 파일을 모델에 어떻게 학습시켜야하는지 몰라서 헤맸던 기억이 있다. 그래서 이 포스트에서는  간단한 CNN모델을 TFReco...">
+  
+  <meta name="author" content="EunSang Park">
+  <meta name="copyright" content="&copy; EunSang Park 2023">
+  
+
+  <!-- External libraries --> 
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css">
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.9.0/styles/monokai-sublime.min.css">
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/lightbox2/2.7.1/css/lightbox.css">
+
+  <!-- Favicon and other icons (made with http://www.favicon-generator.org/) -->
+  <link rel="shortcut icon" href="/blog/assets/icons/favicon.ico" type="image/x-icon">
+  <link rel="icon" href="/blog/assets/icons/favicon.ico" type="image/x-icon">
+  <link rel="apple-touch-icon" sizes="57x57" href="/blog/assets/icons/apple-icon-57x57.png">
+  <link rel="apple-touch-icon" sizes="60x60" href="/blog/assets/icons/apple-icon-60x60.png">
+  <link rel="apple-touch-icon" sizes="72x72" href="/blog/assets/icons/apple-icon-72x72.png">
+  <link rel="apple-touch-icon" sizes="76x76" href="/blog/assets/icons/apple-icon-76x76.png">
+  <link rel="apple-touch-icon" sizes="114x114" href="/blog/assets/icons/apple-icon-114x114.png">
+  <link rel="apple-touch-icon" sizes="120x120" href="/blog/assets/icons/apple-icon-120x120.png">
+  <link rel="apple-touch-icon" sizes="144x144" href="/blog/assets/icons/apple-icon-144x144.png">
+  <link rel="apple-touch-icon" sizes="152x152" href="/blog/assets/icons/apple-icon-152x152.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/blog/assets/icons/apple-icon-180x180.png">
+  <link rel="icon" type="image/png" sizes="192x192"  href="/blog/assets/icons/android-icon-192x192.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/blog/assets/icons/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="96x96" href="/blog/assets/icons/favicon-96x96.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/blog/assets/icons/favicon-16x16.png">
+  <link rel="manifest" href="/blog/assets/icons/manifest.json">
+  <meta name="msapplication-TileColor" content="#ffffff">
+  <meta name="msapplication-TileImage" content="/blog/assets/icons/ms-icon-144x144.png">
+  <meta name="theme-color" content="#ffffff">
+
+  
+  <!-- Facebook OGP cards -->
+  <meta property="og:description" content="배경keras를 이용해 만든 모델에서 이전까지는 모델을 학습시킬 때 X,y에 DataFrame이나 Numpy 형태의 데이터만 사용했기 때문에  TFRecord 파일을 모델에 어떻게 학습시켜야하는지 몰라서 헤맸던 기억이 있다. 그래서 이 포스트에서는  간단한 CNN모델을 TFReco..." />
+  <meta property="og:url" content="https://parkeunsang.github.io/datascience/2020/11/29/tfrecord-2.html">
+  <meta property="og:site_name" content="Edward's blog" />
+  <meta property="og:title" content="[텐서플로] TFRecord 파일을 이용한 이미지 분류-(2)" />
+  <meta property="og:type" content="website" />
+  <meta property="og:image" content="https://parkeunsang.github.io/blog/assets/instacode.png" />
+  <meta property="og:image:type" content="image/png" />
+  <meta property="og:image:width" content="612" />
+  <meta property="og:image:height" content="605" />
+  
+
+  
+  <!-- Twitter: card tags -->
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="[텐서플로] TFRecord 파일을 이용한 이미지 분류-(2)">
+  <meta name="twitter:description" content="배경keras를 이용해 만든 모델에서 이전까지는 모델을 학습시킬 때 X,y에 DataFrame이나 Numpy 형태의 데이터만 사용했기 때문에  TFRecord 파일을 모델에 어떻게 학습시켜야하는지 몰라서 헤맸던 기억이 있다. 그래서 이 포스트에서는  간단한 CNN모델을 TFReco...">
+  <meta name="twitter:image" content="https://parkeunsang.github.io/blog/assets/instacode.png">
+  <meta name="twitter:url" content="https://parkeunsang.github.io/datascience/2020/11/29/tfrecord-2.html">
+  
+
+  
+
+  <!-- Site styles -->
+  <link rel="stylesheet" href="/blog/css/main.css">
+  <link rel="canonical" href="https://parkeunsang.github.io/blog/datascience/2020/11/29/tfrecord-2.html">
+	<link rel="alternate" type="application/rss+xml" title="Edward's blog" href="https://parkeunsang.github.io/blog/feed.xml" />
+	
+	<!-- Tooltips -->
+	<script type="text/javascript">
+		window.tooltips = []
+	</script>
+  <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
+</head>
+
+
+  <body>
+
+    <header class="navigation" role="banner">
+  <div class="navigation-wrapper">
+    <a href="/blog/" class="logo">
+      
+      <img src="/blog/assets/homepage.png" alt="Edward's blog">
+      
+    </a>
+    <a href="javascript:void(0)" class="navigation-menu-button" id="js-mobile-menu">
+      <i class="fa fa-bars"></i>
+    </a>
+    <nav role="navigation">
+      <ul id="js-navigation-menu" class="navigation-menu show">
+				
+	
+	<li class="nav-link"><a href="/blog/about/">About</a>
+	
+
+	
+	<li class="nav-link"><a href="/blog/category/">Categories</a>
+	
+
+	
+
+	
+
+	
+	<li class="nav-link"><a href="/blog/posts/">Posts</a>
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+      </ul>
+    </nav>
+  </div>
+</header>
+
+
+    <div class="page-content">
+        <div class="post">
+
+<div class="post-header-container has-cover" style="background-image: url(/blog/assets/instacode.png);">
+  <div class="scrim has-cover">
+    <header class="post-header">
+      <h1 class="title">[텐서플로] TFRecord 파일을 이용한 이미지 분류-(2)</h1>
+      <p class="info">by <strong>Edward Park</strong></p>
+    </header>
+  </div>
+</div>
+
+<div class="wrapper">
+
+
+
+<section class="post-meta">
+  <div class="post-date">November 29, 2020</div>
+  <div class="post-categories">
+  in 
+    
+    <a href="/blog/posts">DataScience</a>
+    
+  
+  </div>
+</section>
+
+<article class="post-content">
+  <h3 id="배경">배경</h3>
+<p>keras를 이용해 만든 모델에서 이전까지는 모델을 학습시킬 때 X,y에 DataFrame이나 Numpy 형태의 데이터만 사용했기 때문에  TFRecord 파일을 모델에 어떻게 학습시켜야하는지 몰라서 헤맸던 기억이 있다. 그래서 이 포스트에서는  간단한 CNN모델을 TFRecord 파일을 이용해 학습하는 법에 대해 설명하고자 한다.</p>
+
+<h3 id="tfrecord-파일명경로을-이용해-불러오기">TFRecord 파일명(경로)을 이용해 불러오기</h3>
+<pre><code class="language-Python">import tensorflow as tf
+import numpy as np
+from functools import partial
+import pandas as pd
+
+from tensorflow.keras import datasets, layers, models
+from keras.layers import Dense, Activation, Flatten, Conv2D, MaxPooling2D
+
+import IPython.display as display
+import matplotlib.pyplot as plt
+
+def decode_image(image):
+    image = tf.image.decode_jpeg(image, channels=3)
+    image = tf.cast(image, tf.float32)
+    image = tf.image.resize(image, IMAGE_SIZE)
+    return image
+		
+def read_tfrecord(example, labeled):
+    tfrecord_format = (
+        {
+    'image_raw': tf.io.FixedLenFeature([], tf.string),
+    'landmark_id' : tf.io.FixedLenFeature([], tf.int64),
+    'id' : tf.io.FixedLenFeature([], tf.string),
+        }
+        if labeled
+        else {"image": tf.io.FixedLenFeature([], tf.string),}
+    )
+    example = tf.io.parse_single_example(example, tfrecord_format)
+    image = decode_image(example["image_raw"])
+    if labeled:
+        label = tf.cast(example["landmark_id"], tf.int32)
+        return image, label
+    return image
+		
+def load_dataset(filenames, labeled=True):
+    ignore_order = tf.data.Options()
+    ignore_order.experimental_deterministic = False  # disable order, increase speed
+    dataset = tf.data.TFRecordDataset(
+        filenames
+    )  # automatically interleaves reads from multiple files
+    dataset = dataset.with_options(
+        ignore_order
+    )  # uses data as soon as it streams in, rather than in its original order
+    dataset = dataset.map(
+        partial(read_tfrecord, labeled=labeled), num_parallel_calls=AUTOTUNE
+    )
+    # returns a dataset of (image, label) pairs if labeled=True or just images if labeled=False
+    return dataset
+		
+def get_dataset(filenames, labeled=True):
+    dataset = load_dataset(filenames, labeled=labeled)
+    dataset = dataset.prefetch(buffer_size=AUTOTUNE)
+    dataset = dataset.batch(BATCH_SIZE)
+    return dataset
+		
+</code></pre>
+
+<h3 id="simple-cnn-모델">Simple CNN 모델</h3>
+<p>코드 출처 : <a href="https://www.tensorflow.org/tutorials/images/cnn?hl=ko">tensorflow doc</a></p>
+<pre><code class="language-Python">def make_model(outN):
+    model = tf.keras.models.Sequential()
+    model.add(Conv2D(input_shape = (*IMAGE_SIZE,3), filters = 20, kernel_size = (3,3), strides = (1,1), padding = 'same'))
+    model.add(Activation('relu'))
+    model.add(MaxPooling2D(pool_size = (2,2)))
+    model.add(layers.Conv2D(64, (3, 3), activation='relu'))
+    model.add(layers.MaxPooling2D((2, 2)))
+    model.add(layers.Conv2D(32, (3, 3), activation='relu'))
+
+    # prior layer should be flattend to be connected to dense layers
+    model.add(Flatten())
+    # dense layer with 50 neurons
+    model.add(layers.Dense(50, activation = 'relu'))
+    # final layer with 10 neurons to classify the instances
+    model.add(layers.Dense(outN, activation = 'softmax')) #label의 개수
+#    sgd = optimizers.SGD(lr=0.001)
+    model.compile(optimizer='adam',
+      loss='sparse_categorical_crossentropy',
+      metrics=['accuracy'])
+    return model
+
+### 모델 학습
+```Python
+#Set Hyperparameters
+BATCH_SIZE = 32
+AUTOTUNE=3  #한번의 배치사이즈 학습동안 다음데이터를 얼마나 불러올 것인지
+IMAGE_SIZE = [256, 256]
+FILENAMES = tf.io.gfile.glob('./trainset/*')
+</code></pre>
+<pre><code class="language-Python">#label개수 및 이미지 샘플 확인
+uniqueFiles = ['_'.join(x.split('_')[1:-1]) for x in FILENAMES]
+uniqueFiles = list(set(uniqueFiles))
+outN = len(uniqueFiles) #총 몇개의 label이 있는지
+print(outN)
+</code></pre>
+<pre><code class="language-Python">#이미지 jupyter notebook 으로 임포트
+def plotting(uF, rows=3, cols=3):
+    plotFileNames = [x for x in FILENAMES if uF in x][:rows*cols]
+
+    plotFileNames = get_dataset(plotFileNames)
+
+    plotFileNames = next(iter(plotFileNames))[0]
+
+    plotFiles = [x.numpy().astype(int) for x in plotFileNames]
+
+    fig = plt.figure(figsize=(12,12)) # rows*cols 행렬의 i번째 subplot 생성
+    
+    i = 1
+    xlabels = ["xlabel", "(a)", "(b)", "(c)", "(d)"]
+
+    for p in plotFiles:
+        ax = fig.add_subplot(rows, cols, i)
+        ax.imshow(p)
+
+        i += 1
+
+    plt.show()
+plotting(uniqueFiles[0])
+</code></pre>
+<p><img src="/blog/post_images/tfrecord2_1.png" title="sample images" /></p>
+<pre><code class="language-Python">#model에 들어가는 데이터 형태 확인
+firstEpoch = next(iter(get_dataset(FILENAMES)))
+print(firstEpoch[0].shape) #[64,128,128,3] 
+</code></pre>
+<pre><code class="language-Python">#모델 학습
+np.random.shuffle(FILENAMES) #shuffle
+train_fn = FILENAMES[:800]
+test_fn = FILENAMES[800:]
+
+train = get_dataset(train_fn)
+test = get_dataset(test_fn)
+model = make_model(outN)
+model.fit(train, epochs = 5)
+</code></pre>
+<pre><code class="language-Python">#testing
+pred = model.predict(test) #pred(sigmoid)
+real = np.array([])
+predIdx = np.array([np.argmax(x) for x in pred]) #pred(label)
+for t in test:
+    real = np.append(real, t[1])
+
+print("accuracy : ", np.mean(real.astype(int) == predIdx))
+</code></pre>
+<h3 id="결과">결과</h3>
+<p><img src="/blog/post_images/tfrecord2_2.png" title="result" />
+컴퓨팅 파워가 안좋아 1000개의 이미지(12개의 label)의 데이터만을 이용해 학습해보았다. <br />
+모델링 과정에서 accuracy는 98%정도로 나쁘지 않았지만 test dataset에서 accuracy는 28%로 아주 안좋은 결과를 보였다. <br />
+이와같이 overfitting이 발생한 이유는 데이터가 1000개로 많지 않았고, 적절한 parameter tuning도 하지않았기 때문이라고 생각된다.(참고로 대회에서 수상권은 99%이상의 정확도를 보임)</p>
+
+</article>
+<!-- <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script> -->
+
+
+
+<section class="tags">
+  <!-- <strong>Tags:</strong> <a href="/blog/tag/TFRecrod">TFRecrod</a> -->
+  <strong>Tags:</strong> <a href="https://www.google.co.kr/search?q=TFRecrod">TFRecrod</a>
+</section>
+
+
+<!-- <section class="rss">
+  <p class="rss-subscribe text"><strong>Subscribe <a href="/blog/feed.xml">via RSS</a></strong></p>
+</section> -->
+
+<section class="share">
+  <span>Share: </span>
+  
+    
+    
+    
+    
+    
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+      <a href="//www.pinterest.com/pin/create/button/?description=%5B%ED%85%90%EC%84%9C%ED%94%8C%EB%A1%9C%5D+TFRecord+%ED%8C%8C%EC%9D%BC%EC%9D%84+%EC%9D%B4%EC%9A%A9%ED%95%9C+%EC%9D%B4%EB%AF%B8%EC%A7%80+%EB%B6%84%EB%A5%98-%282%29&url=https%3A%2F%2Fparkeunsang.github.io%2Fblog%2Fdatascience%2F2020%2F11%2F29%2Ftfrecord-2.html&media=https://parkeunsang.github.io/blog/assets/instacode.png"
+        onclick="window.open(this.href, 'pinterest-share', 'width=550,height=255');return false;">
+        <i class="fa fa-pinterest-square fa-lg"></i>
+      </a>
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+      <a href="//www.reddit.com/submit" onclick="window.location = '//www.reddit.com/submit?url=' + encodeURIComponent('https://parkeunsang.github.io/blog/datascience/2020/11/29/tfrecord-2.html') + '&title=[텐서플로] TFRecord 파일을 이용한 이미지 분류-(2)'; return false">
+        <i class="fa fa-reddit-square fa-lg"></i>
+      </a>
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+    
+  
+</section>
+
+
+
+
+</div>
+</div>
+
+    </div>
+
+    <footer class="site-footer">
+
+  <div class="wrapper">
+
+    <h3 class="footer-heading">Edward's blog</h3>
+
+    <div class="site-navigation">
+
+      <p><strong>Site Map</strong></p>
+      <ul class="pages">
+				
+	
+	<li class="nav-link"><a href="/blog/about/">About</a>
+	
+
+	
+	<li class="nav-link"><a href="/blog/category/">Categories</a>
+	
+
+	
+
+	
+
+	
+	<li class="nav-link"><a href="/blog/posts/">Posts</a>
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+      </ul>
+    </div>
+
+    <div class="site-contact">
+
+      <p><strong>Contact</strong></p>
+      <ul class="social-media-list">
+        <li>
+          <a href="mailto:edwardfdsp@gmail.com">
+            <i class="fa fa-envelope-o"></i>
+            <span class="username">edwardfdsp@gmail.com</span>
+          </a>
+        </li>
+
+        
+          
+          <li>
+            <a href="https://github.com/parkeunsang" title="Fork me on GitHub">
+              <i class="fa fa-github"></i>
+              <span class="username">EunSang Park</span>
+            </a>
+          </li>
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+
+      </ul>
+    </div>
+
+    <!-- <div class="site-signature">
+      <p class="rss-subscribe text"><strong>Subscribe <a href="/blog/feed.xml">via RSS</a></strong></p>
+      <p class="text">contents
+</p>
+    </div> -->
+
+  </div>
+
+</footer>
+
+<!-- Scripts -->
+<script src="//code.jquery.com/jquery-3.4.1.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/highlight.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.1/js/lightbox.min.js"></script>
+<script src="//unpkg.com/popper.js@1"></script>
+<script src="//unpkg.com/tippy.js@5"></script>
+
+<script type="text/javascript">
+$(document).ready(function() {
+  // Default syntax highlighting
+  hljs.initHighlightingOnLoad();
+
+  // Header
+  var menuToggle = $('#js-mobile-menu').unbind();
+  $('#js-navigation-menu').removeClass("show");
+  menuToggle.on('click', function(e) {
+    e.preventDefault();
+    $('#js-navigation-menu').slideToggle(function(){
+      if($('#js-navigation-menu').is(':hidden')) {
+        $('#js-navigation-menu').removeAttr('style');
+      }
+    });
+  });
+
+	// Enable tooltips via Tippy.js
+	if (Array.isArray(window.tooltips)) {
+		window.tooltips.forEach(function(tooltip) {
+			var selector = tooltip[0];
+			var config = tooltip[1];
+			tippy(selector, config);
+		})
+	}
+});
+
+</script>
+
+
+
+
+
+
+  </body>
+
+</html>

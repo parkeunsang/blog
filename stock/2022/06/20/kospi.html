@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>코스피와 기준금리 관계 분석</title>
+  <meta name="description" content="Intro코스피 지수가 작년 최고치(3300정도)를 찍고 꾸준히 하락하고 있다. 필자도 올해 초부터 주식을 꾸준히 매입하기 시작했는데, 바닥을 모르고 추락하는 지수를 보며 마음을 졸이고 있다.">
+  
+  <meta name="author" content="EunSang Park">
+  <meta name="copyright" content="&copy; EunSang Park 2023">
+  
+
+  <!-- External libraries --> 
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css">
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.9.0/styles/monokai-sublime.min.css">
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/lightbox2/2.7.1/css/lightbox.css">
+
+  <!-- Favicon and other icons (made with http://www.favicon-generator.org/) -->
+  <link rel="shortcut icon" href="/blog/assets/icons/favicon.ico" type="image/x-icon">
+  <link rel="icon" href="/blog/assets/icons/favicon.ico" type="image/x-icon">
+  <link rel="apple-touch-icon" sizes="57x57" href="/blog/assets/icons/apple-icon-57x57.png">
+  <link rel="apple-touch-icon" sizes="60x60" href="/blog/assets/icons/apple-icon-60x60.png">
+  <link rel="apple-touch-icon" sizes="72x72" href="/blog/assets/icons/apple-icon-72x72.png">
+  <link rel="apple-touch-icon" sizes="76x76" href="/blog/assets/icons/apple-icon-76x76.png">
+  <link rel="apple-touch-icon" sizes="114x114" href="/blog/assets/icons/apple-icon-114x114.png">
+  <link rel="apple-touch-icon" sizes="120x120" href="/blog/assets/icons/apple-icon-120x120.png">
+  <link rel="apple-touch-icon" sizes="144x144" href="/blog/assets/icons/apple-icon-144x144.png">
+  <link rel="apple-touch-icon" sizes="152x152" href="/blog/assets/icons/apple-icon-152x152.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/blog/assets/icons/apple-icon-180x180.png">
+  <link rel="icon" type="image/png" sizes="192x192"  href="/blog/assets/icons/android-icon-192x192.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/blog/assets/icons/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="96x96" href="/blog/assets/icons/favicon-96x96.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/blog/assets/icons/favicon-16x16.png">
+  <link rel="manifest" href="/blog/assets/icons/manifest.json">
+  <meta name="msapplication-TileColor" content="#ffffff">
+  <meta name="msapplication-TileImage" content="/blog/assets/icons/ms-icon-144x144.png">
+  <meta name="theme-color" content="#ffffff">
+
+  
+  <!-- Facebook OGP cards -->
+  <meta property="og:description" content="Intro코스피 지수가 작년 최고치(3300정도)를 찍고 꾸준히 하락하고 있다. 필자도 올해 초부터 주식을 꾸준히 매입하기 시작했는데, 바닥을 모르고 추락하는 지수를 보며 마음을 졸이고 있다." />
+  <meta property="og:url" content="https://parkeunsang.github.io/stock/2022/06/20/kospi.html">
+  <meta property="og:site_name" content="Edward's blog" />
+  <meta property="og:title" content="코스피와 기준금리 관계 분석" />
+  <meta property="og:type" content="website" />
+  <meta property="og:image" content="https://parkeunsang.github.io/blog/assets/stock-theme.jpg" />
+  <meta property="og:image:type" content="image/png" />
+  <meta property="og:image:width" content="612" />
+  <meta property="og:image:height" content="605" />
+  
+
+  
+  <!-- Twitter: card tags -->
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="코스피와 기준금리 관계 분석">
+  <meta name="twitter:description" content="Intro코스피 지수가 작년 최고치(3300정도)를 찍고 꾸준히 하락하고 있다. 필자도 올해 초부터 주식을 꾸준히 매입하기 시작했는데, 바닥을 모르고 추락하는 지수를 보며 마음을 졸이고 있다.">
+  <meta name="twitter:image" content="https://parkeunsang.github.io/blog/assets/stock-theme.jpg">
+  <meta name="twitter:url" content="https://parkeunsang.github.io/stock/2022/06/20/kospi.html">
+  
+
+  
+
+  <!-- Site styles -->
+  <link rel="stylesheet" href="/blog/css/main.css">
+  <link rel="canonical" href="https://parkeunsang.github.io/blog/stock/2022/06/20/kospi.html">
+	<link rel="alternate" type="application/rss+xml" title="Edward's blog" href="https://parkeunsang.github.io/blog/feed.xml" />
+	
+	<!-- Tooltips -->
+	<script type="text/javascript">
+		window.tooltips = []
+	</script>
+  <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
+</head>
+
+
+  <body>
+
+    <header class="navigation" role="banner">
+  <div class="navigation-wrapper">
+    <a href="/blog/" class="logo">
+      
+      <img src="/blog/assets/homepage.png" alt="Edward's blog">
+      
+    </a>
+    <a href="javascript:void(0)" class="navigation-menu-button" id="js-mobile-menu">
+      <i class="fa fa-bars"></i>
+    </a>
+    <nav role="navigation">
+      <ul id="js-navigation-menu" class="navigation-menu show">
+				
+	
+	<li class="nav-link"><a href="/blog/about/">About</a>
+	
+
+	
+	<li class="nav-link"><a href="/blog/category/">Categories</a>
+	
+
+	
+
+	
+
+	
+	<li class="nav-link"><a href="/blog/posts/">Posts</a>
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+      </ul>
+    </nav>
+  </div>
+</header>
+
+
+    <div class="page-content">
+        <div class="post">
+
+<div class="post-header-container has-cover" style="background-image: url(/blog/assets/stock-theme.jpg);">
+  <div class="scrim has-cover">
+    <header class="post-header">
+      <h1 class="title">코스피와 기준금리 관계 분석</h1>
+      <p class="info">by <strong>Edward Park</strong></p>
+    </header>
+  </div>
+</div>
+
+<div class="wrapper">
+
+
+
+<section class="post-meta">
+  <div class="post-date">June 20, 2022</div>
+  <div class="post-categories">
+  in 
+    
+    <a href="/blog/posts">Stock</a>
+    
+  
+  </div>
+</section>
+
+<article class="post-content">
+  <h2 id="intro">Intro</h2>
+<p>코스피 지수가 작년 최고치(3300정도)를 찍고 꾸준히 하락하고 있다. 필자도 올해 초부터 주식을 꾸준히 매입하기 시작했는데, 바닥을 모르고 추락하는 지수를 보며 마음을 졸이고 있다.<br /></p>
+
+<p>주가가 하락하는 이유에는 <strong>러시아 전쟁, 기준 금리상승,  경기침체 우려</strong> 등 다양한 요소가 관여하고 있고, 많은 전문가들이 <strong>연준 금리 상승 및 국내 기준금리 상승</strong>을 주가 하락을 주요 원인으로 해석하고 있다.<br /></p>
+
+<p>나를 포함한 많은 이들이 아마 올해초 급격한 금리 인상을 예상했음에도 주식에 투자를 한 이유는 아마 이러한 정보가 주가에 선반영이 되어 실질적인 주가 하락은 크지 않을것이라고 예상했기 때문일 것이다.<br /></p>
+
+<p>하지만 예상보다 빠른 금리 인상 때문인지 주가는 꾸준히 하락했다. 그래서 지금이라도 손절을 해야하나 고민을 하던 중 <strong>과거의 기준 금리인상 사례</strong>를 살펴보면 판단에 도움이 되지 않을까 생각하여 이번 포스트를 작성하였다.<br />
+Subtitle은 <strong>급격한 금리인상이 장기적인(적어도 1년 이상)주가 하락을 야기하는가?</strong> 정도로 하면 좋을 것 같다.</p>
+
+<h2 id="import-data">Import Data</h2>
+<pre><code class="language-Python">import FinanceDataReader as fdr
+import pandas as pd
+# kospi
+kospi_df = fdr.DataReader('KS11', '1998')
+kospi_df = kospi_df.reset_index()
+
+# https://www.bok.or.kr/portal/singl/baseRate/list.do?dataSeCd=01&amp;menuNo=200643
+# 기준 금리 table copy
+base_rate_df = pd.read_clipboard(header=None)
+base_rate_df['Date'] = pd.to_datetime(base_rate_df[0].astype(str) + base_rate_df[1], format='%Y%m월 %d일')
+base_rate_df = base_rate_df[[2, 'Date']]
+base_rate_df.columns = ['Base_rate', 'Date']
+</code></pre>
+
+<h2 id="preprocessing-data">Preprocessing Data</h2>
+<pre><code class="language-Python">kp_br = kospi_df.merge(base_rate_df, on='Date', how='outer')  # kospi and base rate
+kp_br = kp_br[['Date', 'Close', 'Base_rate']]
+kp_br = kp_br.fillna(method='ffill')
+kp_br['Kospi_scaled'] = (kp_br['Close'] - kp_br['Close'].min()) / (kp_br['Close'].max() - kp_br['Close'].min())
+kp_br['Kospi_scaled'] = kp_br['Kospi_scaled'] * kp_br['Base_rate'].max()
+kp_br.tail()
+</code></pre>
+<p><img src="/blog/post_images/stock/stock_1.png" title="stock" /></p>
+
+<h2 id="plotting">Plotting</h2>
+<p>*편의상 double y axis가 아닌 scaling을 사용해 plotting</p>
+<pre><code class="language-Python">kp_br.plot(x='Date', y=['Base_rate', 'Kospi_scaled'], figsize=(15, 10))
+</code></pre>
+<p><img src="/blog/post_images/stock/stock_2.png" title="stock" />
+<strong>금리 인상 사례</strong></p>
+<ul>
+  <li>2005.12 ~ 2007.08 : <strong>3.75 -&gt; 5.0</strong>, <font color="red">1.25%</font> 상승, 금리 상승기간동안 주가도 상승하는 추세, 이후 급격한 하락(서브프라임 모기지)</li>
+  <li>2010.6 ~ 2011.8 : <strong>2.0 -&gt; 3.25</strong>, <font color="red">1.25%</font> 상승, 마찬가지로 금리 상승기간동안 주가도 상승, 이후 단기간 급격한 하락 후 점진적으로 상승</li>
+  <li>2021.8 ~ 2022.06(현재) : <strong>0.5 -&gt; 1.75</strong>, <font color="red">1.25%</font> 상승, 위 사례들과 반대로 금리 상승기간 동안 주가 하락.</li>
+</ul>
+
+<h2 id="conclusion">Conclusion</h2>
+<ul>
+  <li>최근과 같은 단기간 급격한 기준 금리 인상은 과거 2차례 정도 확인되었지만, <strong>최근 사례와 달리 금리가 상승하는 과정에서 코스피 지수도 같이 상승하였다.</strong><br /></li>
+  <li>그리고 금리 상승이 종료된 시점에서 코스피 지수는 하락하는 경향을 보였다.(2번째 금리 인상 사례의 경우 하락기간과 폭이 크지는 않음)<br /></li>
+  <li>현재 시점 기준(2022.06.20) 연준 금리는 급등(0.75)했지만 한국은행 기준 금리에는 반영되지 않은 상태이므로 기준 금리는 또 한차례 오를 것이고, 이는 <strong>유례없는 금리 인상</strong>이라고 보여진다.<br /></li>
+</ul>
+
+<h2 id="개인적인-생각">개인적인 생각</h2>
+<p>과거(십수년 전)에 비해 <strong>개인 투자자들의 수가 많이 늘었고, 개인이 접할 수 있는 정보의 양도 늚</strong>에 따라 기준금리 상승으로 인한 주가 하락이 좀더 민감하게 반응하고 있다고 해석할 수도 있다. 즉 개인들의 불안한 심리로 인해 과거와 상반되는 주가 흐름을 야기했을 수 있다고 생각할 수 있다. 이 경우라면 현재 코스피 시장을 긍정적으로 바라볼 수도 있을 것이다.<br />
+하지만 <strong>이례적인 금리 인상과 스테그플레이션</strong> 등을 고려하면 예상을 뛰어넘는 주가 하락양상이 나올 수 있을 것이다.<br />
+그래서 이번 포스트에서는 <strong>경제에 꾸준히 관심을 가지고 현명하게 대처하자</strong>라는 아주 재미없는 결론을 내려본다.</p>
+
+</article>
+<!-- <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script> -->
+
+
+
+<section class="tags">
+  <!-- <strong>Tags:</strong> <a href="/blog/tag/Stock">Stock</a>,&nbsp;<a href="/blog/tag/Python">Python</a> -->
+  <strong>Tags:</strong> <a href="https://www.google.co.kr/search?q=Stock">Stock</a>,&nbsp;<a href="https://www.google.co.kr/search?q=Python">Python</a>
+</section>
+
+
+<!-- <section class="rss">
+  <p class="rss-subscribe text"><strong>Subscribe <a href="/blog/feed.xml">via RSS</a></strong></p>
+</section> -->
+
+<section class="share">
+  <span>Share: </span>
+  
+    
+    
+    
+    
+    
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+      <a href="//www.pinterest.com/pin/create/button/?description=%EC%BD%94%EC%8A%A4%ED%94%BC%EC%99%80+%EA%B8%B0%EC%A4%80%EA%B8%88%EB%A6%AC+%EA%B4%80%EA%B3%84+%EB%B6%84%EC%84%9D&url=https%3A%2F%2Fparkeunsang.github.io%2Fblog%2Fstock%2F2022%2F06%2F20%2Fkospi.html&media=https://parkeunsang.github.io/blog/assets/stock-theme.jpg"
+        onclick="window.open(this.href, 'pinterest-share', 'width=550,height=255');return false;">
+        <i class="fa fa-pinterest-square fa-lg"></i>
+      </a>
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+      <a href="//www.reddit.com/submit" onclick="window.location = '//www.reddit.com/submit?url=' + encodeURIComponent('https://parkeunsang.github.io/blog/stock/2022/06/20/kospi.html') + '&title=코스피와 기준금리 관계 분석'; return false">
+        <i class="fa fa-reddit-square fa-lg"></i>
+      </a>
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+    
+  
+</section>
+
+
+
+
+</div>
+</div>
+
+    </div>
+
+    <footer class="site-footer">
+
+  <div class="wrapper">
+
+    <h3 class="footer-heading">Edward's blog</h3>
+
+    <div class="site-navigation">
+
+      <p><strong>Site Map</strong></p>
+      <ul class="pages">
+				
+	
+	<li class="nav-link"><a href="/blog/about/">About</a>
+	
+
+	
+	<li class="nav-link"><a href="/blog/category/">Categories</a>
+	
+
+	
+
+	
+
+	
+	<li class="nav-link"><a href="/blog/posts/">Posts</a>
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+      </ul>
+    </div>
+
+    <div class="site-contact">
+
+      <p><strong>Contact</strong></p>
+      <ul class="social-media-list">
+        <li>
+          <a href="mailto:edwardfdsp@gmail.com">
+            <i class="fa fa-envelope-o"></i>
+            <span class="username">edwardfdsp@gmail.com</span>
+          </a>
+        </li>
+
+        
+          
+          <li>
+            <a href="https://github.com/parkeunsang" title="Fork me on GitHub">
+              <i class="fa fa-github"></i>
+              <span class="username">EunSang Park</span>
+            </a>
+          </li>
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+
+      </ul>
+    </div>
+
+    <!-- <div class="site-signature">
+      <p class="rss-subscribe text"><strong>Subscribe <a href="/blog/feed.xml">via RSS</a></strong></p>
+      <p class="text">contents
+</p>
+    </div> -->
+
+  </div>
+
+</footer>
+
+<!-- Scripts -->
+<script src="//code.jquery.com/jquery-3.4.1.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/highlight.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.1/js/lightbox.min.js"></script>
+<script src="//unpkg.com/popper.js@1"></script>
+<script src="//unpkg.com/tippy.js@5"></script>
+
+<script type="text/javascript">
+$(document).ready(function() {
+  // Default syntax highlighting
+  hljs.initHighlightingOnLoad();
+
+  // Header
+  var menuToggle = $('#js-mobile-menu').unbind();
+  $('#js-navigation-menu').removeClass("show");
+  menuToggle.on('click', function(e) {
+    e.preventDefault();
+    $('#js-navigation-menu').slideToggle(function(){
+      if($('#js-navigation-menu').is(':hidden')) {
+        $('#js-navigation-menu').removeAttr('style');
+      }
+    });
+  });
+
+	// Enable tooltips via Tippy.js
+	if (Array.isArray(window.tooltips)) {
+		window.tooltips.forEach(function(tooltip) {
+			var selector = tooltip[0];
+			var config = tooltip[1];
+			tippy(selector, config);
+		})
+	}
+});
+
+</script>
+
+
+
+
+
+
+  </body>
+
+</html>

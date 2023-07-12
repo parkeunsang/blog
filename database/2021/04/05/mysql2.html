@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>[MySQL] 기초 문법 정리 - 2</title>
+  <meta name="description" content="Abstract지난포스트에서는 MySQL의 기본적인 문법인 CRUD + 간단한 정렬(order by), 조건문(where)들을 살펴보았다. 이번포스트에서는 좀더 심화된 조건문(like)과 병합(join)등에 대해 살펴보자.Table 생성```sql– Set SchemaCREATE ...">
+  
+  <meta name="author" content="EunSang Park">
+  <meta name="copyright" content="&copy; EunSang Park 2023">
+  
+
+  <!-- External libraries --> 
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css">
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.9.0/styles/monokai-sublime.min.css">
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/lightbox2/2.7.1/css/lightbox.css">
+
+  <!-- Favicon and other icons (made with http://www.favicon-generator.org/) -->
+  <link rel="shortcut icon" href="/blog/assets/icons/favicon.ico" type="image/x-icon">
+  <link rel="icon" href="/blog/assets/icons/favicon.ico" type="image/x-icon">
+  <link rel="apple-touch-icon" sizes="57x57" href="/blog/assets/icons/apple-icon-57x57.png">
+  <link rel="apple-touch-icon" sizes="60x60" href="/blog/assets/icons/apple-icon-60x60.png">
+  <link rel="apple-touch-icon" sizes="72x72" href="/blog/assets/icons/apple-icon-72x72.png">
+  <link rel="apple-touch-icon" sizes="76x76" href="/blog/assets/icons/apple-icon-76x76.png">
+  <link rel="apple-touch-icon" sizes="114x114" href="/blog/assets/icons/apple-icon-114x114.png">
+  <link rel="apple-touch-icon" sizes="120x120" href="/blog/assets/icons/apple-icon-120x120.png">
+  <link rel="apple-touch-icon" sizes="144x144" href="/blog/assets/icons/apple-icon-144x144.png">
+  <link rel="apple-touch-icon" sizes="152x152" href="/blog/assets/icons/apple-icon-152x152.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/blog/assets/icons/apple-icon-180x180.png">
+  <link rel="icon" type="image/png" sizes="192x192"  href="/blog/assets/icons/android-icon-192x192.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/blog/assets/icons/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="96x96" href="/blog/assets/icons/favicon-96x96.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/blog/assets/icons/favicon-16x16.png">
+  <link rel="manifest" href="/blog/assets/icons/manifest.json">
+  <meta name="msapplication-TileColor" content="#ffffff">
+  <meta name="msapplication-TileImage" content="/blog/assets/icons/ms-icon-144x144.png">
+  <meta name="theme-color" content="#ffffff">
+
+  
+  <!-- Facebook OGP cards -->
+  <meta property="og:description" content="Abstract지난포스트에서는 MySQL의 기본적인 문법인 CRUD + 간단한 정렬(order by), 조건문(where)들을 살펴보았다. 이번포스트에서는 좀더 심화된 조건문(like)과 병합(join)등에 대해 살펴보자.Table 생성```sql– Set SchemaCREATE ..." />
+  <meta property="og:url" content="https://parkeunsang.github.io/database/2021/04/05/mysql2.html">
+  <meta property="og:site_name" content="Edward's blog" />
+  <meta property="og:title" content="[MySQL] 기초 문법 정리 - 2" />
+  <meta property="og:type" content="website" />
+  <meta property="og:image" content="https://parkeunsang.github.io/blog/assets/instacode.png" />
+  <meta property="og:image:type" content="image/png" />
+  <meta property="og:image:width" content="612" />
+  <meta property="og:image:height" content="605" />
+  
+
+  
+  <!-- Twitter: card tags -->
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="[MySQL] 기초 문법 정리 - 2">
+  <meta name="twitter:description" content="Abstract지난포스트에서는 MySQL의 기본적인 문법인 CRUD + 간단한 정렬(order by), 조건문(where)들을 살펴보았다. 이번포스트에서는 좀더 심화된 조건문(like)과 병합(join)등에 대해 살펴보자.Table 생성```sql– Set SchemaCREATE ...">
+  <meta name="twitter:image" content="https://parkeunsang.github.io/blog/assets/instacode.png">
+  <meta name="twitter:url" content="https://parkeunsang.github.io/database/2021/04/05/mysql2.html">
+  
+
+  
+
+  <!-- Site styles -->
+  <link rel="stylesheet" href="/blog/css/main.css">
+  <link rel="canonical" href="https://parkeunsang.github.io/blog/database/2021/04/05/mysql2.html">
+	<link rel="alternate" type="application/rss+xml" title="Edward's blog" href="https://parkeunsang.github.io/blog/feed.xml" />
+	
+	<!-- Tooltips -->
+	<script type="text/javascript">
+		window.tooltips = []
+	</script>
+  <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
+</head>
+
+
+  <body>
+
+    <header class="navigation" role="banner">
+  <div class="navigation-wrapper">
+    <a href="/blog/" class="logo">
+      
+      <img src="/blog/assets/homepage.png" alt="Edward's blog">
+      
+    </a>
+    <a href="javascript:void(0)" class="navigation-menu-button" id="js-mobile-menu">
+      <i class="fa fa-bars"></i>
+    </a>
+    <nav role="navigation">
+      <ul id="js-navigation-menu" class="navigation-menu show">
+				
+	
+	<li class="nav-link"><a href="/blog/about/">About</a>
+	
+
+	
+	<li class="nav-link"><a href="/blog/category/">Categories</a>
+	
+
+	
+
+	
+
+	
+	<li class="nav-link"><a href="/blog/posts/">Posts</a>
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+      </ul>
+    </nav>
+  </div>
+</header>
+
+
+    <div class="page-content">
+        <div class="post">
+
+<div class="post-header-container has-cover" style="background-image: url(/blog/assets/instacode.png);">
+  <div class="scrim has-cover">
+    <header class="post-header">
+      <h1 class="title">[MySQL] 기초 문법 정리 - 2</h1>
+      <p class="info">by <strong>Edward Park</strong></p>
+    </header>
+  </div>
+</div>
+
+<div class="wrapper">
+
+
+
+<section class="post-meta">
+  <div class="post-date">April 5, 2021</div>
+  <div class="post-categories">
+  in 
+    
+    <a href="/blog/posts">DataBase</a>
+    
+  
+  </div>
+</section>
+
+<article class="post-content">
+  <h2 id="abstract">Abstract</h2>
+<p>지난포스트에서는 MySQL의 기본적인 문법인 CRUD + 간단한 정렬(order by), 조건문(where)들을 살펴보았다. <br />
+이번포스트에서는 좀더 심화된 조건문(like)과 병합(join)등에 대해 살펴보자.</p>
+<h2 id="table-생성">Table 생성</h2>
+<div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">-- Set Schema</span>
+<span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">classmates</span> <span class="p">(</span>
+  <span class="n">id</span> <span class="nb">INTEGER</span> <span class="k">PRIMARY</span> <span class="k">KEY</span> <span class="n">AUTO_INCREMENT</span><span class="p">,</span>
+	<span class="c1">-- autoincrement가 지정되어있는 primary key의 경우 </span>
+	<span class="c1">-- 삭제된 후 다시 데이터를 insert해도 삭제된 부분이 채워지지않는다.</span>
+  <span class="n">name</span> <span class="nb">TEXT</span> <span class="k">NOT</span> <span class="k">NULL</span><span class="p">,</span>
+  <span class="n">age</span> <span class="nb">INT</span> <span class="k">NOT</span> <span class="k">NULL</span><span class="p">,</span>
+  <span class="n">address</span> <span class="nb">TEXT</span> <span class="k">NOT</span> <span class="k">NULL</span>
+<span class="p">);</span>
+
+<span class="c1">-- Insert data</span>
+<span class="k">INSERT</span> <span class="k">INTO</span> <span class="n">classmates</span> <span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">age</span><span class="p">,</span> <span class="n">address</span><span class="p">)</span>
+<span class="k">VALUES</span> 
+<span class="p">(</span><span class="s1">'바지락'</span><span class="p">,</span> <span class="mi">33</span><span class="p">,</span> <span class="s1">'울산'</span><span class="p">),</span>
+<span class="p">(</span><span class="s1">'가자미'</span><span class="p">,</span> <span class="mi">33</span><span class="p">,</span> <span class="s1">'부산'</span><span class="p">),</span>
+<span class="p">(</span><span class="s1">'가자미'</span><span class="p">,</span> <span class="mi">25</span><span class="p">,</span> <span class="s1">'김해'</span><span class="p">),</span>
+<span class="p">(</span><span class="s1">'갈매기'</span><span class="p">,</span> <span class="mi">15</span><span class="p">,</span> <span class="s1">'울산'</span><span class="p">)</span>
+<span class="p">;</span>
+</code></pre></div></div>
+
+<h2 id="table-2번-선택">TABLE 2번 선택</h2>
+<p>다음과 같이 한개의 command에 SELECT문을 여러번 사용할 수 있다.</p>
+<div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">SELECT</span> <span class="n">t</span><span class="p">.</span><span class="n">name</span> <span class="k">FROM</span> <span class="p">(</span><span class="k">SELECT</span> <span class="n">name</span><span class="p">,</span> <span class="n">age</span> <span class="k">FROM</span> <span class="n">classmates</span> <span class="k">WHERE</span> <span class="n">age</span> <span class="o">&gt;=</span> <span class="mi">20</span><span class="p">)</span> <span class="k">AS</span> <span class="n">t</span><span class="p">;</span>
+</code></pre></div></div>
+<h2 id="조건문">조건문</h2>
+<p><strong>LIKE</strong>
+<code class="language-plaintext highlighter-rouge">2%</code> : 2로 시작(0개이상)<br />
+<code class="language-plaintext highlighter-rouge">%2</code> : 2로끝남<br />
+<code class="language-plaintext highlighter-rouge">%2%</code> : 2가들어감<br />
+<code class="language-plaintext highlighter-rouge">_2%</code> : 아무값이나 들어가고 두번째가 2로 시작<br />
+<code class="language-plaintext highlighter-rouge">1___</code> : 1로 시작하고 4자리<br /></p>
+
+<div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">SELECT</span> <span class="o">*</span> <span class="k">FROM</span> <span class="n">classmates</span>
+<span class="k">WHERE</span> <span class="n">age</span> <span class="k">LIKE</span> <span class="s1">'2_'</span><span class="p">;</span>  <span class="c1">-- 20대인 row만 출력</span>
+<span class="k">SELECT</span> <span class="o">*</span> <span class="k">FROM</span> <span class="n">classmates</span>
+<span class="k">WHERE</span> <span class="n">age</span> <span class="o">&gt;=</span> <span class="mi">30</span> <span class="k">and</span> <span class="n">name</span> <span class="k">LIKE</span> <span class="s1">'%미'</span><span class="p">;</span>  <span class="c1">-- 두가지 이상의 조건 연결</span>
+</code></pre></div></div>
+<p><strong>GROUPBY에서 조건</strong>
+HAVING 사용</p>
+<div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">SELECT</span> <span class="n">name</span><span class="p">,</span> <span class="k">COUNT</span><span class="p">(</span><span class="n">name</span><span class="p">)</span> <span class="k">AS</span> <span class="k">count</span>
+<span class="k">FROM</span> <span class="n">classmates</span>
+<span class="k">GROUP</span> <span class="k">BY</span> <span class="n">name</span>
+<span class="k">HAVING</span> <span class="k">COUNT</span><span class="p">(</span><span class="n">name</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span>
+<span class="p">;</span>   <span class="c1">-- name=가자미, count=2인 table 반환</span>
+</code></pre></div></div>
+<p><strong>IN</strong></p>
+<div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">SELECT</span> <span class="n">id</span><span class="p">,</span> <span class="n">name</span> <span class="k">FROM</span> <span class="n">classmates</span>
+<span class="k">WHERE</span> <span class="n">name</span> <span class="k">in</span> <span class="p">(</span><span class="s1">'가자미'</span><span class="p">,</span> <span class="s1">'전복'</span><span class="p">);</span>  <span class="c1">-- 포함되어있는 것</span>
+</code></pre></div></div>
+
+<h2 id="병합join">병합(JOIN)</h2>
+<p>두개의 테이블을 어떠한 column을 기준으로 합치는것으로 MySQL에서는 크게 3가지 방법이 있다.<br /></p>
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">INNSER JOIN</code> : 두개의 테이블중 중복된 것들만 뽑아 합치는것. 결과물의 row가 가장 작다</li>
+  <li><code class="language-plaintext highlighter-rouge">LEFT JOIN(=LEFT OUTER JOIN)</code> : 왼쪽 테이블이 모든 원소를 가지며 합쳤을때 오른쪽 테이블에 없는 값들은 NULL값이 된다.</li>
+  <li><code class="language-plaintext highlighter-rouge">RIGHT JOIN(=RIGHT OUTER JOIN)</code> : 위와 동(left, right 반대)</li>
+  <li><code class="language-plaintext highlighter-rouge">CROSS JOIN</code> : 특정 기준값 없이 두 테이블의 모든 경우의 수 결합을 나열<br />
+<a href="https://doorbw.tistory.com/223">설명 참고</a>
+<strong>또다른 table 생성</strong>
+    <div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">-- Set Schema</span>
+<span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">classmates2</span> <span class="p">(</span>
+<span class="n">id</span> <span class="nb">INTEGER</span> <span class="k">PRIMARY</span> <span class="k">KEY</span> <span class="n">AUTO_INCREMENT</span><span class="p">,</span>
+<span class="n">name</span> <span class="nb">TEXT</span> <span class="k">NOT</span> <span class="k">NULL</span><span class="p">,</span>
+<span class="n">age</span> <span class="nb">INT</span> <span class="k">NOT</span> <span class="k">NULL</span><span class="p">,</span>
+<span class="n">address</span> <span class="nb">TEXT</span> <span class="k">NOT</span> <span class="k">NULL</span>
+<span class="p">);</span>
+<span class="c1">-- Insert data</span>
+<span class="k">ALTER</span> <span class="k">TABLE</span> <span class="n">classmates2</span> <span class="k">convert</span> <span class="k">to</span> <span class="nb">character</span> <span class="k">set</span> <span class="n">UTF8</span><span class="p">;</span>
+<span class="k">INSERT</span> <span class="k">INTO</span> <span class="n">classmates2</span> <span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">age</span><span class="p">,</span> <span class="n">address</span><span class="p">)</span>
+<span class="k">VALUES</span> 
+<span class="p">(</span><span class="s1">'바지락'</span><span class="p">,</span> <span class="mi">26</span><span class="p">,</span> <span class="s1">'울산'</span><span class="p">),</span>
+<span class="p">(</span><span class="s1">'우럭'</span><span class="p">,</span> <span class="mi">33</span><span class="p">,</span> <span class="s1">'서울'</span><span class="p">),</span>
+<span class="p">(</span><span class="s1">'가자미'</span><span class="p">,</span> <span class="mi">25</span><span class="p">,</span> <span class="s1">'김해'</span><span class="p">),</span>
+<span class="p">(</span><span class="s1">'갈매기'</span><span class="p">,</span> <span class="mi">15</span><span class="p">,</span> <span class="s1">'울산'</span><span class="p">),</span>
+<span class="p">(</span><span class="s1">'조기'</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="s1">'대구'</span><span class="p">)</span>
+<span class="p">;</span>
+</code></pre></div>    </div>
+  </li>
+</ul>
+
+<p><strong>기본적인 사용법</strong></p>
+<div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">joined_table</span><span class="p">:</span> <span class="p">{</span>
+    <span class="n">table_reference</span> <span class="p">{[</span><span class="k">INNER</span> <span class="o">|</span> <span class="k">CROSS</span><span class="p">]</span> <span class="k">JOIN</span> <span class="o">|</span> <span class="n">STRAIGHT_JOIN</span><span class="p">}</span> <span class="n">table_factor</span> <span class="p">[</span><span class="n">join_specification</span><span class="p">]</span>
+  <span class="o">|</span> <span class="n">table_reference</span> <span class="p">{</span><span class="k">LEFT</span><span class="o">|</span><span class="k">RIGHT</span><span class="p">}</span> <span class="p">[</span><span class="k">OUTER</span><span class="p">]</span> <span class="k">JOIN</span> <span class="n">table_reference</span> <span class="n">join_specification</span>
+  <span class="o">|</span> <span class="n">table_reference</span> <span class="k">NATURAL</span> <span class="p">[</span><span class="k">INNER</span> <span class="o">|</span> <span class="p">{</span><span class="k">LEFT</span><span class="o">|</span><span class="k">RIGHT</span><span class="p">}</span> <span class="p">[</span><span class="k">OUTER</span><span class="p">]]</span> <span class="k">JOIN</span> <span class="n">table_factor</span>
+<span class="p">}</span>
+</code></pre></div></div>
+<p><strong>예제</strong></p>
+<div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">-- LEFT JOIN</span>
+<span class="k">SELECT</span> <span class="n">c1</span><span class="p">.</span><span class="n">name</span><span class="p">,</span> <span class="n">c1</span><span class="p">.</span><span class="n">age</span> <span class="k">as</span> <span class="n">c1_age</span><span class="p">,</span> <span class="n">c2</span><span class="p">.</span><span class="n">age</span> <span class="k">as</span> <span class="n">c2_age</span> <span class="k">FROM</span> <span class="n">classmates</span> <span class="k">AS</span> <span class="n">c1</span> <span class="k">LEFT</span> <span class="k">JOIN</span> <span class="n">classmates2</span> <span class="k">AS</span> <span class="n">c2</span> <span class="k">ON</span> <span class="n">c1</span><span class="p">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">c2</span><span class="p">.</span><span class="n">name</span><span class="p">;</span>
+</code></pre></div></div>
+<p>결과물은 아래와 같다.
+<img src="/blog/post_images/mysql_2_1.png" title="sql_result" /></p>
+
+</article>
+<!-- <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script> -->
+
+
+
+<section class="tags">
+  <!-- <strong>Tags:</strong> <a href="/blog/tag/MySQL">MySQL</a> -->
+  <strong>Tags:</strong> <a href="https://www.google.co.kr/search?q=MySQL">MySQL</a>
+</section>
+
+
+<!-- <section class="rss">
+  <p class="rss-subscribe text"><strong>Subscribe <a href="/blog/feed.xml">via RSS</a></strong></p>
+</section> -->
+
+<section class="share">
+  <span>Share: </span>
+  
+    
+    
+    
+    
+    
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+      <a href="//www.pinterest.com/pin/create/button/?description=%5BMySQL%5D+%EA%B8%B0%EC%B4%88+%EB%AC%B8%EB%B2%95+%EC%A0%95%EB%A6%AC+-+2&url=https%3A%2F%2Fparkeunsang.github.io%2Fblog%2Fdatabase%2F2021%2F04%2F05%2Fmysql2.html&media=https://parkeunsang.github.io/blog/assets/instacode.png"
+        onclick="window.open(this.href, 'pinterest-share', 'width=550,height=255');return false;">
+        <i class="fa fa-pinterest-square fa-lg"></i>
+      </a>
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+      <a href="//www.reddit.com/submit" onclick="window.location = '//www.reddit.com/submit?url=' + encodeURIComponent('https://parkeunsang.github.io/blog/database/2021/04/05/mysql2.html') + '&title=[MySQL] 기초 문법 정리 - 2'; return false">
+        <i class="fa fa-reddit-square fa-lg"></i>
+      </a>
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+    
+  
+</section>
+
+
+
+
+</div>
+</div>
+
+    </div>
+
+    <footer class="site-footer">
+
+  <div class="wrapper">
+
+    <h3 class="footer-heading">Edward's blog</h3>
+
+    <div class="site-navigation">
+
+      <p><strong>Site Map</strong></p>
+      <ul class="pages">
+				
+	
+	<li class="nav-link"><a href="/blog/about/">About</a>
+	
+
+	
+	<li class="nav-link"><a href="/blog/category/">Categories</a>
+	
+
+	
+
+	
+
+	
+	<li class="nav-link"><a href="/blog/posts/">Posts</a>
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+      </ul>
+    </div>
+
+    <div class="site-contact">
+
+      <p><strong>Contact</strong></p>
+      <ul class="social-media-list">
+        <li>
+          <a href="mailto:edwardfdsp@gmail.com">
+            <i class="fa fa-envelope-o"></i>
+            <span class="username">edwardfdsp@gmail.com</span>
+          </a>
+        </li>
+
+        
+          
+          <li>
+            <a href="https://github.com/parkeunsang" title="Fork me on GitHub">
+              <i class="fa fa-github"></i>
+              <span class="username">EunSang Park</span>
+            </a>
+          </li>
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+
+      </ul>
+    </div>
+
+    <!-- <div class="site-signature">
+      <p class="rss-subscribe text"><strong>Subscribe <a href="/blog/feed.xml">via RSS</a></strong></p>
+      <p class="text">contents
+</p>
+    </div> -->
+
+  </div>
+
+</footer>
+
+<!-- Scripts -->
+<script src="//code.jquery.com/jquery-3.4.1.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/highlight.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.1/js/lightbox.min.js"></script>
+<script src="//unpkg.com/popper.js@1"></script>
+<script src="//unpkg.com/tippy.js@5"></script>
+
+<script type="text/javascript">
+$(document).ready(function() {
+  // Default syntax highlighting
+  hljs.initHighlightingOnLoad();
+
+  // Header
+  var menuToggle = $('#js-mobile-menu').unbind();
+  $('#js-navigation-menu').removeClass("show");
+  menuToggle.on('click', function(e) {
+    e.preventDefault();
+    $('#js-navigation-menu').slideToggle(function(){
+      if($('#js-navigation-menu').is(':hidden')) {
+        $('#js-navigation-menu').removeAttr('style');
+      }
+    });
+  });
+
+	// Enable tooltips via Tippy.js
+	if (Array.isArray(window.tooltips)) {
+		window.tooltips.forEach(function(tooltip) {
+			var selector = tooltip[0];
+			var config = tooltip[1];
+			tippy(selector, config);
+		})
+	}
+});
+
+</script>
+
+
+
+
+
+
+  </body>
+
+</html>

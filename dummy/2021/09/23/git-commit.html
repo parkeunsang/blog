@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>[Git] commit 메세지 수정</title>
+  <meta name="description" content="배경git은 형상관리, 코드공유 등에 요긴하게 이용된다. git의 핵심은 단연 코드이며 이 외의것은 무시되기 쉽다. 나 또한 commit 메세지라던지, branch 관리 등의 필요성을 크게 못느껴 이를 등한시 했었다. 하지만 협업을 하다보니 이런 부가적인(?) 것들이 왜 필요한지 ...">
+  
+  <meta name="author" content="EunSang Park">
+  <meta name="copyright" content="&copy; EunSang Park 2023">
+  
+
+  <!-- External libraries --> 
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css">
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.9.0/styles/monokai-sublime.min.css">
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/lightbox2/2.7.1/css/lightbox.css">
+
+  <!-- Favicon and other icons (made with http://www.favicon-generator.org/) -->
+  <link rel="shortcut icon" href="/blog/assets/icons/favicon.ico" type="image/x-icon">
+  <link rel="icon" href="/blog/assets/icons/favicon.ico" type="image/x-icon">
+  <link rel="apple-touch-icon" sizes="57x57" href="/blog/assets/icons/apple-icon-57x57.png">
+  <link rel="apple-touch-icon" sizes="60x60" href="/blog/assets/icons/apple-icon-60x60.png">
+  <link rel="apple-touch-icon" sizes="72x72" href="/blog/assets/icons/apple-icon-72x72.png">
+  <link rel="apple-touch-icon" sizes="76x76" href="/blog/assets/icons/apple-icon-76x76.png">
+  <link rel="apple-touch-icon" sizes="114x114" href="/blog/assets/icons/apple-icon-114x114.png">
+  <link rel="apple-touch-icon" sizes="120x120" href="/blog/assets/icons/apple-icon-120x120.png">
+  <link rel="apple-touch-icon" sizes="144x144" href="/blog/assets/icons/apple-icon-144x144.png">
+  <link rel="apple-touch-icon" sizes="152x152" href="/blog/assets/icons/apple-icon-152x152.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/blog/assets/icons/apple-icon-180x180.png">
+  <link rel="icon" type="image/png" sizes="192x192"  href="/blog/assets/icons/android-icon-192x192.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/blog/assets/icons/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="96x96" href="/blog/assets/icons/favicon-96x96.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/blog/assets/icons/favicon-16x16.png">
+  <link rel="manifest" href="/blog/assets/icons/manifest.json">
+  <meta name="msapplication-TileColor" content="#ffffff">
+  <meta name="msapplication-TileImage" content="/blog/assets/icons/ms-icon-144x144.png">
+  <meta name="theme-color" content="#ffffff">
+
+  
+  <!-- Facebook OGP cards -->
+  <meta property="og:description" content="배경git은 형상관리, 코드공유 등에 요긴하게 이용된다. git의 핵심은 단연 코드이며 이 외의것은 무시되기 쉽다. 나 또한 commit 메세지라던지, branch 관리 등의 필요성을 크게 못느껴 이를 등한시 했었다. 하지만 협업을 하다보니 이런 부가적인(?) 것들이 왜 필요한지 ..." />
+  <meta property="og:url" content="https://parkeunsang.github.io/dummy/2021/09/23/git-commit.html">
+  <meta property="og:site_name" content="Edward's blog" />
+  <meta property="og:title" content="[Git] commit 메세지 수정" />
+  <meta property="og:type" content="website" />
+  <meta property="og:image" content="https://parkeunsang.github.io/blog/assets/instacode.png" />
+  <meta property="og:image:type" content="image/png" />
+  <meta property="og:image:width" content="612" />
+  <meta property="og:image:height" content="605" />
+  
+
+  
+  <!-- Twitter: card tags -->
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="[Git] commit 메세지 수정">
+  <meta name="twitter:description" content="배경git은 형상관리, 코드공유 등에 요긴하게 이용된다. git의 핵심은 단연 코드이며 이 외의것은 무시되기 쉽다. 나 또한 commit 메세지라던지, branch 관리 등의 필요성을 크게 못느껴 이를 등한시 했었다. 하지만 협업을 하다보니 이런 부가적인(?) 것들이 왜 필요한지 ...">
+  <meta name="twitter:image" content="https://parkeunsang.github.io/blog/assets/instacode.png">
+  <meta name="twitter:url" content="https://parkeunsang.github.io/dummy/2021/09/23/git-commit.html">
+  
+
+  
+
+  <!-- Site styles -->
+  <link rel="stylesheet" href="/blog/css/main.css">
+  <link rel="canonical" href="https://parkeunsang.github.io/blog/dummy/2021/09/23/git-commit.html">
+	<link rel="alternate" type="application/rss+xml" title="Edward's blog" href="https://parkeunsang.github.io/blog/feed.xml" />
+	
+	<!-- Tooltips -->
+	<script type="text/javascript">
+		window.tooltips = []
+	</script>
+  <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
+</head>
+
+
+  <body>
+
+    <header class="navigation" role="banner">
+  <div class="navigation-wrapper">
+    <a href="/blog/" class="logo">
+      
+      <img src="/blog/assets/homepage.png" alt="Edward's blog">
+      
+    </a>
+    <a href="javascript:void(0)" class="navigation-menu-button" id="js-mobile-menu">
+      <i class="fa fa-bars"></i>
+    </a>
+    <nav role="navigation">
+      <ul id="js-navigation-menu" class="navigation-menu show">
+				
+	
+	<li class="nav-link"><a href="/blog/about/">About</a>
+	
+
+	
+	<li class="nav-link"><a href="/blog/category/">Categories</a>
+	
+
+	
+
+	
+
+	
+	<li class="nav-link"><a href="/blog/posts/">Posts</a>
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+      </ul>
+    </nav>
+  </div>
+</header>
+
+
+    <div class="page-content">
+        <div class="post">
+
+<div class="post-header-container has-cover" style="background-image: url(/blog/assets/instacode.png);">
+  <div class="scrim has-cover">
+    <header class="post-header">
+      <h1 class="title">[Git] commit 메세지 수정</h1>
+      <p class="info">by <strong>Edward Park</strong></p>
+    </header>
+  </div>
+</div>
+
+<div class="wrapper">
+
+
+
+<section class="post-meta">
+  <div class="post-date">September 23, 2021</div>
+  <div class="post-categories">
+  in 
+    
+    <a href="/blog/posts">Dummy</a>
+    
+  
+  </div>
+</section>
+
+<article class="post-content">
+  <h2 id="배경">배경</h2>
+<p>git은 형상관리, 코드공유 등에 요긴하게 이용된다. git의 핵심은 단연 <strong>코드</strong>이며 이 외의것은 무시되기 쉽다. 나 또한 commit 메세지라던지, branch 관리 등의 필요성을 크게 못느껴 이를 등한시 했었다. 하지만 협업을 하다보니 이런 부가적인(?) 것들이 왜 필요한지 점차 깨달아가는 것 같다.<br />
+이번 포스트는 최근 삼성전자 오픈소스 프로젝트에 참여하며 커밋 메세지 규칙(4단어 이상)을 지키지 않고 pull request를 보내었다가 봇에게 반려당한 경험을 바탕으로 쓰게 되었다.</p>
+
+<h2 id="직전-커밋-메세지-수정">직전 커밋 메세지 수정</h2>
+<p>직전 커밋 메세지의 경우 아래의 명령어를 통해 수정 가능하다.</p>
+<pre><code class="language-Shell">$ git commit --amend
+</code></pre>
+<p>해당 명령어를 실행 시 아래와 같은 수정 화면이 등장하며 원하는 메세지로 변경 후 <code class="language-plaintext highlighter-rouge">ctrl+X</code>, <code class="language-plaintext highlighter-rouge">Y</code>, <code class="language-plaintext highlighter-rouge">Enter</code> 를 순서대로 누르면 저장이 된다.<br />
+아래 예시에서는 <strong>second</strong>가 커밋 메세지이다.
+<img src="/blog/post_images/git/commit_1.png" title="commit" /></p>
+
+<h2 id="이전-커밋-메세지-수정">이전 커밋 메세지 수정</h2>
+<p>직전 커밋 메세지가 아니라 이전의 메세지를 수정하고 싶으면 다음과 같은 과정을 거쳐야 한다.</p>
+<ol>
+  <li>원하는 위치(여기서는 3번째 이전)로 커밋을 이동
+    <pre><code class="language-Shell"> $ git rebase -i HEAD~3
+</code></pre>
+  </li>
+  <li>커밋 메세지 수정 상태로 변환(pick -&gt; reword)
+<img src="/blog/post_images/git/commit_2.png" title="commit" />
+reword로 글자 수정 후 저장하면 바로 해당 커밋(들)의 메세지를 수정할 수 있는 창이 나온다.</li>
+  <li>커밋 메세지 수정 후 저장<br />
+(위의 amend 명령어를 입력했을때 나오는 창과 동일.)</li>
+</ol>
+
+<h2 id="git-branch에-push한-경우">Git branch에 push한 경우</h2>
+<p>이미 push를 완료한 경우 커밋 메세지를 수정해서 일반적인 방법으로 push를 하면 conflict가 발생한다.<br />
+따라서 force옵션을 통해 강제로 push를 해 커밋 메세지를 수정해야한다. 하지만 이와 같은 경우 해당 브랜치를 사용하고 있는 다른 사용자들과 conflict가 발생할 수 있으므로 가급적 자제해야한다.</p>
+<pre><code class="language-Shell">$ git push origin master[branch name] --force
+</code></pre>
+<p>참고 : <a href="https://velog.io/@mayinjanuary/git-%EC%BB%A4%EB%B0%8B-%EB%A9%94%EC%84%B8%EC%A7%80-%EC%88%98%EC%A0%95%ED%95%98%EA%B8%B0-changing-commit-message">git 커밋 메세지 수정하기</a></p>
+
+</article>
+<!-- <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script> -->
+
+
+
+
+<!-- <section class="rss">
+  <p class="rss-subscribe text"><strong>Subscribe <a href="/blog/feed.xml">via RSS</a></strong></p>
+</section> -->
+
+<section class="share">
+  <span>Share: </span>
+  
+    
+    
+    
+    
+    
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+      <a href="//www.pinterest.com/pin/create/button/?description=%5BGit%5D+commit+%EB%A9%94%EC%84%B8%EC%A7%80+%EC%88%98%EC%A0%95&url=https%3A%2F%2Fparkeunsang.github.io%2Fblog%2Fdummy%2F2021%2F09%2F23%2Fgit-commit.html&media=https://parkeunsang.github.io/blog/assets/instacode.png"
+        onclick="window.open(this.href, 'pinterest-share', 'width=550,height=255');return false;">
+        <i class="fa fa-pinterest-square fa-lg"></i>
+      </a>
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+      <a href="//www.reddit.com/submit" onclick="window.location = '//www.reddit.com/submit?url=' + encodeURIComponent('https://parkeunsang.github.io/blog/dummy/2021/09/23/git-commit.html') + '&title=[Git] commit 메세지 수정'; return false">
+        <i class="fa fa-reddit-square fa-lg"></i>
+      </a>
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+    
+  
+</section>
+
+
+
+
+</div>
+</div>
+
+    </div>
+
+    <footer class="site-footer">
+
+  <div class="wrapper">
+
+    <h3 class="footer-heading">Edward's blog</h3>
+
+    <div class="site-navigation">
+
+      <p><strong>Site Map</strong></p>
+      <ul class="pages">
+				
+	
+	<li class="nav-link"><a href="/blog/about/">About</a>
+	
+
+	
+	<li class="nav-link"><a href="/blog/category/">Categories</a>
+	
+
+	
+
+	
+
+	
+	<li class="nav-link"><a href="/blog/posts/">Posts</a>
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+      </ul>
+    </div>
+
+    <div class="site-contact">
+
+      <p><strong>Contact</strong></p>
+      <ul class="social-media-list">
+        <li>
+          <a href="mailto:edwardfdsp@gmail.com">
+            <i class="fa fa-envelope-o"></i>
+            <span class="username">edwardfdsp@gmail.com</span>
+          </a>
+        </li>
+
+        
+          
+          <li>
+            <a href="https://github.com/parkeunsang" title="Fork me on GitHub">
+              <i class="fa fa-github"></i>
+              <span class="username">EunSang Park</span>
+            </a>
+          </li>
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+
+      </ul>
+    </div>
+
+    <!-- <div class="site-signature">
+      <p class="rss-subscribe text"><strong>Subscribe <a href="/blog/feed.xml">via RSS</a></strong></p>
+      <p class="text">contents
+</p>
+    </div> -->
+
+  </div>
+
+</footer>
+
+<!-- Scripts -->
+<script src="//code.jquery.com/jquery-3.4.1.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/highlight.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.1/js/lightbox.min.js"></script>
+<script src="//unpkg.com/popper.js@1"></script>
+<script src="//unpkg.com/tippy.js@5"></script>
+
+<script type="text/javascript">
+$(document).ready(function() {
+  // Default syntax highlighting
+  hljs.initHighlightingOnLoad();
+
+  // Header
+  var menuToggle = $('#js-mobile-menu').unbind();
+  $('#js-navigation-menu').removeClass("show");
+  menuToggle.on('click', function(e) {
+    e.preventDefault();
+    $('#js-navigation-menu').slideToggle(function(){
+      if($('#js-navigation-menu').is(':hidden')) {
+        $('#js-navigation-menu').removeAttr('style');
+      }
+    });
+  });
+
+	// Enable tooltips via Tippy.js
+	if (Array.isArray(window.tooltips)) {
+		window.tooltips.forEach(function(tooltip) {
+			var selector = tooltip[0];
+			var config = tooltip[1];
+			tippy(selector, config);
+		})
+	}
+});
+
+</script>
+
+
+
+
+
+
+  </body>
+
+</html>

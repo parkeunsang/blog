@@ -1,0 +1,681 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>[Python] 기관, 외국인 거래량이 많으면 주가가 하락한다?</title>
+  <meta name="description" content="Abstract이전 포스트에서 기관, 외인순매매량과 주가의 관계를 삼성전자, 대한항공 2가지의 예시로 간략하게 살펴보았으며 뚜렷한 결과를 확인하기는 힘들었다. 그래서 이번에는 2020년 12월 31일 기준 코스피에 상장된 총 799개의 종목을 이용해 주가와의 관계를 살펴보고자 한다...">
+  
+  <meta name="author" content="EunSang Park">
+  <meta name="copyright" content="&copy; EunSang Park 2023">
+  
+
+  <!-- External libraries --> 
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css">
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.9.0/styles/monokai-sublime.min.css">
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/lightbox2/2.7.1/css/lightbox.css">
+
+  <!-- Favicon and other icons (made with http://www.favicon-generator.org/) -->
+  <link rel="shortcut icon" href="/blog/assets/icons/favicon.ico" type="image/x-icon">
+  <link rel="icon" href="/blog/assets/icons/favicon.ico" type="image/x-icon">
+  <link rel="apple-touch-icon" sizes="57x57" href="/blog/assets/icons/apple-icon-57x57.png">
+  <link rel="apple-touch-icon" sizes="60x60" href="/blog/assets/icons/apple-icon-60x60.png">
+  <link rel="apple-touch-icon" sizes="72x72" href="/blog/assets/icons/apple-icon-72x72.png">
+  <link rel="apple-touch-icon" sizes="76x76" href="/blog/assets/icons/apple-icon-76x76.png">
+  <link rel="apple-touch-icon" sizes="114x114" href="/blog/assets/icons/apple-icon-114x114.png">
+  <link rel="apple-touch-icon" sizes="120x120" href="/blog/assets/icons/apple-icon-120x120.png">
+  <link rel="apple-touch-icon" sizes="144x144" href="/blog/assets/icons/apple-icon-144x144.png">
+  <link rel="apple-touch-icon" sizes="152x152" href="/blog/assets/icons/apple-icon-152x152.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/blog/assets/icons/apple-icon-180x180.png">
+  <link rel="icon" type="image/png" sizes="192x192"  href="/blog/assets/icons/android-icon-192x192.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/blog/assets/icons/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="96x96" href="/blog/assets/icons/favicon-96x96.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/blog/assets/icons/favicon-16x16.png">
+  <link rel="manifest" href="/blog/assets/icons/manifest.json">
+  <meta name="msapplication-TileColor" content="#ffffff">
+  <meta name="msapplication-TileImage" content="/blog/assets/icons/ms-icon-144x144.png">
+  <meta name="theme-color" content="#ffffff">
+
+  
+  <!-- Facebook OGP cards -->
+  <meta property="og:description" content="Abstract이전 포스트에서 기관, 외인순매매량과 주가의 관계를 삼성전자, 대한항공 2가지의 예시로 간략하게 살펴보았으며 뚜렷한 결과를 확인하기는 힘들었다. 그래서 이번에는 2020년 12월 31일 기준 코스피에 상장된 총 799개의 종목을 이용해 주가와의 관계를 살펴보고자 한다..." />
+  <meta property="og:url" content="https://parkeunsang.github.io/stock/2021/01/19/python.html">
+  <meta property="og:site_name" content="Edward's blog" />
+  <meta property="og:title" content="[Python] 기관, 외국인 거래량이 많으면 주가가 하락한다?" />
+  <meta property="og:type" content="website" />
+  <meta property="og:image" content="https://parkeunsang.github.io/blog/assets/instacode.png" />
+  <meta property="og:image:type" content="image/png" />
+  <meta property="og:image:width" content="612" />
+  <meta property="og:image:height" content="605" />
+  
+
+  
+  <!-- Twitter: card tags -->
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="[Python] 기관, 외국인 거래량이 많으면 주가가 하락한다?">
+  <meta name="twitter:description" content="Abstract이전 포스트에서 기관, 외인순매매량과 주가의 관계를 삼성전자, 대한항공 2가지의 예시로 간략하게 살펴보았으며 뚜렷한 결과를 확인하기는 힘들었다. 그래서 이번에는 2020년 12월 31일 기준 코스피에 상장된 총 799개의 종목을 이용해 주가와의 관계를 살펴보고자 한다...">
+  <meta name="twitter:image" content="https://parkeunsang.github.io/blog/assets/instacode.png">
+  <meta name="twitter:url" content="https://parkeunsang.github.io/stock/2021/01/19/python.html">
+  
+
+  
+
+  <!-- Site styles -->
+  <link rel="stylesheet" href="/blog/css/main.css">
+  <link rel="canonical" href="https://parkeunsang.github.io/blog/stock/2021/01/19/python.html">
+	<link rel="alternate" type="application/rss+xml" title="Edward's blog" href="https://parkeunsang.github.io/blog/feed.xml" />
+	
+	<!-- Tooltips -->
+	<script type="text/javascript">
+		window.tooltips = []
+	</script>
+  <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
+</head>
+
+
+  <body>
+
+    <header class="navigation" role="banner">
+  <div class="navigation-wrapper">
+    <a href="/blog/" class="logo">
+      
+      <img src="/blog/assets/homepage.png" alt="Edward's blog">
+      
+    </a>
+    <a href="javascript:void(0)" class="navigation-menu-button" id="js-mobile-menu">
+      <i class="fa fa-bars"></i>
+    </a>
+    <nav role="navigation">
+      <ul id="js-navigation-menu" class="navigation-menu show">
+				
+	
+	<li class="nav-link"><a href="/blog/about/">About</a>
+	
+
+	
+	<li class="nav-link"><a href="/blog/category/">Categories</a>
+	
+
+	
+
+	
+
+	
+	<li class="nav-link"><a href="/blog/posts/">Posts</a>
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+      </ul>
+    </nav>
+  </div>
+</header>
+
+
+    <div class="page-content">
+        <div class="post">
+
+<div class="post-header-container has-cover" style="background-image: url(/blog/assets/instacode.png);">
+  <div class="scrim has-cover">
+    <header class="post-header">
+      <h1 class="title">[Python] 기관, 외국인 거래량이 많으면 주가가 하락한다?</h1>
+      <p class="info">by <strong>Edward Park</strong></p>
+    </header>
+  </div>
+</div>
+
+<div class="wrapper">
+
+
+
+<section class="post-meta">
+  <div class="post-date">January 19, 2021</div>
+  <div class="post-categories">
+  in 
+    
+    <a href="/blog/posts">Stock</a>
+    
+  
+  </div>
+</section>
+
+<article class="post-content">
+  <h2 id="abstract">Abstract</h2>
+<p><a href="https://parkeunsang.github.io/blog/stock/2021/01/03/eda.html">이전 포스트</a>에서 기관, 외인순매매량과 주가의 관계를 삼성전자, 대한항공 2가지의 예시로 간략하게 살펴보았으며 뚜렷한 결과를 확인하기는 힘들었다. 그래서 이번에는 2020년 12월 31일 기준 코스피에 상장된 총 799개의 종목을 이용해 주가와의 관계를 살펴보고자 한다. 여기서 <strong>순매매량</strong>은 기관, 외인의 순매매량과 당일 종가를 곱한 값을 사용했다(액면분할등의 이슈로 주가가 급변할 경우 거래량도 급변하기 때문). <br />
+기관 외국인 거래량(<strong>x</strong>)와 주가(y)의 관계를  시계열 회귀, LSTM 등의 예측기반 방법론을 통해 살펴볼수도 있지만, 아직까지 시계열 데이터를 예측하는 방법론들에 익숙하지 않고, 또 두 변수의 긴밀한 관계도 없을 것이라고 생각되므로 위의 방법론을 이용한 예측은 추후에 기회가 된다면 다뤄보기로하고, 이번 포스트에서는 <strong>기관, 외인 거래량이 급증(or 급락)했을 때 해당 주가의 변동</strong>에 초점을 맞추어 살펴보기로 했다. 그리고 결과는 예상했던것과 다르게 <strong>기관, 외인 거래량이 급증, 급락한 두가지 경우 모두 주가에 좋지않은 영향을 가져다 주었다.</strong><br /></p>
+
+<h2 id="세부-전략">세부 전략</h2>
+<p>그렇다면 위에서 말한 <strong>기관, 외인 거래량이 급변</strong>했다는 것을 어떻게 알 수 있을까? <br />
+보통 <strong>이상감지(Anormaly Detection)</strong> 와같은 방법을 사용하며 여기서는 Z-score normalization(정규화)를 통해 특정값(여기서는 2.5)이상인 값을 이상치로 분류했다. <br />
+처음에는 단순히 기관과 외인의 순매매량을 정규화해 값이 크거나 작은 지점들을 선택했다.</p>
+<pre><code class="language-Python"># import library ~ Preprocessor 객체생성까지는 이전포스트 참조
+</code></pre>
+<pre><code class="language-Python">class TradeStradegy:
+    '''
+    mergePrice: 기관, 외인 데이터베이스로부터 추출된 데이터프레임과
+    주가 데이터베이스로부터 추출된 데이터프레임 결합
+    
+    stradegy1Condition: 기관, 외인 순매매량의 이상치 index 반환
+    
+    stradegy1: 위의 index를 기준으로 n일 후 종가 변화량들 반환
+    '''
+    def __init__(self, code, criteria, window, dayLater, who):
+        self.code = code
+        self.criteria = criteria
+        self.window = window
+        self.dayLater = dayLater
+        self.who = who
+        self.curC = conStock.cursor()
+        self.curP = conPrice.cursor()
+        self.df = self.mergePrice()
+        
+    def mergePrice(self):
+        dfWho = extractDf(self.curC, self.code)
+        dfPrice = extractDf(self.curP, self.code)
+        
+        dfWho['Date'] = pd.to_datetime(dfWho['Date'])
+        dfWho['volumePrice'] = dfWho[self.who]*dfWho['Close']
+        dfWho = dfWho.drop(columns = ['Close','Change','Volume'])
+        df = dfWho.merge(dfPrice,how='left',on='Date')
+        df = df[::-1].reset_index(drop=True)
+        return(df)
+    
+    
+    def stradegy1Condition(self):
+        ppsr = Preprocessor
+        self.df['volumePriceRolling'] = ppsr.normalize(self.df['volumePrice'].rolling(window=self.window).mean())
+        if(self.criteria&gt;0):
+            plusIdx = self.df[self.df['volumePriceRolling']&gt;self.criteria].index.values
+        else:
+            plusIdx = self.df[self.df['volumePriceRolling']&lt;self.criteria].index.values
+        
+        if(len(plusIdx)==0):
+            return np.array([])
+        uniqueIdx = [plusIdx[0]]
+        for i in range(1,len(plusIdx)):
+            if(plusIdx[i] - plusIdx[i-1] &gt; 5):
+                uniqueIdx.append(plusIdx[i])
+        return np.array(uniqueIdx)
+    
+    def stradegy1(self): #or inst_sum
+        uniqueIdx = self.stradegy1Condition()
+        uniqueIdxLater = uniqueIdx + self.dayLater
+
+        uniqueIdx = uniqueIdx[uniqueIdxLater&lt;len(self.df)]
+        uniqueIdxLater = uniqueIdxLater[uniqueIdxLater&lt;len(self.df)]
+        
+        
+        dfOrigin = self.df.iloc[uniqueIdx,:]
+        dfLater = self.df.iloc[uniqueIdxLater,:]
+        return (dfLater['Close'].values/dfOrigin['Close'].values,
+                np.random.choice(self.df[self.dayLater:]['Close'].values / self.df[:-1*self.dayLater]['Close'].values, len(uniqueIdx)))
+#        return (1-np.mean(dfSelected['Close']/dfSelected['Open']), len(dfSelected))
+</code></pre>
+
+<pre><code class="language-Python">tss = TradeStradegy('c005930', 2.5, 10, 30, "inst_sum")
+df = tss.mergePrice()
+
+fig = df.iplot(x='Date', y='volumePrice', asFigure=True, title='삼성전자 기관 순매매량')
+fig.show()
+</code></pre>
+<p><img src="/blog/post_images/tradeWho2_1.png" title="sample images" />
+하지만 위의 그래프에서 보는 바와같이 일일 순매매량 변동이 너무 크기때문에 10일 이동평균(Moving average)변환을 이용해 변동을 줄인 후 정규화를 진행했고, 이 값이 2.5보다 큰 지점을 파란선으로 표시했다.</p>
+<pre><code class="language-Python">ppsr = Preprocessor
+df['vPR'] = df['volumePrice'].rolling(window=10).mean()
+df['vPRNM'] = ppsr.normalize(df['vPR'])
+
+fig = df['vPRNM'].iplot(asFigure=True, title='삼성전자 기관 순매매량(10일 이동평균 + 정규화)')
+for i in plusIdx:
+   # fig.add_scatter(x=[i]*100, y=np.linspace(-100000,100000,100), opacity=0.3)
+    fig.add_trace(go.Scatter(
+    x=[i]*100, y=np.linspace(df['vPRNM'].min(),df['vPRNM'].max(),100),
+    opacity=0.3,
+    marker_color='rgba(0, 0, 158, .8)'
+))
+fig.show()
+</code></pre>
+
+<p><img src="/blog/post_images/tradeWho2_2.png" title="sample images" />
+10년간 <strong>기관 매매량급증</strong>은 8회나타났다. 
+<img src="/blog/post_images/tradeWho2_3.png" title="sample images" />
+위 그래프는 <strong>기관 매매량급증</strong>신호와 종가를 같이 나타낸 것이다. 삼성전자의 경우 기관매매량이 급증한 경우 대체로 주가가 오르는 경우가 많았다.<br />
+이제 삼성전자 단일종목이 아닌 모든 코스피종목에대해 위와같은 <strong>기관 매매량급증</strong>신호가 나타난 후 <strong>30영업일(약 40일)</strong>후 주가변화값을 모두 구해보았다.</p>
+<pre><code class="language-Python">result = np.array([])
+resultRandom = np.array([])
+for code in tqdm(codes):
+    tss = TradeStradegy(code, 2.5, 10, 30, "inst_sum")
+    stdg1 = tss.stradegy1()
+    changeSelected = stdg1[0]
+    changeRandom = stdg1[1]
+    result = np.append(result, changeSelected)
+    resultRandom = np.append(resultRandom, changeRandom)
+		
+print(len(result)
+print(np.mean(result))
+</code></pre>
+<p>총 3500번 정도 위와같은 신호에따른 매매를 진행했고, 놀랍게도 평균적으로 1.3%정도 손해를 본다는 결과가 나왔다.</p>
+<pre><code class="language-Python">n = 30
+allCases = np.array([])
+for code in tqdm(codes):
+    df = extractDf(conPrice.cursor(), codes[0])
+    allCases = np.append(allCases, df[n:]['Close'].values/df[:-n]['Close'].values)
+meanList = []
+#gmeanList = []
+
+for i in range(1000):
+    temp = np.random.choice(allCases, n)
+    meanList.append(np.mean(temp))
+#    gmeanList.append(gmean(temp))
+
+allCases_ = allCases - 1
+result_ = result - 1
+
+n = len(result)
+pd.DataFrame({"random": np.random.choice(allCases_, n), "selected": result_}).iplot(kind='histogram', theme='white', title='Strategy1 vs random')
+</code></pre>
+
+<p><img src="/blog/post_images/tradeWho2_4.png" title="sample images" />
+Histogram을 통해 확인해보면(x축은 수익률) <font color="blue">신호에 따른 매매</font>가 <font color="orange">랜덤한 매매</font>보다 안좋은 결과를 나타냄을 알 수 있다.<br />
+마지막으로 bootstrap method를 이용해 위의 결과(평균 1.3% 손해)가 얼마나 통계적으로 유의미한지를 확인해보자.<br /></p>
+<pre><code class="language-Python"># bootstrap
+
+meanList = []
+for i in range(1000):
+    temp = np.random.choice(allCases, n)
+    meanList.append(np.mean(temp))
+print(np.mean(meanList))
+print(min(meanList))
+</code></pre>
+<p>놀랍게도 랜덤한 매매는 30영업일 후 평균 2.1%정도의 수익을 냈고(코스피는 장기적으로 우상향하기때문), 3500개정도를 랜덤하게뽑아 평균을 낸 값중 가장 안좋은 결과도 평균 1.2%의 수익을 내었음을 알 수 있다. 즉 위의 <strong>기관 매매량급증 신호에 따른 매매</strong>를 할 경우 랜덤한 매매보다도 훨씬 좋지않은 수익률을 기록했음을 알 수 있다.<br /></p>
+
+<p>다음포스트에는 마지막으로 이동평균값, 기관 or 외인, n영업일 후 매매 등과같은 parameter 값들을 달리해 어떤 전략을 취해야 수익을 올릴 수 있는지를 살펴보자.</p>
+
+</article>
+<!-- <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script> -->
+
+
+
+<section class="tags">
+  <!-- <strong>Tags:</strong> <a href="/blog/tag/Stock">Stock</a> -->
+  <strong>Tags:</strong> <a href="https://www.google.co.kr/search?q=Stock">Stock</a>
+</section>
+
+
+<!-- <section class="rss">
+  <p class="rss-subscribe text"><strong>Subscribe <a href="/blog/feed.xml">via RSS</a></strong></p>
+</section> -->
+
+<section class="share">
+  <span>Share: </span>
+  
+    
+    
+    
+    
+    
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+      <a href="//www.pinterest.com/pin/create/button/?description=%5BPython%5D+%EA%B8%B0%EA%B4%80%2C+%EC%99%B8%EA%B5%AD%EC%9D%B8+%EA%B1%B0%EB%9E%98%EB%9F%89%EC%9D%B4+%EB%A7%8E%EC%9C%BC%EB%A9%B4+%EC%A3%BC%EA%B0%80%EA%B0%80+%ED%95%98%EB%9D%BD%ED%95%9C%EB%8B%A4%3F&url=https%3A%2F%2Fparkeunsang.github.io%2Fblog%2Fstock%2F2021%2F01%2F19%2Fpython.html&media=https://parkeunsang.github.io/blog/assets/instacode.png"
+        onclick="window.open(this.href, 'pinterest-share', 'width=550,height=255');return false;">
+        <i class="fa fa-pinterest-square fa-lg"></i>
+      </a>
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+      <a href="//www.reddit.com/submit" onclick="window.location = '//www.reddit.com/submit?url=' + encodeURIComponent('https://parkeunsang.github.io/blog/stock/2021/01/19/python.html') + '&title=[Python] 기관, 외국인 거래량이 많으면 주가가 하락한다?'; return false">
+        <i class="fa fa-reddit-square fa-lg"></i>
+      </a>
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+    
+  
+</section>
+
+
+
+
+</div>
+</div>
+
+    </div>
+
+    <footer class="site-footer">
+
+  <div class="wrapper">
+
+    <h3 class="footer-heading">Edward's blog</h3>
+
+    <div class="site-navigation">
+
+      <p><strong>Site Map</strong></p>
+      <ul class="pages">
+				
+	
+	<li class="nav-link"><a href="/blog/about/">About</a>
+	
+
+	
+	<li class="nav-link"><a href="/blog/category/">Categories</a>
+	
+
+	
+
+	
+
+	
+	<li class="nav-link"><a href="/blog/posts/">Posts</a>
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+      </ul>
+    </div>
+
+    <div class="site-contact">
+
+      <p><strong>Contact</strong></p>
+      <ul class="social-media-list">
+        <li>
+          <a href="mailto:edwardfdsp@gmail.com">
+            <i class="fa fa-envelope-o"></i>
+            <span class="username">edwardfdsp@gmail.com</span>
+          </a>
+        </li>
+
+        
+          
+          <li>
+            <a href="https://github.com/parkeunsang" title="Fork me on GitHub">
+              <i class="fa fa-github"></i>
+              <span class="username">EunSang Park</span>
+            </a>
+          </li>
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+
+      </ul>
+    </div>
+
+    <!-- <div class="site-signature">
+      <p class="rss-subscribe text"><strong>Subscribe <a href="/blog/feed.xml">via RSS</a></strong></p>
+      <p class="text">contents
+</p>
+    </div> -->
+
+  </div>
+
+</footer>
+
+<!-- Scripts -->
+<script src="//code.jquery.com/jquery-3.4.1.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/highlight.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.1/js/lightbox.min.js"></script>
+<script src="//unpkg.com/popper.js@1"></script>
+<script src="//unpkg.com/tippy.js@5"></script>
+
+<script type="text/javascript">
+$(document).ready(function() {
+  // Default syntax highlighting
+  hljs.initHighlightingOnLoad();
+
+  // Header
+  var menuToggle = $('#js-mobile-menu').unbind();
+  $('#js-navigation-menu').removeClass("show");
+  menuToggle.on('click', function(e) {
+    e.preventDefault();
+    $('#js-navigation-menu').slideToggle(function(){
+      if($('#js-navigation-menu').is(':hidden')) {
+        $('#js-navigation-menu').removeAttr('style');
+      }
+    });
+  });
+
+	// Enable tooltips via Tippy.js
+	if (Array.isArray(window.tooltips)) {
+		window.tooltips.forEach(function(tooltip) {
+			var selector = tooltip[0];
+			var config = tooltip[1];
+			tippy(selector, config);
+		})
+	}
+});
+
+</script>
+
+
+
+
+
+
+  </body>
+
+</html>

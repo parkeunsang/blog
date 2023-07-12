@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>[Python] Bootstrap을 이용한 가설검정(feat.삼성전자 주가)</title>
+  <meta name="description" content="Intro데이터분석을 하다보면 가설검정을 해야할 일이 많다. 여기서 가설검정이라 함은 사전에 귀무가설과 유의수준을 설정해 데이터 결과값을 토대로 귀무가설을 채택/기각하는 교과서에서 배운 딱딱한 가설검정뿐만 아니라 “내 주식 전략이 유효한 수익을 내는가?”와 같은 간단한 질문도 가설...">
+  
+  <meta name="author" content="EunSang Park">
+  <meta name="copyright" content="&copy; EunSang Park 2023">
+  
+
+  <!-- External libraries --> 
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css">
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.9.0/styles/monokai-sublime.min.css">
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/lightbox2/2.7.1/css/lightbox.css">
+
+  <!-- Favicon and other icons (made with http://www.favicon-generator.org/) -->
+  <link rel="shortcut icon" href="/blog/assets/icons/favicon.ico" type="image/x-icon">
+  <link rel="icon" href="/blog/assets/icons/favicon.ico" type="image/x-icon">
+  <link rel="apple-touch-icon" sizes="57x57" href="/blog/assets/icons/apple-icon-57x57.png">
+  <link rel="apple-touch-icon" sizes="60x60" href="/blog/assets/icons/apple-icon-60x60.png">
+  <link rel="apple-touch-icon" sizes="72x72" href="/blog/assets/icons/apple-icon-72x72.png">
+  <link rel="apple-touch-icon" sizes="76x76" href="/blog/assets/icons/apple-icon-76x76.png">
+  <link rel="apple-touch-icon" sizes="114x114" href="/blog/assets/icons/apple-icon-114x114.png">
+  <link rel="apple-touch-icon" sizes="120x120" href="/blog/assets/icons/apple-icon-120x120.png">
+  <link rel="apple-touch-icon" sizes="144x144" href="/blog/assets/icons/apple-icon-144x144.png">
+  <link rel="apple-touch-icon" sizes="152x152" href="/blog/assets/icons/apple-icon-152x152.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/blog/assets/icons/apple-icon-180x180.png">
+  <link rel="icon" type="image/png" sizes="192x192"  href="/blog/assets/icons/android-icon-192x192.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/blog/assets/icons/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="96x96" href="/blog/assets/icons/favicon-96x96.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/blog/assets/icons/favicon-16x16.png">
+  <link rel="manifest" href="/blog/assets/icons/manifest.json">
+  <meta name="msapplication-TileColor" content="#ffffff">
+  <meta name="msapplication-TileImage" content="/blog/assets/icons/ms-icon-144x144.png">
+  <meta name="theme-color" content="#ffffff">
+
+  
+  <!-- Facebook OGP cards -->
+  <meta property="og:description" content="Intro데이터분석을 하다보면 가설검정을 해야할 일이 많다. 여기서 가설검정이라 함은 사전에 귀무가설과 유의수준을 설정해 데이터 결과값을 토대로 귀무가설을 채택/기각하는 교과서에서 배운 딱딱한 가설검정뿐만 아니라 “내 주식 전략이 유효한 수익을 내는가?”와 같은 간단한 질문도 가설..." />
+  <meta property="og:url" content="https://parkeunsang.github.io/dataanalysis/2022/08/06/python-bootstrap-feat.html">
+  <meta property="og:site_name" content="Edward's blog" />
+  <meta property="og:title" content="[Python] Bootstrap을 이용한 가설검정(feat.삼성전자 주가)" />
+  <meta property="og:type" content="website" />
+  <meta property="og:image" content="https://parkeunsang.github.io/blog/assets/instacode.png" />
+  <meta property="og:image:type" content="image/png" />
+  <meta property="og:image:width" content="612" />
+  <meta property="og:image:height" content="605" />
+  
+
+  
+  <!-- Twitter: card tags -->
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="[Python] Bootstrap을 이용한 가설검정(feat.삼성전자 주가)">
+  <meta name="twitter:description" content="Intro데이터분석을 하다보면 가설검정을 해야할 일이 많다. 여기서 가설검정이라 함은 사전에 귀무가설과 유의수준을 설정해 데이터 결과값을 토대로 귀무가설을 채택/기각하는 교과서에서 배운 딱딱한 가설검정뿐만 아니라 “내 주식 전략이 유효한 수익을 내는가?”와 같은 간단한 질문도 가설...">
+  <meta name="twitter:image" content="https://parkeunsang.github.io/blog/assets/instacode.png">
+  <meta name="twitter:url" content="https://parkeunsang.github.io/dataanalysis/2022/08/06/python-bootstrap-feat.html">
+  
+
+  
+
+  <!-- Site styles -->
+  <link rel="stylesheet" href="/blog/css/main.css">
+  <link rel="canonical" href="https://parkeunsang.github.io/blog/dataanalysis/2022/08/06/python-bootstrap-feat.html">
+	<link rel="alternate" type="application/rss+xml" title="Edward's blog" href="https://parkeunsang.github.io/blog/feed.xml" />
+	
+	<!-- Tooltips -->
+	<script type="text/javascript">
+		window.tooltips = []
+	</script>
+  <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
+</head>
+
+
+  <body>
+
+    <header class="navigation" role="banner">
+  <div class="navigation-wrapper">
+    <a href="/blog/" class="logo">
+      
+      <img src="/blog/assets/homepage.png" alt="Edward's blog">
+      
+    </a>
+    <a href="javascript:void(0)" class="navigation-menu-button" id="js-mobile-menu">
+      <i class="fa fa-bars"></i>
+    </a>
+    <nav role="navigation">
+      <ul id="js-navigation-menu" class="navigation-menu show">
+				
+	
+	<li class="nav-link"><a href="/blog/about/">About</a>
+	
+
+	
+	<li class="nav-link"><a href="/blog/category/">Categories</a>
+	
+
+	
+
+	
+
+	
+	<li class="nav-link"><a href="/blog/posts/">Posts</a>
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+      </ul>
+    </nav>
+  </div>
+</header>
+
+
+    <div class="page-content">
+        <div class="post">
+
+<div class="post-header-container has-cover" style="background-image: url(/blog/assets/instacode.png);">
+  <div class="scrim has-cover">
+    <header class="post-header">
+      <h1 class="title">[Python] Bootstrap을 이용한 가설검정(feat.삼성전자 주가)</h1>
+      <p class="info">by <strong>Edward Park</strong></p>
+    </header>
+  </div>
+</div>
+
+<div class="wrapper">
+
+
+
+<section class="post-meta">
+  <div class="post-date">August 6, 2022</div>
+  <div class="post-categories">
+  in 
+    
+    <a href="/blog/posts">DataAnalysis</a>
+    
+  
+  </div>
+</section>
+
+<article class="post-content">
+  <h2 id="intro">Intro</h2>
+<p>데이터분석을 하다보면 <strong>가설검정</strong>을 해야할 일이 많다. 여기서 가설검정이라 함은 사전에 귀무가설과 유의수준을 설정해 데이터 결과값을 토대로 귀무가설을 채택/기각하는 교과서에서 배운 딱딱한 가설검정뿐만 아니라 “내 주식 전략이 유효한 수익을 내는가?”와 같은 간단한 질문도 가설검정의 범위에 포함된다고 할 수 있다.<br />
+여기서는 후자의 예시를 통해 <strong>Bootstrap을 활용한 가설검정</strong>을 해보고자 한다.</p>
+
+<h2 id="bootstrap이란">Bootstrap이란</h2>
+<p>표본집단에서 n개의 샘플을 추출해 통계량을 계산하는 과정을 <strong>매우 많은 횟수로 반복</strong>(복원추출)한 결과의 분포는 <strong>정규분포</strong>를 따르고, 이를 가설검정에 활용할 수 있다.</p>
+
+<h2 id="삼성전자-주가-데이터를-활용한-예제">삼성전자 주가 데이터를 활용한 예제</h2>
+<ul>
+  <li>원래는 일별 주가 등락률을 사용하려고 했으나, <strong>이미 정규분포에 가까운 형태</strong>를 띄고 있어서 Bootstrap의 취지에 맞게 정규분포와 거리가 있는 <strong>거래량 데이터</strong>를 활용했다.</li>
+  <li>가설은 <font color="red">"주가의 변동이 큰 다음날 거래량이 평소보다 많을까?"</font>이다.</li>
+</ul>
+
+<h3 id="데이터-분포">데이터 분포</h3>
+<pre><code class="language-Python">import FinanceDataReader as fdr
+import pandas as pd
+import matplotlib.pyplot as plt
+import numpy as np
+
+df = fdr.DataReader('005930', '2015')  # 2015년 이후 삼성전자 주가 데이터
+df['Volume'].plot(kind='hist', bins=100, xlim=(0, 5e+7))  # 거래량의 분포
+</code></pre>
+<p><img src="/blog/post_images/bootstrap/boot_1.png" title="samsung" /></p>
+<ul>
+  <li>데이터 기간:2015.01.01 ~ 2022.08.05</li>
+  <li>일일 삼성전자 <strong>주식 거래량의 분포는 정규분포와는 거리가 있어 보인다.</strong></li>
+</ul>
+
+<h3 id="주가-변동과-거래량">주가 변동과 거래량</h3>
+<ul>
+  <li>주가 변동은 <strong>전날 고가와 저가의 변동폭(고가/저가 - 1)이 4%이상인 날</strong>을 기준으로 하였다.</li>
+</ul>
+
+<pre><code class="language-Python">df['variance'] = df['High'] /df['Low'] - 1
+df['variance'] = df['variance'].shift(-1)
+print(np.mean(df['variance'] &gt; 0.04))  # 0.039572192513368985
+print(df[df['variance'] &gt; 0.04]['Volume'].mean())  # 17363760.283783782
+df['Volume'].mean()  # 9148466.696791444
+</code></pre>
+<ul>
+  <li>변동폭이 4% 이상인 날의 빈도는 <strong>약 4%</strong>(0.0395…)이다.</li>
+  <li>주가의 변동폭이 <strong>4%이상인 다음날 거래량의 평균은 약 1736만주</strong> 이다.</li>
+  <li>위의 조건 없이 일반적인 삼성전자 주식의 거래량 평균은 <strong>약 915만주</strong> 이다.</li>
+</ul>
+
+<p>주가 변동폭이 큰 다음날 거래량이 큰 것은 맞는것 같은데(약 2배차이) <strong>이게 얼마나 유의미한 차이일까</strong>는 통계적으로 와닿지 않는다(얼마나 희박한 확률인가). 그래서 Bootstrap을 통해 이를 알아보고자 한다.</p>
+<h3 id="bootstrap">Bootstrap</h3>
+<pre><code class="language-Python">n = int(len(df) *np.mean(df['variance'] &gt; 0.04))  # 74
+boot_list = []
+for _ in range(10000):
+    boot_list.append(df['Volume'].sample(n).mean())
+boot_list = np.array(boot_list)
+plt.figure(figsize=(12,5))
+plt.hist(boot_list, bins=100);
+</code></pre>
+<ul>
+  <li>표본집단의 데이터 개수는 1870(len(df))이고, 전날 주가의 변동폭이 4%이상인 날은 <strong>74회</strong>였으므로 뽑는 샘플의 개수(n)은 74가 된다.</li>
+  <li>총 10000번 반복한 결과의 분포는 아래와 같이 <strong>정규분포 형태</strong>를 보임을 알 수 있다.
+<img src="/blog/post_images/bootstrap/boot_2.png" title="samsung" /></li>
+</ul>
+
+<h3 id="가설검정">가설검정</h3>
+<pre><code class="language-Python">np.mean(boot_list &gt; df[df['variance'] &gt; 0.04]['Volume'].mean())  # 0.0
+print(np.std(boot_list))  # 1178456.0974523935
+print(np.mean(boot_list))  # 9161909.036206756
+</code></pre>
+<ul>
+  <li>먼저 rough하게 살펴보면, 10000번중에 샘플링된 <strong>74개의 거래량의 평균이 1736만이상 나온 경우는 0번</strong>임을 알 수 있다. 이를 통해 주가 변동폭이 4%이상인 다음날 거래량은 평소보다 높다고 제시할 근거가 충분하다고 볼 수 있다(만번중에 1번도 이렇게 크게 나오지 않음).</li>
+  <li>표준편차가 약 118만이므로 단측검정일 때 <strong>거래량 평균값이 1152만 이상</strong>(평균 + 1.96*표준편차)이라면 <strong>유의수준 alpha가 0.025</strong>일때 귀무가설(주가의 변동폭이 4%이상인 다음날 거래량의 평균은 일반적인 거래량의 평균보다 높다.)을 <strong>기각</strong>할 수 있다.</li>
+  <li>결과적으로 Bootstrap Method를 통해  1736만주라는 결과값이 <strong>얼마나 유의미한 지를 수치적으로 알 수 있다</strong>고 볼 수 있다.</li>
+</ul>
+
+</article>
+<!-- <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script> -->
+
+
+
+<section class="tags">
+  <!-- <strong>Tags:</strong> <a href="/blog/tag/Python">Python</a> -->
+  <strong>Tags:</strong> <a href="https://www.google.co.kr/search?q=Python">Python</a>
+</section>
+
+
+<!-- <section class="rss">
+  <p class="rss-subscribe text"><strong>Subscribe <a href="/blog/feed.xml">via RSS</a></strong></p>
+</section> -->
+
+<section class="share">
+  <span>Share: </span>
+  
+    
+    
+    
+    
+    
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+      <a href="//www.pinterest.com/pin/create/button/?description=%5BPython%5D+Bootstrap%EC%9D%84+%EC%9D%B4%EC%9A%A9%ED%95%9C+%EA%B0%80%EC%84%A4%EA%B2%80%EC%A0%95%28feat.%EC%82%BC%EC%84%B1%EC%A0%84%EC%9E%90+%EC%A3%BC%EA%B0%80%29&url=https%3A%2F%2Fparkeunsang.github.io%2Fblog%2Fdataanalysis%2F2022%2F08%2F06%2Fpython-bootstrap-feat.html&media=https://parkeunsang.github.io/blog/assets/instacode.png"
+        onclick="window.open(this.href, 'pinterest-share', 'width=550,height=255');return false;">
+        <i class="fa fa-pinterest-square fa-lg"></i>
+      </a>
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+      <a href="//www.reddit.com/submit" onclick="window.location = '//www.reddit.com/submit?url=' + encodeURIComponent('https://parkeunsang.github.io/blog/dataanalysis/2022/08/06/python-bootstrap-feat.html') + '&title=[Python] Bootstrap을 이용한 가설검정(feat.삼성전자 주가)'; return false">
+        <i class="fa fa-reddit-square fa-lg"></i>
+      </a>
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+    
+  
+</section>
+
+
+
+
+</div>
+</div>
+
+    </div>
+
+    <footer class="site-footer">
+
+  <div class="wrapper">
+
+    <h3 class="footer-heading">Edward's blog</h3>
+
+    <div class="site-navigation">
+
+      <p><strong>Site Map</strong></p>
+      <ul class="pages">
+				
+	
+	<li class="nav-link"><a href="/blog/about/">About</a>
+	
+
+	
+	<li class="nav-link"><a href="/blog/category/">Categories</a>
+	
+
+	
+
+	
+
+	
+	<li class="nav-link"><a href="/blog/posts/">Posts</a>
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+      </ul>
+    </div>
+
+    <div class="site-contact">
+
+      <p><strong>Contact</strong></p>
+      <ul class="social-media-list">
+        <li>
+          <a href="mailto:edwardfdsp@gmail.com">
+            <i class="fa fa-envelope-o"></i>
+            <span class="username">edwardfdsp@gmail.com</span>
+          </a>
+        </li>
+
+        
+          
+          <li>
+            <a href="https://github.com/parkeunsang" title="Fork me on GitHub">
+              <i class="fa fa-github"></i>
+              <span class="username">EunSang Park</span>
+            </a>
+          </li>
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+
+      </ul>
+    </div>
+
+    <!-- <div class="site-signature">
+      <p class="rss-subscribe text"><strong>Subscribe <a href="/blog/feed.xml">via RSS</a></strong></p>
+      <p class="text">contents
+</p>
+    </div> -->
+
+  </div>
+
+</footer>
+
+<!-- Scripts -->
+<script src="//code.jquery.com/jquery-3.4.1.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/highlight.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.1/js/lightbox.min.js"></script>
+<script src="//unpkg.com/popper.js@1"></script>
+<script src="//unpkg.com/tippy.js@5"></script>
+
+<script type="text/javascript">
+$(document).ready(function() {
+  // Default syntax highlighting
+  hljs.initHighlightingOnLoad();
+
+  // Header
+  var menuToggle = $('#js-mobile-menu').unbind();
+  $('#js-navigation-menu').removeClass("show");
+  menuToggle.on('click', function(e) {
+    e.preventDefault();
+    $('#js-navigation-menu').slideToggle(function(){
+      if($('#js-navigation-menu').is(':hidden')) {
+        $('#js-navigation-menu').removeAttr('style');
+      }
+    });
+  });
+
+	// Enable tooltips via Tippy.js
+	if (Array.isArray(window.tooltips)) {
+		window.tooltips.forEach(function(tooltip) {
+			var selector = tooltip[0];
+			var config = tooltip[1];
+			tippy(selector, config);
+		})
+	}
+});
+
+</script>
+
+
+
+
+
+
+  </body>
+
+</html>

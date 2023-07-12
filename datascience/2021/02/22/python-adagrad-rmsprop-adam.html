@@ -1,0 +1,660 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>[Python] AdaGrad, RMSProp, Adam 구현</title>
+  <meta name="description" content="Abstract딥러닝에서 각 노드의 weight를 조정할 때, batch마다 gradient를 계산해 일정 비율(learning rate)로 weight를 업데이트한다. 이때 learning rate값이 크면 weight는 발산하게되고, 또 너무 작으면 수렴하는속도가 느려 학습시간...">
+  
+  <meta name="author" content="EunSang Park">
+  <meta name="copyright" content="&copy; EunSang Park 2023">
+  
+
+  <!-- External libraries --> 
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css">
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.9.0/styles/monokai-sublime.min.css">
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/lightbox2/2.7.1/css/lightbox.css">
+
+  <!-- Favicon and other icons (made with http://www.favicon-generator.org/) -->
+  <link rel="shortcut icon" href="/blog/assets/icons/favicon.ico" type="image/x-icon">
+  <link rel="icon" href="/blog/assets/icons/favicon.ico" type="image/x-icon">
+  <link rel="apple-touch-icon" sizes="57x57" href="/blog/assets/icons/apple-icon-57x57.png">
+  <link rel="apple-touch-icon" sizes="60x60" href="/blog/assets/icons/apple-icon-60x60.png">
+  <link rel="apple-touch-icon" sizes="72x72" href="/blog/assets/icons/apple-icon-72x72.png">
+  <link rel="apple-touch-icon" sizes="76x76" href="/blog/assets/icons/apple-icon-76x76.png">
+  <link rel="apple-touch-icon" sizes="114x114" href="/blog/assets/icons/apple-icon-114x114.png">
+  <link rel="apple-touch-icon" sizes="120x120" href="/blog/assets/icons/apple-icon-120x120.png">
+  <link rel="apple-touch-icon" sizes="144x144" href="/blog/assets/icons/apple-icon-144x144.png">
+  <link rel="apple-touch-icon" sizes="152x152" href="/blog/assets/icons/apple-icon-152x152.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/blog/assets/icons/apple-icon-180x180.png">
+  <link rel="icon" type="image/png" sizes="192x192"  href="/blog/assets/icons/android-icon-192x192.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/blog/assets/icons/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="96x96" href="/blog/assets/icons/favicon-96x96.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/blog/assets/icons/favicon-16x16.png">
+  <link rel="manifest" href="/blog/assets/icons/manifest.json">
+  <meta name="msapplication-TileColor" content="#ffffff">
+  <meta name="msapplication-TileImage" content="/blog/assets/icons/ms-icon-144x144.png">
+  <meta name="theme-color" content="#ffffff">
+
+  
+  <!-- Facebook OGP cards -->
+  <meta property="og:description" content="Abstract딥러닝에서 각 노드의 weight를 조정할 때, batch마다 gradient를 계산해 일정 비율(learning rate)로 weight를 업데이트한다. 이때 learning rate값이 크면 weight는 발산하게되고, 또 너무 작으면 수렴하는속도가 느려 학습시간..." />
+  <meta property="og:url" content="https://parkeunsang.github.io/datascience/2021/02/22/python-adagrad-rmsprop-adam.html">
+  <meta property="og:site_name" content="Edward's blog" />
+  <meta property="og:title" content="[Python] AdaGrad, RMSProp, Adam 구현" />
+  <meta property="og:type" content="website" />
+  <meta property="og:image" content="https://parkeunsang.github.io/blog/assets/instacode.png" />
+  <meta property="og:image:type" content="image/png" />
+  <meta property="og:image:width" content="612" />
+  <meta property="og:image:height" content="605" />
+  
+
+  
+  <!-- Twitter: card tags -->
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="[Python] AdaGrad, RMSProp, Adam 구현">
+  <meta name="twitter:description" content="Abstract딥러닝에서 각 노드의 weight를 조정할 때, batch마다 gradient를 계산해 일정 비율(learning rate)로 weight를 업데이트한다. 이때 learning rate값이 크면 weight는 발산하게되고, 또 너무 작으면 수렴하는속도가 느려 학습시간...">
+  <meta name="twitter:image" content="https://parkeunsang.github.io/blog/assets/instacode.png">
+  <meta name="twitter:url" content="https://parkeunsang.github.io/datascience/2021/02/22/python-adagrad-rmsprop-adam.html">
+  
+
+  
+
+  <!-- Site styles -->
+  <link rel="stylesheet" href="/blog/css/main.css">
+  <link rel="canonical" href="https://parkeunsang.github.io/blog/datascience/2021/02/22/python-adagrad-rmsprop-adam.html">
+	<link rel="alternate" type="application/rss+xml" title="Edward's blog" href="https://parkeunsang.github.io/blog/feed.xml" />
+	
+	<!-- Tooltips -->
+	<script type="text/javascript">
+		window.tooltips = []
+	</script>
+  <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
+</head>
+
+
+  <body>
+
+    <header class="navigation" role="banner">
+  <div class="navigation-wrapper">
+    <a href="/blog/" class="logo">
+      
+      <img src="/blog/assets/homepage.png" alt="Edward's blog">
+      
+    </a>
+    <a href="javascript:void(0)" class="navigation-menu-button" id="js-mobile-menu">
+      <i class="fa fa-bars"></i>
+    </a>
+    <nav role="navigation">
+      <ul id="js-navigation-menu" class="navigation-menu show">
+				
+	
+	<li class="nav-link"><a href="/blog/about/">About</a>
+	
+
+	
+	<li class="nav-link"><a href="/blog/category/">Categories</a>
+	
+
+	
+
+	
+
+	
+	<li class="nav-link"><a href="/blog/posts/">Posts</a>
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+      </ul>
+    </nav>
+  </div>
+</header>
+
+
+    <div class="page-content">
+        <div class="post">
+
+<div class="post-header-container has-cover" style="background-image: url(/blog/assets/instacode.png);">
+  <div class="scrim has-cover">
+    <header class="post-header">
+      <h1 class="title">[Python] AdaGrad, RMSProp, Adam 구현</h1>
+      <p class="info">by <strong>Edward Park</strong></p>
+    </header>
+  </div>
+</div>
+
+<div class="wrapper">
+
+
+
+<section class="post-meta">
+  <div class="post-date">February 22, 2021</div>
+  <div class="post-categories">
+  in 
+    
+    <a href="/blog/posts">DataScience</a>
+    
+  
+  </div>
+</section>
+
+<article class="post-content">
+  <h2 id="abstract">Abstract</h2>
+<p>딥러닝에서 각 노드의 weight를 조정할 때, batch마다 gradient를 계산해 <strong>일정 비율(learning rate)로 weight를 업데이트</strong>한다. 이때 learning rate값이 크면 weight는 발산하게되고, 또 너무 작으면 수렴하는속도가 느려 학습시간이 오래걸릴것이다. 그래서 gradient를 이용해 weight를 적절하게 업데이트 하는 여러가지 방법들이 있으며 여기서는 자주사용되는 <strong>AdaGrad, RMSProp, Adam</strong> 3가지 방법에 대해 소개하고자 한다.<br />
+또한 보다 직관적인 이해를 위해 실제 데이터를 이용한 딥러닝학습과정이 아닌 <strong>임의의 함수(f(x))를 설정</strong>하고, gradient(df(X)도 계산해 위와같은 방법을 통해 f(x)를 minimize하는 x값을 찾는 과정으로 진행한다.<br />
+상세 코드 참조 : <a href="https://github.com/parkeunsang/ML_algorithms/blob/master/ANN/optimizers.ipynb">https://github.com/parkeunsang/ML_algorithms/blob/master/ANN/optimizers.ipynb</a></p>
+<h2 id="fx">f(x)</h2>
+<p>먼저 f(x)를 아래와 같이 설정했다.<br /><br />
+<img src="/blog/post_images/optimizer_1.png" title="sample images" />
+<strong>Code</strong></p>
+<pre><code class="language-Python">#f(x1,x2)
+def fx(x):
+    x1 = x[0]
+    x2 = x[1]
+    return np.exp((x1)/5)+5*(x1**2) + 3*(x2**2) - 2*x1*x2 - 7*x1 - 8*x2+5
+		
+#gradient of f
+def gfx(x):
+    x1 = x[0]
+    x2 = x[1]
+    return np.array([np.exp(x1/5)/5+10*x1-2*x2-7, 6*x2-2*x1-8])
+</code></pre>
+<p><img src="/blog/post_images/optimizer_2.png" title="sample images" /></p>
+
+<p>Plotting에 사용될 함수</p>
+<pre><code class="language-Python">def plotLog(log):  # weight가 업데이트되어가는 로그
+    df = pd.DataFrame(log)
+    df.columns = ['x','y']
+    df['z'] = np.array(list(range(len(df))))
+  #  df['z'] = np.log(df['z']+1)
+    sns.scatterplot(
+        data=df, x='x', y='y', hue='z'
+    )
+</code></pre>
+
+<h2 id="1-adagrad">1. AdaGrad</h2>
+<ul>
+  <li>weight를 업데이트할때 learning rate의 값을 계속 감소시켜나가는것(df^2와 관련)
+<img src="/blog/post_images/optimizer_3.png" title="sample images" />
+<strong>Code</strong></li>
+</ul>
+
+<pre><code class="language-Python">def adagrad(f, gfx, x, ir=100, h=np.array([0.1,0.1]), lamb=0.1, th=0.00001):
+    h = h.copy()
+    log = np.array([])
+    for i in range(ir):
+        log = np.append(log, x)
+        gx = gfx(x)
+        h += gx**2
+        xNew = x-lamb*gx/(h**(1/2))
+        if(sum(abs(x-xNew)) &lt;th):
+            break
+        x = xNew
+    log = log.reshape(len(log)//2, 2)
+    return x, i, log
+x = np.array([0,0])  # init variable
+
+xm, _, log = adagrad(fx, gfx, x, ir=1000)
+plotLog(log)
+</code></pre>
+
+<p><strong>탐색 과정</strong>
+<img src="/blog/post_images/optimizer_4.png" title="sample images" /></p>
+<ul>
+  <li>시행횟수가 커질수록 업데이트속도가 느려진다. -&gt; 오래걸림</li>
+</ul>
+
+<h2 id="2-rmsprop">2. RMSProp</h2>
+<p>AdaGrad에서 h가 계속 커지는것을 방지하기위해 이전 h와 df^2의 비율을 정해 h를 업데이트
+<img src="/blog/post_images/optimizer_5.png" title="sample images" /></p>
+<pre><code class="language-Code">def rmsprop(f, gfx, x, ir=100, h=np.array([0.1, 0.1]), gamma=0.001, lamb=0.1, 
+                    rho = 0.5, th=0.00001):
+    h = h.copy()
+    log = np.array([])
+    for i in range(ir):
+        log = np.append(log, x)
+        gx = gfx(x)
+        h = rho*h + (1 - rho)*gx**2
+        xNew = x-lamb*gx/(h**(1/2))
+        if(sum(abs(x-xNew)) &lt;th):
+            break
+        x = xNew
+    log = log.reshape(len(log)//2, 2)
+    return x, i, log
+x = np.array([0,0])
+xm, _, log = rmsprop(fx, gfx, x, rho=0.8,ir=1000)
+plotLog(log)
+</code></pre>
+
+<p><img src="/blog/post_images/optimizer_6.png" title="sample images" /></p>
+<ul>
+  <li>AdaGrad보다 수렴속도가 빠름</li>
+</ul>
+
+<h2 id="3-adam">3. Adam</h2>
+<p>Momentum + RMSProp
+ref : <a href="https://arxiv.org/pdf/1412.6980.pdf">ADAM: A METHOD FOR STOCHASTIC OPTIMIZATION</a>
+<img src="/blog/post_images/optimizer_7.png" title="sample images" /></p>
+
+<pre><code class="language-Python">def adam(gfx, x, ir=1000, alpha = 0.1, beta1 = 0.9, beta2 = 0.999,
+                epsilon = 10e-8, th=0.00001):
+    m = 0
+    v = 0
+    t = 1
+    log = np.array([])
+    while t &lt; ir:
+        log = np.append(log, x)
+        gx = gfx(x)
+        m = beta1 * m + (1 - beta1) * gx
+        v = beta2 * v + (1- beta2) * gx **2
+        mh = m / (1 - beta1 ** t)  # m hat
+        vh = v / (1 - beta2 ** t)  # v hat
+        x_new = x - alpha * mh / (vh ** (1/2) + epsilon)
+        if(sum(abs(x-x_new)) &lt;th):
+                break
+        x = x_new
+        t += 1
+    log = log.reshape(len(log)//2, 2)
+    return x, t, log
+x = np.array([0,0])
+xm, _, log = adam(gfx, x, alpha = 0.1)
+plotLog(log)
+</code></pre>
+<p><img src="/blog/post_images/optimizer_8.png" title="sample images" /></p>
+
+<ul>
+  <li>세 optimizer중 가장 최신 알고리즘</li>
+</ul>
+
+<p>추가로 여러 local minimum이 있는 함수를 설정해 성능을 비교해볼 필요도 있음.</p>
+
+</article>
+<!-- <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script> -->
+
+
+
+<section class="tags">
+  <!-- <strong>Tags:</strong> <a href="/blog/tag/Python">Python</a> -->
+  <strong>Tags:</strong> <a href="https://www.google.co.kr/search?q=Python">Python</a>
+</section>
+
+
+<!-- <section class="rss">
+  <p class="rss-subscribe text"><strong>Subscribe <a href="/blog/feed.xml">via RSS</a></strong></p>
+</section> -->
+
+<section class="share">
+  <span>Share: </span>
+  
+    
+    
+    
+    
+    
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+      <a href="//www.pinterest.com/pin/create/button/?description=%5BPython%5D+AdaGrad%2C+RMSProp%2C+Adam+%EA%B5%AC%ED%98%84&url=https%3A%2F%2Fparkeunsang.github.io%2Fblog%2Fdatascience%2F2021%2F02%2F22%2Fpython-adagrad-rmsprop-adam.html&media=https://parkeunsang.github.io/blog/assets/instacode.png"
+        onclick="window.open(this.href, 'pinterest-share', 'width=550,height=255');return false;">
+        <i class="fa fa-pinterest-square fa-lg"></i>
+      </a>
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+      <a href="//www.reddit.com/submit" onclick="window.location = '//www.reddit.com/submit?url=' + encodeURIComponent('https://parkeunsang.github.io/blog/datascience/2021/02/22/python-adagrad-rmsprop-adam.html') + '&title=[Python] AdaGrad, RMSProp, Adam 구현'; return false">
+        <i class="fa fa-reddit-square fa-lg"></i>
+      </a>
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+    
+  
+</section>
+
+
+
+
+</div>
+</div>
+
+    </div>
+
+    <footer class="site-footer">
+
+  <div class="wrapper">
+
+    <h3 class="footer-heading">Edward's blog</h3>
+
+    <div class="site-navigation">
+
+      <p><strong>Site Map</strong></p>
+      <ul class="pages">
+				
+	
+	<li class="nav-link"><a href="/blog/about/">About</a>
+	
+
+	
+	<li class="nav-link"><a href="/blog/category/">Categories</a>
+	
+
+	
+
+	
+
+	
+	<li class="nav-link"><a href="/blog/posts/">Posts</a>
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+      </ul>
+    </div>
+
+    <div class="site-contact">
+
+      <p><strong>Contact</strong></p>
+      <ul class="social-media-list">
+        <li>
+          <a href="mailto:edwardfdsp@gmail.com">
+            <i class="fa fa-envelope-o"></i>
+            <span class="username">edwardfdsp@gmail.com</span>
+          </a>
+        </li>
+
+        
+          
+          <li>
+            <a href="https://github.com/parkeunsang" title="Fork me on GitHub">
+              <i class="fa fa-github"></i>
+              <span class="username">EunSang Park</span>
+            </a>
+          </li>
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+
+      </ul>
+    </div>
+
+    <!-- <div class="site-signature">
+      <p class="rss-subscribe text"><strong>Subscribe <a href="/blog/feed.xml">via RSS</a></strong></p>
+      <p class="text">contents
+</p>
+    </div> -->
+
+  </div>
+
+</footer>
+
+<!-- Scripts -->
+<script src="//code.jquery.com/jquery-3.4.1.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/highlight.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.1/js/lightbox.min.js"></script>
+<script src="//unpkg.com/popper.js@1"></script>
+<script src="//unpkg.com/tippy.js@5"></script>
+
+<script type="text/javascript">
+$(document).ready(function() {
+  // Default syntax highlighting
+  hljs.initHighlightingOnLoad();
+
+  // Header
+  var menuToggle = $('#js-mobile-menu').unbind();
+  $('#js-navigation-menu').removeClass("show");
+  menuToggle.on('click', function(e) {
+    e.preventDefault();
+    $('#js-navigation-menu').slideToggle(function(){
+      if($('#js-navigation-menu').is(':hidden')) {
+        $('#js-navigation-menu').removeAttr('style');
+      }
+    });
+  });
+
+	// Enable tooltips via Tippy.js
+	if (Array.isArray(window.tooltips)) {
+		window.tooltips.forEach(function(tooltip) {
+			var selector = tooltip[0];
+			var config = tooltip[1];
+			tippy(selector, config);
+		})
+	}
+});
+
+</script>
+
+
+
+
+
+
+  </body>
+
+</html>

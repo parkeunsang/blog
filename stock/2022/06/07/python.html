@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>[Python] 비트코인 변동률, 거래량 추이 분석</title>
+  <meta name="description" content="Intro데이터를 이용한 예측에서는 미래가 과거와 유사한 추이를 보일 것이라는걸 전제로 한다. 하지만 현실은 그렇지 않은 경우가 많다.백테스팅에서 뛰어난 결과를 보인 알고리즘도 실제 트레이딩에서는 좋은 결과를 거두지 못하는 이유가 이것이다.그래서 이번 포스트에서는 비트코인의 거래량...">
+  
+  <meta name="author" content="EunSang Park">
+  <meta name="copyright" content="&copy; EunSang Park 2023">
+  
+
+  <!-- External libraries --> 
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css">
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.9.0/styles/monokai-sublime.min.css">
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/lightbox2/2.7.1/css/lightbox.css">
+
+  <!-- Favicon and other icons (made with http://www.favicon-generator.org/) -->
+  <link rel="shortcut icon" href="/blog/assets/icons/favicon.ico" type="image/x-icon">
+  <link rel="icon" href="/blog/assets/icons/favicon.ico" type="image/x-icon">
+  <link rel="apple-touch-icon" sizes="57x57" href="/blog/assets/icons/apple-icon-57x57.png">
+  <link rel="apple-touch-icon" sizes="60x60" href="/blog/assets/icons/apple-icon-60x60.png">
+  <link rel="apple-touch-icon" sizes="72x72" href="/blog/assets/icons/apple-icon-72x72.png">
+  <link rel="apple-touch-icon" sizes="76x76" href="/blog/assets/icons/apple-icon-76x76.png">
+  <link rel="apple-touch-icon" sizes="114x114" href="/blog/assets/icons/apple-icon-114x114.png">
+  <link rel="apple-touch-icon" sizes="120x120" href="/blog/assets/icons/apple-icon-120x120.png">
+  <link rel="apple-touch-icon" sizes="144x144" href="/blog/assets/icons/apple-icon-144x144.png">
+  <link rel="apple-touch-icon" sizes="152x152" href="/blog/assets/icons/apple-icon-152x152.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/blog/assets/icons/apple-icon-180x180.png">
+  <link rel="icon" type="image/png" sizes="192x192"  href="/blog/assets/icons/android-icon-192x192.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/blog/assets/icons/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="96x96" href="/blog/assets/icons/favicon-96x96.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/blog/assets/icons/favicon-16x16.png">
+  <link rel="manifest" href="/blog/assets/icons/manifest.json">
+  <meta name="msapplication-TileColor" content="#ffffff">
+  <meta name="msapplication-TileImage" content="/blog/assets/icons/ms-icon-144x144.png">
+  <meta name="theme-color" content="#ffffff">
+
+  
+  <!-- Facebook OGP cards -->
+  <meta property="og:description" content="Intro데이터를 이용한 예측에서는 미래가 과거와 유사한 추이를 보일 것이라는걸 전제로 한다. 하지만 현실은 그렇지 않은 경우가 많다.백테스팅에서 뛰어난 결과를 보인 알고리즘도 실제 트레이딩에서는 좋은 결과를 거두지 못하는 이유가 이것이다.그래서 이번 포스트에서는 비트코인의 거래량..." />
+  <meta property="og:url" content="https://parkeunsang.github.io/stock/2022/06/07/python.html">
+  <meta property="og:site_name" content="Edward's blog" />
+  <meta property="og:title" content="[Python] 비트코인 변동률, 거래량 추이 분석" />
+  <meta property="og:type" content="website" />
+  <meta property="og:image" content="https://parkeunsang.github.io/blog/assets/instacode.png" />
+  <meta property="og:image:type" content="image/png" />
+  <meta property="og:image:width" content="612" />
+  <meta property="og:image:height" content="605" />
+  
+
+  
+  <!-- Twitter: card tags -->
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="[Python] 비트코인 변동률, 거래량 추이 분석">
+  <meta name="twitter:description" content="Intro데이터를 이용한 예측에서는 미래가 과거와 유사한 추이를 보일 것이라는걸 전제로 한다. 하지만 현실은 그렇지 않은 경우가 많다.백테스팅에서 뛰어난 결과를 보인 알고리즘도 실제 트레이딩에서는 좋은 결과를 거두지 못하는 이유가 이것이다.그래서 이번 포스트에서는 비트코인의 거래량...">
+  <meta name="twitter:image" content="https://parkeunsang.github.io/blog/assets/instacode.png">
+  <meta name="twitter:url" content="https://parkeunsang.github.io/stock/2022/06/07/python.html">
+  
+
+  
+
+  <!-- Site styles -->
+  <link rel="stylesheet" href="/blog/css/main.css">
+  <link rel="canonical" href="https://parkeunsang.github.io/blog/stock/2022/06/07/python.html">
+	<link rel="alternate" type="application/rss+xml" title="Edward's blog" href="https://parkeunsang.github.io/blog/feed.xml" />
+	
+	<!-- Tooltips -->
+	<script type="text/javascript">
+		window.tooltips = []
+	</script>
+  <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
+</head>
+
+
+  <body>
+
+    <header class="navigation" role="banner">
+  <div class="navigation-wrapper">
+    <a href="/blog/" class="logo">
+      
+      <img src="/blog/assets/homepage.png" alt="Edward's blog">
+      
+    </a>
+    <a href="javascript:void(0)" class="navigation-menu-button" id="js-mobile-menu">
+      <i class="fa fa-bars"></i>
+    </a>
+    <nav role="navigation">
+      <ul id="js-navigation-menu" class="navigation-menu show">
+				
+	
+	<li class="nav-link"><a href="/blog/about/">About</a>
+	
+
+	
+	<li class="nav-link"><a href="/blog/category/">Categories</a>
+	
+
+	
+
+	
+
+	
+	<li class="nav-link"><a href="/blog/posts/">Posts</a>
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+      </ul>
+    </nav>
+  </div>
+</header>
+
+
+    <div class="page-content">
+        <div class="post">
+
+<div class="post-header-container has-cover" style="background-image: url(/blog/assets/instacode.png);">
+  <div class="scrim has-cover">
+    <header class="post-header">
+      <h1 class="title">[Python] 비트코인 변동률, 거래량 추이 분석</h1>
+      <p class="info">by <strong>Edward Park</strong></p>
+    </header>
+  </div>
+</div>
+
+<div class="wrapper">
+
+
+
+<section class="post-meta">
+  <div class="post-date">June 7, 2022</div>
+  <div class="post-categories">
+  in 
+    
+    <a href="/blog/posts">Stock</a>
+    
+  
+  </div>
+</section>
+
+<article class="post-content">
+  <h2 id="intro">Intro</h2>
+<p>데이터를 이용한 예측에서는 <strong>미래가 과거와 유사한 추이를 보일 것</strong>이라는걸 전제로 한다. 하지만 현실은 그렇지 않은 경우가 많다.<br />
+백테스팅에서 뛰어난 결과를 보인 알고리즘도 실제 트레이딩에서는 좋은 결과를 거두지 못하는 이유가 이것이다.<br />
+그래서 이번 포스트에서는 비트코인의 <strong>거래량과 변동률이 과거와 현재 어떻게 다른지</strong>를 가볍게 분석해보고자 한다.</p>
+
+<h2 id="import-data">Import Data</h2>
+<p><a href="https://parkeunsang.github.io/blog/stock/2021/06/11/python-api.html">지난 포스트</a> 에서 비트코인 가격을 수집하는 방법을 다뤘다.<br />
+여기서는 <strong>15분 단위 선물거래</strong> 데이터를 사용한다.<br />
+참고로 선물거래 데이터를 이용하려면 지난 포스트에서 URL을 다음과 같이 수정하면 된다.<br /></p>
+<pre><code class="language-Python">URL = 'https://fapi.binance.com/fapi/v1/klines'
+</code></pre>
+<p>데이터는 2020.01.01 00:00~2022.06.07 21:45 까지의 데이터를 사용했다.
+<img src="/blog/post_images/binance/eda_1.png" title="eda" /></p>
+
+<h2 id="변동률-분석">변동률 분석</h2>
+<p>비트코인을 매수 후 1시간과 5시간 뒤 가격의 변동률 추이를 살펴보자.</p>
+<pre><code class="language-Python">df['year_month'] = df['Open_time'].dt.strftime('%Y-%m')
+df['1_hours_later'] = abs(df['Close'] / df['Close'].shift(4) - 1)
+df['5_hours_later'] = abs(df['Close'] / df['Close'].shift(20) - 1)
+df.groupby('year_month').mean()[['1_hours_later', '5_hours_later']].plot()
+</code></pre>
+<p><img src="/blog/post_images/binance/eda_2.png" title="eda" />
+2021년 1월에 변동률이 가장 컸고, 5시간 동안 <strong>평균적으로 2% 이상</strong>의 변동이 있었음을 확인할 수 있다.</p>
+
+<h2 id="거래량-분석">거래량 분석</h2>
+<p>거래량은 단순 Volume이 아닌 Volume과 Close를 곱한 <strong>거래대금</strong>을 사용했다.</p>
+<pre><code class="language-Python">df['Volume_price'] = df['Close'] * df['Volume']
+df.groupby('year_month').mean()['Volume_price'].plot()
+</code></pre>
+<p><img src="/blog/post_images/binance/eda_3.png" title="eda" />
+결과 2020년 10월까지는 거래대금의 변화가 거의 없다가, 2021년 5월까지 급격하게 상승하고, 이후 하락하는 추세임을 알 수 있다.<br />
+이는 대중들의 비트코인에 대한 관심을 어느정도 대변한다고도 볼 수 있다.</p>
+
+<h2 id="결론">결론</h2>
+<p>비트코인 외에도 몇가지 다른 코인(이더리움, 도지 등)을 분석해보았으나, 비트코인의 양상과 크게 차이나는점을 발견하지는 못했다.<br />
+이외에 궁금한 점이 있으면 아래 이메일로 문의 부탁드립니다.</p>
+
+</article>
+<!-- <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script> -->
+
+
+
+<section class="tags">
+  <!-- <strong>Tags:</strong> <a href="/blog/tag/Bitcoin">Bitcoin</a> -->
+  <strong>Tags:</strong> <a href="https://www.google.co.kr/search?q=Bitcoin">Bitcoin</a>
+</section>
+
+
+<!-- <section class="rss">
+  <p class="rss-subscribe text"><strong>Subscribe <a href="/blog/feed.xml">via RSS</a></strong></p>
+</section> -->
+
+<section class="share">
+  <span>Share: </span>
+  
+    
+    
+    
+    
+    
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+      <a href="//www.pinterest.com/pin/create/button/?description=%5BPython%5D+%EB%B9%84%ED%8A%B8%EC%BD%94%EC%9D%B8+%EB%B3%80%EB%8F%99%EB%A5%A0%2C+%EA%B1%B0%EB%9E%98%EB%9F%89+%EC%B6%94%EC%9D%B4+%EB%B6%84%EC%84%9D&url=https%3A%2F%2Fparkeunsang.github.io%2Fblog%2Fstock%2F2022%2F06%2F07%2Fpython.html&media=https://parkeunsang.github.io/blog/assets/instacode.png"
+        onclick="window.open(this.href, 'pinterest-share', 'width=550,height=255');return false;">
+        <i class="fa fa-pinterest-square fa-lg"></i>
+      </a>
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+      <a href="//www.reddit.com/submit" onclick="window.location = '//www.reddit.com/submit?url=' + encodeURIComponent('https://parkeunsang.github.io/blog/stock/2022/06/07/python.html') + '&title=[Python] 비트코인 변동률, 거래량 추이 분석'; return false">
+        <i class="fa fa-reddit-square fa-lg"></i>
+      </a>
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+    
+  
+</section>
+
+
+
+
+</div>
+</div>
+
+    </div>
+
+    <footer class="site-footer">
+
+  <div class="wrapper">
+
+    <h3 class="footer-heading">Edward's blog</h3>
+
+    <div class="site-navigation">
+
+      <p><strong>Site Map</strong></p>
+      <ul class="pages">
+				
+	
+	<li class="nav-link"><a href="/blog/about/">About</a>
+	
+
+	
+	<li class="nav-link"><a href="/blog/category/">Categories</a>
+	
+
+	
+
+	
+
+	
+	<li class="nav-link"><a href="/blog/posts/">Posts</a>
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+      </ul>
+    </div>
+
+    <div class="site-contact">
+
+      <p><strong>Contact</strong></p>
+      <ul class="social-media-list">
+        <li>
+          <a href="mailto:edwardfdsp@gmail.com">
+            <i class="fa fa-envelope-o"></i>
+            <span class="username">edwardfdsp@gmail.com</span>
+          </a>
+        </li>
+
+        
+          
+          <li>
+            <a href="https://github.com/parkeunsang" title="Fork me on GitHub">
+              <i class="fa fa-github"></i>
+              <span class="username">EunSang Park</span>
+            </a>
+          </li>
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+
+      </ul>
+    </div>
+
+    <!-- <div class="site-signature">
+      <p class="rss-subscribe text"><strong>Subscribe <a href="/blog/feed.xml">via RSS</a></strong></p>
+      <p class="text">contents
+</p>
+    </div> -->
+
+  </div>
+
+</footer>
+
+<!-- Scripts -->
+<script src="//code.jquery.com/jquery-3.4.1.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/highlight.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.1/js/lightbox.min.js"></script>
+<script src="//unpkg.com/popper.js@1"></script>
+<script src="//unpkg.com/tippy.js@5"></script>
+
+<script type="text/javascript">
+$(document).ready(function() {
+  // Default syntax highlighting
+  hljs.initHighlightingOnLoad();
+
+  // Header
+  var menuToggle = $('#js-mobile-menu').unbind();
+  $('#js-navigation-menu').removeClass("show");
+  menuToggle.on('click', function(e) {
+    e.preventDefault();
+    $('#js-navigation-menu').slideToggle(function(){
+      if($('#js-navigation-menu').is(':hidden')) {
+        $('#js-navigation-menu').removeAttr('style');
+      }
+    });
+  });
+
+	// Enable tooltips via Tippy.js
+	if (Array.isArray(window.tooltips)) {
+		window.tooltips.forEach(function(tooltip) {
+			var selector = tooltip[0];
+			var config = tooltip[1];
+			tippy(selector, config);
+		})
+	}
+});
+
+</script>
+
+
+
+
+
+
+  </body>
+
+</html>

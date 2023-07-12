@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>서울 원룸 전월세 데이터 분석 - 전세, 월세 가격 변화</title>
+  <meta name="description" content="Intro최근(2022년 12월) 전세 매물을 알아보러 부동산을 돌아다녀보니 월세매물이 강세(수요가 많음)고 상대적으로 전세매물이 공급이 많은 추세였다. 이로인해 월세는 오르고있고, 전세가는 내리고 있다고 말씀들을 많이 하셨다. 그래서 이전에 직방에서 수집한 서울 원룸 전월세 데이...">
+  
+  <meta name="author" content="EunSang Park">
+  <meta name="copyright" content="&copy; EunSang Park 2023">
+  
+
+  <!-- External libraries --> 
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css">
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.9.0/styles/monokai-sublime.min.css">
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/lightbox2/2.7.1/css/lightbox.css">
+
+  <!-- Favicon and other icons (made with http://www.favicon-generator.org/) -->
+  <link rel="shortcut icon" href="/blog/assets/icons/favicon.ico" type="image/x-icon">
+  <link rel="icon" href="/blog/assets/icons/favicon.ico" type="image/x-icon">
+  <link rel="apple-touch-icon" sizes="57x57" href="/blog/assets/icons/apple-icon-57x57.png">
+  <link rel="apple-touch-icon" sizes="60x60" href="/blog/assets/icons/apple-icon-60x60.png">
+  <link rel="apple-touch-icon" sizes="72x72" href="/blog/assets/icons/apple-icon-72x72.png">
+  <link rel="apple-touch-icon" sizes="76x76" href="/blog/assets/icons/apple-icon-76x76.png">
+  <link rel="apple-touch-icon" sizes="114x114" href="/blog/assets/icons/apple-icon-114x114.png">
+  <link rel="apple-touch-icon" sizes="120x120" href="/blog/assets/icons/apple-icon-120x120.png">
+  <link rel="apple-touch-icon" sizes="144x144" href="/blog/assets/icons/apple-icon-144x144.png">
+  <link rel="apple-touch-icon" sizes="152x152" href="/blog/assets/icons/apple-icon-152x152.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/blog/assets/icons/apple-icon-180x180.png">
+  <link rel="icon" type="image/png" sizes="192x192"  href="/blog/assets/icons/android-icon-192x192.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/blog/assets/icons/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="96x96" href="/blog/assets/icons/favicon-96x96.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/blog/assets/icons/favicon-16x16.png">
+  <link rel="manifest" href="/blog/assets/icons/manifest.json">
+  <meta name="msapplication-TileColor" content="#ffffff">
+  <meta name="msapplication-TileImage" content="/blog/assets/icons/ms-icon-144x144.png">
+  <meta name="theme-color" content="#ffffff">
+
+  
+  <!-- Facebook OGP cards -->
+  <meta property="og:description" content="Intro최근(2022년 12월) 전세 매물을 알아보러 부동산을 돌아다녀보니 월세매물이 강세(수요가 많음)고 상대적으로 전세매물이 공급이 많은 추세였다. 이로인해 월세는 오르고있고, 전세가는 내리고 있다고 말씀들을 많이 하셨다. 그래서 이전에 직방에서 수집한 서울 원룸 전월세 데이..." />
+  <meta property="og:url" content="https://parkeunsang.github.io/dataanalysis/2022/12/18/zigbang.html">
+  <meta property="og:site_name" content="Edward's blog" />
+  <meta property="og:title" content="서울 원룸 전월세 데이터 분석 - 전세, 월세 가격 변화" />
+  <meta property="og:type" content="website" />
+  <meta property="og:image" content="https://parkeunsang.github.io/blog/post_images/real_estate/plot4.png" />
+  <meta property="og:image:type" content="image/png" />
+  <meta property="og:image:width" content="612" />
+  <meta property="og:image:height" content="605" />
+  
+
+  
+  <!-- Twitter: card tags -->
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="서울 원룸 전월세 데이터 분석 - 전세, 월세 가격 변화">
+  <meta name="twitter:description" content="Intro최근(2022년 12월) 전세 매물을 알아보러 부동산을 돌아다녀보니 월세매물이 강세(수요가 많음)고 상대적으로 전세매물이 공급이 많은 추세였다. 이로인해 월세는 오르고있고, 전세가는 내리고 있다고 말씀들을 많이 하셨다. 그래서 이전에 직방에서 수집한 서울 원룸 전월세 데이...">
+  <meta name="twitter:image" content="https://parkeunsang.github.io/blog/post_images/real_estate/plot4.png">
+  <meta name="twitter:url" content="https://parkeunsang.github.io/dataanalysis/2022/12/18/zigbang.html">
+  
+
+  
+
+  <!-- Site styles -->
+  <link rel="stylesheet" href="/blog/css/main.css">
+  <link rel="canonical" href="https://parkeunsang.github.io/blog/dataanalysis/2022/12/18/zigbang.html">
+	<link rel="alternate" type="application/rss+xml" title="Edward's blog" href="https://parkeunsang.github.io/blog/feed.xml" />
+	
+	<!-- Tooltips -->
+	<script type="text/javascript">
+		window.tooltips = []
+	</script>
+  <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
+</head>
+
+
+  <body>
+
+    <header class="navigation" role="banner">
+  <div class="navigation-wrapper">
+    <a href="/blog/" class="logo">
+      
+      <img src="/blog/assets/homepage.png" alt="Edward's blog">
+      
+    </a>
+    <a href="javascript:void(0)" class="navigation-menu-button" id="js-mobile-menu">
+      <i class="fa fa-bars"></i>
+    </a>
+    <nav role="navigation">
+      <ul id="js-navigation-menu" class="navigation-menu show">
+				
+	
+	<li class="nav-link"><a href="/blog/about/">About</a>
+	
+
+	
+	<li class="nav-link"><a href="/blog/category/">Categories</a>
+	
+
+	
+
+	
+
+	
+	<li class="nav-link"><a href="/blog/posts/">Posts</a>
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+      </ul>
+    </nav>
+  </div>
+</header>
+
+
+    <div class="page-content">
+        <div class="post">
+
+<div class="post-header-container has-cover" style="background-image: url(/blog/post_images/real_estate/plot4.png);">
+  <div class="scrim has-cover">
+    <header class="post-header">
+      <h1 class="title">서울 원룸 전월세 데이터 분석 - 전세, 월세 가격 변화</h1>
+      <p class="info">by <strong>Edward Park</strong></p>
+    </header>
+  </div>
+</div>
+
+<div class="wrapper">
+
+
+
+<section class="post-meta">
+  <div class="post-date">December 18, 2022</div>
+  <div class="post-categories">
+  in 
+    
+    <a href="/blog/posts">DataAnalysis</a>
+    
+  
+  </div>
+</section>
+
+<article class="post-content">
+  <h2 id="intro">Intro</h2>
+<p>최근(2022년 12월) 전세 매물을 알아보러 부동산을 돌아다녀보니 월세매물이 강세(수요가 많음)고 상대적으로 전세매물이 공급이 많은 추세였다. 이로인해 월세는 오르고있고, 전세가는 내리고 있다고 말씀들을 많이 하셨다. 그래서 이전에 직방에서 수집한 서울 원룸 전월세 데이터를 통해 전월세 변화 추이<strong>(22.09.25 ~ 22.12.01)</strong>를 알아보고자 한다.<br /></p>
+<h3 id="데이터">데이터</h3>
+<ul>
+  <li>출처 : <a href="https://www.zigbang.com/">직방</a></li>
+  <li>데이터 수집 기준일 : 2022.09.25 / 2022.12.01
+    <h2 id="code">Code</h2>
+    <h3 id="import-data">Import Data</h3>
+  </li>
+  <li>수집된 데이터는 제 <a href="https://github.com/parkeunsang/toy_projects/tree/main/zigbang/data_preprocessed">Github</a>에서 확인하실 수 있습니다.</li>
+</ul>
+
+<pre><code class="language-Python">import pandas as pd
+import pickle
+from tqdm import tqdm
+from glob import glob
+import re
+
+import cufflinks as cf
+cf.go_offline()
+
+room_info_old = pd.read_csv(f'data_preprocessed/room_info_220925.csv')
+room_info_new = pd.read_csv(f'data_preprocessed/room_info_221201.csv')
+
+monthly_old = room_info_old[~room_info_old['월세금액'].isna()]
+charter_old = room_info_old[room_info_old['월세금액'].isna()]
+monthly_new = room_info_new[~room_info_new['월세금액'].isna()]
+charter_new = room_info_new[room_info_new['월세금액'].isna()]
+</code></pre>
+<h3 id="전세-보증금-비교">전세 보증금 비교</h3>
+<pre><code class="language-Python">def q_trim(df, col, q, all_columns=False):
+    if all_columns:
+        return df[df[col] &lt;= df[col].quantile(q)]
+    else:
+        return df[df[col] &lt;= df[col].quantile(q)][col]
+				
+def make_histogram(df_old, df_new, col, col_show, bins=None, q=1, kind='histogram'):
+    # quantile이 1이면 전체
+    old_values = q_trim(df_old, col, q).tolist()
+    new_values = q_trim(df_new, col, q).tolist()
+    
+    df = {f'{col_show}-220925': old_values,
+    f'{col_show}-221201': new_values}
+    df = pd.DataFrame(dict([ (k,pd.Series(v)) for k,v in df.items() ]))
+    if bins:
+        df.iplot(kind=kind, bins=bins, opacity=0.6)
+    else:
+        df.iplot(kind=kind)
+
+print(q_trim(charter_old, '보증금액', 0.99).mean())  # 22820.3434
+print(q_trim(charter_new, '보증금액', 0.99).mean())  # 20949.6317
+make_histogram(charter_old, charter_new, '보증금액', '전세', 50, 0.99)
+</code></pre>
+<p><img src="/blog/post_images/real_estate/plot4.png" title="real_estate" /></p>
+
+<ul>
+  <li>이상치가 있어서 보증금 상위 1%값의 데이터는 제거</li>
+  <li>2022.09.25기준 전세 보증금 평균은 2.28억정도</li>
+  <li>2022.12.01기준 전세 보증금 평균은 2.09억정도로 <strong>약 1달전 대비 평균 2천만원 정도의 하락이 있었음</strong></li>
+</ul>
+
+<h3 id="월세-비교">월세 비교</h3>
+<pre><code class="language-Python">print(q_trim(monthly_new, '월세금액', 0.99).mean())  # 64.89
+print(q_trim(monthly_old, '월세금액', 0.99).mean())  # 64.10
+make_histogram(monthly_old, monthly_new, '월세금액', '월세 보증금', bins=30, q=0.99, kind='box')
+</code></pre>
+<p><img src="/blog/post_images/real_estate/plot5.png" title="real_estate" /></p>
+<ul>
+  <li>마찬가지로 이상치때문에 상위 1%값의 데이터를 제거</li>
+  <li>2022.09.25기준 월세 평균은 64.89만원 정도</li>
+  <li>2022.12.01기준 <strong>월세 평균은 64.10정도로 1달전과 큰 차이가 없었다</strong>.</li>
+  <li>boxplot에서 median(중앙값)은 2022.12.01이 2022.09.25대비 5만원 높았다(50 -&gt; 55)</li>
+</ul>
+
+<h3 id="지역별-전월세-변화-추이">지역별 전월세 변화 추이</h3>
+<pre><code class="language-Python">def make_barplot(df_old, df_new, col, col_name):
+    df1 = pd.DataFrame(q_trim(df_old, col, 0.99, True).groupby('local2').mean()[col]).reset_index()
+    df1.columns = ['지역', f'{col_name}-220925']
+    
+    df2 = pd.DataFrame(q_trim(df_new, col, 0.99, True).groupby('local2').mean()[col]).reset_index()
+    df2.columns = ['지역', f'{col_name}-221201']
+    df_merged = pd.merge(df1, df2, on='지역')
+    df_merged.iplot(kind = 'bar', x='지역')
+    return df_merged
+		
+df_merged = make_barplot(charter_old, charter_new, '보증금액', '전세')
+df_merged['gap'] = df_merged.iloc[:, 2] - df_merged.iloc[:, 1]
+df_merged.sort_values('gap')
+</code></pre>
+<p><img src="/blog/post_images/real_estate/plot6.png" title="real_estate" /></p>
+<pre><code class="language-Python">df_merged = make_barplot(monthly_old, monthly_new, '월세금액', '월세')
+df_merged['gap'] = df_merged.iloc[:, 2] - df_merged.iloc[:, 1]
+df_merged.sort_values('gap')
+</code></pre>
+<p><img src="/blog/post_images/real_estate/plot7.png" title="real_estate" /></p>
+<ul>
+  <li>1달간 평균 전세가격이 가장 많이 하락한 구는  <font color="red">마포구(-4447만원) - 종로구(-3245만원) - 송파구(-2931만원) - 강남구(-2888만원)</font> 순서이다.</li>
+  <li>1달간 평균 월세가격은 <font color="red">마포구가 11.2만원, 서대문구가 6.9만원정도 하락</font>했고, <font color="blue">은평구, 중랑구, 영등포구가 각각 10.1만원, 9.7만원, 9.5만원 상승</font>했다.</li>
+</ul>
+
+<h2 id="결론">결론</h2>
+<ul>
+  <li>실제로 전세가격은** 약 1달간 유의미한 하락<strong>이 있었던 것으로 확인되었다. 그리고 **금리인상으로 인해 전세가는 계속 떨어질 것으로 예상</strong>이된다.</li>
+  <li>그런데 실제로 부동산을 돌아보니 <strong>최근 2억원 내외의 전세매물을 찾는 사람들이 많이 늘었다</strong>고 했고, 그 이유는 버팀목 전세자금대출 한도 상향(최대 2억원 까지)때문이라고 했다. 버팀목의 경우 대출이자가 연 2프로 초반대로 저렴하며 이러한 정책자금 대출의 영향으로 인해 2억원 내외 원룸의 전세가는 급격한 하락이 일어나지는 않을 것이라고 생각된다.</li>
+</ul>
+
+</article>
+<!-- <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script> -->
+
+
+
+<section class="tags">
+  <!-- <strong>Tags:</strong> <a href="/blog/tag/Python">Python</a> -->
+  <strong>Tags:</strong> <a href="https://www.google.co.kr/search?q=Python">Python</a>
+</section>
+
+
+<!-- <section class="rss">
+  <p class="rss-subscribe text"><strong>Subscribe <a href="/blog/feed.xml">via RSS</a></strong></p>
+</section> -->
+
+<section class="share">
+  <span>Share: </span>
+  
+    
+    
+    
+    
+    
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+      <a href="//www.pinterest.com/pin/create/button/?description=%EC%84%9C%EC%9A%B8+%EC%9B%90%EB%A3%B8+%EC%A0%84%EC%9B%94%EC%84%B8+%EB%8D%B0%EC%9D%B4%ED%84%B0+%EB%B6%84%EC%84%9D+-+%EC%A0%84%EC%84%B8%2C+%EC%9B%94%EC%84%B8+%EA%B0%80%EA%B2%A9+%EB%B3%80%ED%99%94&url=https%3A%2F%2Fparkeunsang.github.io%2Fblog%2Fdataanalysis%2F2022%2F12%2F18%2Fzigbang.html&media=https://parkeunsang.github.io/blog/post_images/real_estate/plot4.png"
+        onclick="window.open(this.href, 'pinterest-share', 'width=550,height=255');return false;">
+        <i class="fa fa-pinterest-square fa-lg"></i>
+      </a>
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+      <a href="//www.reddit.com/submit" onclick="window.location = '//www.reddit.com/submit?url=' + encodeURIComponent('https://parkeunsang.github.io/blog/dataanalysis/2022/12/18/zigbang.html') + '&title=서울 원룸 전월세 데이터 분석 - 전세, 월세 가격 변화'; return false">
+        <i class="fa fa-reddit-square fa-lg"></i>
+      </a>
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+    
+  
+</section>
+
+
+
+
+</div>
+</div>
+
+    </div>
+
+    <footer class="site-footer">
+
+  <div class="wrapper">
+
+    <h3 class="footer-heading">Edward's blog</h3>
+
+    <div class="site-navigation">
+
+      <p><strong>Site Map</strong></p>
+      <ul class="pages">
+				
+	
+	<li class="nav-link"><a href="/blog/about/">About</a>
+	
+
+	
+	<li class="nav-link"><a href="/blog/category/">Categories</a>
+	
+
+	
+
+	
+
+	
+	<li class="nav-link"><a href="/blog/posts/">Posts</a>
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+      </ul>
+    </div>
+
+    <div class="site-contact">
+
+      <p><strong>Contact</strong></p>
+      <ul class="social-media-list">
+        <li>
+          <a href="mailto:edwardfdsp@gmail.com">
+            <i class="fa fa-envelope-o"></i>
+            <span class="username">edwardfdsp@gmail.com</span>
+          </a>
+        </li>
+
+        
+          
+          <li>
+            <a href="https://github.com/parkeunsang" title="Fork me on GitHub">
+              <i class="fa fa-github"></i>
+              <span class="username">EunSang Park</span>
+            </a>
+          </li>
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+
+      </ul>
+    </div>
+
+    <!-- <div class="site-signature">
+      <p class="rss-subscribe text"><strong>Subscribe <a href="/blog/feed.xml">via RSS</a></strong></p>
+      <p class="text">contents
+</p>
+    </div> -->
+
+  </div>
+
+</footer>
+
+<!-- Scripts -->
+<script src="//code.jquery.com/jquery-3.4.1.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/highlight.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.1/js/lightbox.min.js"></script>
+<script src="//unpkg.com/popper.js@1"></script>
+<script src="//unpkg.com/tippy.js@5"></script>
+
+<script type="text/javascript">
+$(document).ready(function() {
+  // Default syntax highlighting
+  hljs.initHighlightingOnLoad();
+
+  // Header
+  var menuToggle = $('#js-mobile-menu').unbind();
+  $('#js-navigation-menu').removeClass("show");
+  menuToggle.on('click', function(e) {
+    e.preventDefault();
+    $('#js-navigation-menu').slideToggle(function(){
+      if($('#js-navigation-menu').is(':hidden')) {
+        $('#js-navigation-menu').removeAttr('style');
+      }
+    });
+  });
+
+	// Enable tooltips via Tippy.js
+	if (Array.isArray(window.tooltips)) {
+		window.tooltips.forEach(function(tooltip) {
+			var selector = tooltip[0];
+			var config = tooltip[1];
+			tippy(selector, config);
+		})
+	}
+});
+
+</script>
+
+
+
+
+
+
+  </body>
+
+</html>
