@@ -6,3 +6,4 @@ gem 'jekyll-paginate-v2'
 gem 'jekyll-admin', group: :jekyll_plugins
 gem "webrick", "~> 1.8"
 gem "kramdown-parser-gfm"
+gem 'jekyll-sass-converter', git: 'https://github.com/jekyll/jekyll-sass-converter', branch: 'master'
