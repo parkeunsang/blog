@@ -45,11 +45,11 @@
   <!-- Facebook OGP cards -->
   <meta property="og:description" content="contents
 " />
-  <meta property="og:url" content="http://0.0.0.0:4000/index.html">
+  <meta property="og:url" content="http://localhost:4000/index.html">
   <meta property="og:site_name" content="Edward's blog" />
   <meta property="og:title" content="Edward's blog" />
   <meta property="og:type" content="website" />
-  <meta property="og:image" content="http://0.0.0.0:4000/blog/assets/logo.png" />
+  <meta property="og:image" content="http://localhost:4000/blog/assets/logo.png" />
   <meta property="og:image:type" content="image/png" />
   <meta property="og:image:width" content="612" />
   <meta property="og:image:height" content="605" />
@@ -61,16 +61,16 @@
   <meta name="twitter:title" content="Edward's blog">
   <meta name="twitter:description" content="contents
 ">
-  <meta name="twitter:image" content="http://0.0.0.0:4000/blog/assets/logo.png">
-  <meta name="twitter:url" content="http://0.0.0.0:4000/index.html">
+  <meta name="twitter:image" content="http://localhost:4000/blog/assets/logo.png">
+  <meta name="twitter:url" content="http://localhost:4000/index.html">
   
 
   
 
   <!-- Site styles -->
   <link rel="stylesheet" href="/blog/css/main.css">
-  <link rel="canonical" href="http://0.0.0.0:4000/blog/">
-	<link rel="alternate" type="application/rss+xml" title="Edward's blog" href="http://0.0.0.0:4000/blog/feed.xml" />
+  <link rel="canonical" href="http://localhost:4000/blog/">
+	<link rel="alternate" type="application/rss+xml" title="Edward's blog" href="http://localhost:4000/blog/feed.xml" />
 	
 	<!-- Tooltips -->
 	<script type="text/javascript">
@@ -191,28 +191,6 @@
   
   <li>
     <h2>
-      <a class="post-link" href="/blog/stock/2023/08/13/news-stock.html">뉴스기사와 주가 관계 분석 - (1) 데이터 수집(네이버 증권 뉴스)</a>
-    </h2>
-    <section class="post-excerpt" itemprop="description">
-      <p>Intro 주가는 여러가지 factor(요인)들에 의해 움직입니다. 이러한 factor에는 금리, 환율 등 거시적 지표, 최근 주가의 횡보(OHLC: Open, High, Low, Change), 개별 종목의 재무관련 데이터와 같은 수치화 가능한 데이터가 있고, 종목 관련 기사와 같이 수치화가 어려운(정성적) 데이터가 있습니다리고 투자자들의 심리적 요인이나 알려지지 않은 호재/악재 등 외부자의 입장에서 수집, 분석하기 어려운 데이터들도...</p>
-    </section>
-    <section class="post-meta">
-      <div class="post-date">August 13, 2023</div>
-      <div class="post-categories">
-      in 
-        
-        <a href="/blog/category/stock">Stock</a>
-        
-      
-      </div>
-    </section>
-  </li>
-  
-  <hr>
-  
-  
-  <li>
-    <h2>
       <a class="post-link" href="/blog/dummy/2023/07/10/docker-jekyll-port.html">Docker 환경 Jekyll port 포워딩 문제</a>
     </h2>
     <section class="post-excerpt" itemprop="description">
@@ -290,6 +268,28 @@
       in 
         
         <a href="/blog/category/dataanalysis">DataAnalysis</a>
+        
+      
+      </div>
+    </section>
+  </li>
+  
+  <hr>
+  
+  
+  <li>
+    <h2>
+      <a class="post-link" href="/blog/dummy/2022/08/16/nginx-sock-failed-13-permission-denied.html">Nginx sock failed (13: Permission denied) 에러 해결</a>
+    </h2>
+    <section class="post-excerpt" itemprop="description">
+      <p>배경 Docker환경(Python:3.7 이미지 사용)에서 Django 프로젝트를 nginx와 uwsgi를 이용해 배포하는 과정에서 502 Bad Gateway 에러가 발생했다.실습가이드 참조 실습 가이드에서 친절하게 에러 로그를 쌓고있는 위치를 알려주었고, /var/log/nginx/error.log 파일에서 로그를 보니 아래와 같은 에러로 Bad Gateway문제가 발생했음을 알 수 있었다. connect() to unix:///root/hello/hello.sock failed (13: Permission denied) while connecting to upstream, client:...</p>
+    </section>
+    <section class="post-meta">
+      <div class="post-date">August 16, 2022</div>
+      <div class="post-categories">
+      in 
+        
+        <a href="/blog/category/dummy">Dummy</a>
         
       
       </div>
