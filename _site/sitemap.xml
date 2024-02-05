@@ -3,6 +3,21 @@
   
     
     <url>
+      <loc>http://localhost:4000/blog/python/2023/12/20/chroma-db-change-embeddingsuse-huggingface-model.html</loc>
+      
+        <lastmod>2023-12-20T22:31:30-06:00</lastmod>
+      
+      
+        <changefreq>monthly</changefreq>
+      
+      
+        <priority>0.5</priority>
+      
+    </url>
+    
+  
+    
+    <url>
       <loc>http://localhost:4000/blog/stock/2023/09/14/news-stock.html</loc>
       
         <lastmod>2023-09-14T00:30:00-05:00</lastmod>
