@@ -6,9 +6,27 @@
 </description>
     <link>http://localhost:4000/blog/</link>
     <atom:link href="http://localhost:4000/blog/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Mon, 05 Feb 2024 08:16:21 -0600</pubDate>
-    <lastBuildDate>Mon, 05 Feb 2024 08:16:21 -0600</lastBuildDate>
+    <pubDate>Fri, 01 Mar 2024 09:26:40 -0600</pubDate>
+    <lastBuildDate>Fri, 01 Mar 2024 09:26:40 -0600</lastBuildDate>
     <generator>Jekyll v4.3.2</generator>
+    
+      <item>
+        <title>Certbot 404 에러 해결(feat. Docker, Django, Nginx)</title>
+        <description>&lt;h2 id=&quot;에러-발생&quot;&gt;에러 발생&lt;/h2&gt; &lt;ul&gt; &lt;li&gt;Ref: &lt;a href=&quot;https://medium.com/@akshatgadodia/deploying-a-django-application-with-docker-nginx-and-certbot-eaf576463f19&quot;&gt;Deploying a Django Application with Docker, Nginx, and Certbot&lt;/a&gt;&lt;br /&gt;&lt;/li&gt; &lt;li&gt;문제 발생 단계: 위 블로그를 참고해 Docker compose를 활용하여 Django, Nginx, Certbot 컨테이너를 띄우고,...</description>
+        <pubDate>Mon, 05 Feb 2024 13:54:00 -0600</pubDate>
+        <link>http://localhost:4000/blog/django/2024/02/05/certbot-404-feat-docker-django-nginx.html</link>
+        <guid isPermaLink="true">http://localhost:4000/blog/django/2024/02/05/certbot-404-feat-docker-django-nginx.html</guid>
+        
+        <category>Docker</category>
+        
+        <category>Django</category>
+        
+        <category>Certbot</category>
+        
+        
+        <category>Django</category>
+        
+      </item>
     
       <item>
         <title>[Chroma DB] Change embeddings(using huggingface model)</title>
@@ -141,22 +159,6 @@
         
         
         <category>DataAnalysis</category>
-        
-      </item>
-    
-      <item>
-        <title>코스피와 기준금리 관계 분석</title>
-        <description>&lt;h2 id=&quot;intro&quot;&gt;Intro&lt;/h2&gt; &lt;p&gt;코스피 지수가 작년 최고치(3300정도)를 찍고 꾸준히 하락하고 있다. 필자도 올해 초부터 주식을 꾸준히 매입하기 시작했는데, 바닥을 모르고 추락하는 지수를 보며 마음을 졸이고 있다.&lt;br /&gt;&lt;/p&gt; &lt;p&gt;주가가 하락하는 이유에는 &lt;strong&gt;러시아...</description>
-        <pubDate>Mon, 20 Jun 2022 20:43:53 -0500</pubDate>
-        <link>http://localhost:4000/blog/stock/2022/06/20/kospi.html</link>
-        <guid isPermaLink="true">http://localhost:4000/blog/stock/2022/06/20/kospi.html</guid>
-        
-        <category>Stock</category>
-        
-        <category>Python</category>
-        
-        
-        <category>Stock</category>
         
       </item>
     
