@@ -46,7 +46,7 @@ $ sudo apt-get update && sudo apt-get install -y nvidia-container-toolkit
 $ sudo apt-get install -y nvidia-container-toolkit
 ```
 **B. Docker 재시작**<br>
-Docker desktop을 쓰는 경우 아이콘을 우클릭해 재시작 할 수 있고, 아닌 경우 `sudo service docker restart` 명령어로 재시작
+Docker desktop을 쓰는 경우 아이콘을 우클릭해 재시작 할 수 있고, 아닌 경우 `sudo service docker restart` 명령어로 재시작<br>
 **C. 설치 확인**<br>
 `sudo docker run --gpus all nvidia/cuda:11.8.0-base-ubuntu20.04 nvidia-smi` 커맨드를 입력 시 nvidia-smi 결과 값이 나오면 정상적으로 설치가 완료 된 상태. 여기서 11.8.0 부분을 본인이 사용하고자 하는 cuda 버전으로 변경해서 실행.(ex. cuda:12.2.-base)<br>
 참고로 해당 커맨드는 nvidia 환경의 ubuntu 이미지를 pull 하고, 실행 후 nvidia-smi 커맨드를 입력결과를 반환하는 것이다.
