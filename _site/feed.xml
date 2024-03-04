@@ -6,9 +6,27 @@
 </description>
     <link>http://localhost:4000/blog/</link>
     <atom:link href="http://localhost:4000/blog/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Fri, 01 Mar 2024 09:26:40 -0600</pubDate>
-    <lastBuildDate>Fri, 01 Mar 2024 09:26:40 -0600</lastBuildDate>
+    <pubDate>Mon, 04 Mar 2024 08:29:24 -0600</pubDate>
+    <lastBuildDate>Mon, 04 Mar 2024 08:29:24 -0600</lastBuildDate>
     <generator>Jekyll v4.3.2</generator>
+    
+      <item>
+        <title>Window Tensorflow 최신 CUDA(12 이상) 사용법(with WSL2, Docker)</title>
+        <description>&lt;h2 id=&quot;intro&quot;&gt;Intro&lt;/h2&gt; &lt;p&gt;현재 CUDA 12.1 버전으로 Torch를 사용하고 있었는데, Tensorflow는 &lt;a href=&quot;https://www.tensorflow.org/install/source?hl=ko&quot;&gt;Tensorflow gpu-linux/Mac OS&lt;/a&gt;에서 확인해보니까 CUDA 12.1버전을 지원하지 않고 있었다. 그리고 &lt;a href=&quot;https://www.tensorflow.org/install/source_windows?hl=ko&quot;&gt;window&lt;/a&gt;의 경우 &lt;strong&gt;CUDA 11.2 이후 버전은 지원하지 않는다&lt;/strong&gt;고...</description>
+        <pubDate>Fri, 01 Mar 2024 12:30:00 -0600</pubDate>
+        <link>http://localhost:4000/blog/datascience/2024/03/01/window-tensorflow-cuda12-with-wsl2-docker.html</link>
+        <guid isPermaLink="true">http://localhost:4000/blog/datascience/2024/03/01/window-tensorflow-cuda12-with-wsl2-docker.html</guid>
+        
+        <category>Python</category>
+        
+        <category>Docker</category>
+        
+        <category>Tensorflow</category>
+        
+        
+        <category>DataScience</category>
+        
+      </item>
     
       <item>
         <title>Certbot 404 에러 해결(feat. Docker, Django, Nginx)</title>
@@ -145,20 +163,6 @@
         
         
         <category>Dummy</category>
-        
-      </item>
-    
-      <item>
-        <title>[Python] Bootstrap을 이용한 가설검정(feat.삼성전자 주가)</title>
-        <description>&lt;h2 id=&quot;intro&quot;&gt;Intro&lt;/h2&gt; &lt;p&gt;데이터분석을 하다보면 &lt;strong&gt;가설검정&lt;/strong&gt;을 해야할 일이 많다. 여기서 가설검정이라 함은 사전에 귀무가설과 유의수준을 설정해 데이터 결과값을 토대로 귀무가설을 채택/기각하는 교과서에서 배운 딱딱한 가설검정뿐만 아니라 “내 주식 전략이 유효한 수익을...</description>
-        <pubDate>Sat, 06 Aug 2022 20:23:48 -0500</pubDate>
-        <link>http://localhost:4000/blog/dataanalysis/2022/08/06/python-bootstrap-feat.html</link>
-        <guid isPermaLink="true">http://localhost:4000/blog/dataanalysis/2022/08/06/python-bootstrap-feat.html</guid>
-        
-        <category>Python</category>
-        
-        
-        <category>DataAnalysis</category>
         
       </item>
     
